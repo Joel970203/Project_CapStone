@@ -13,14 +13,13 @@ public class ClickMove : MonoBehaviour
     {
         agent=GetComponent<NavMeshAgent>();
         anim=GetComponent<Animator>();
-
-        agent.speed = 16.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        //마우스 오른쪽 클릭. Idle 상태거나 Walk 상태일 때만 이동 명령 가능
+        if(Input.GetMouseButtonDown(1)&&(anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")||anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")))
         {
             Ray ray=Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -33,6 +32,42 @@ public class ClickMove : MonoBehaviour
         else if(agent.remainingDistance<0.1f)
         {
             anim.SetBool("Walk",false);
+        }
+
+        //공격 받는다면 이동 취소 후 Walk 상태 초기화
+        if(anim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
+        {
+            agent.ResetPath();
+            anim.SetBool("Walk",false);
+        }
+
+        //스페이스바 입력. 회피
+        if(Input.GetButtonDown("Jump"))
+        {
+            Ray ray=Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            //마우스 바라보는 방향 구함. 마우스 위치에서 자신 위치 빼기.
+            if(Physics.Raycast(ray,out RaycastHit hit))
+            {
+                Vector3 dodge_Direction = new Vector3(hit.point.x,transform.position.y,hit.point.z) - transform.position;
+
+                anim.transform.forward = dodge_Direction;
+
+                if(Camera.main.ScreenToViewportPoint(Input.mousePosition).x>=0.5)
+                {
+                    anim.SetBool("Right_Dodge",true);
+                }
+                else
+                {
+                    anim.SetBool("Right_Dodge",false);
+                }
+
+                anim.SetTrigger("Dodge");
+
+                Debug.Log(Camera.main.ScreenToViewportPoint(Input.mousePosition).x);
+
+                agent.destination=transform.position + dodge_Direction.normalized*50f;
+            }
         }
     }
 }
