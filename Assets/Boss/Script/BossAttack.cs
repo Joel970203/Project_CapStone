@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-using UnityEngine;
-
 public class BossAttack : MonoBehaviour
 {
     public float normalDamage = 20.0f; // 기본 공격 데미지 
