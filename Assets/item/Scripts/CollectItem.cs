@@ -14,7 +14,7 @@ public class CollectItem : MonoBehaviour
             Item item = new Item();
             item.setItem(itemType, sprite);
 
-            other.gameObject.GetComponent<Character>().CollectItem(item);
+            other.gameObject.GetComponent<CharacterInventory>().CollectItem(item);
             Destroy(gameObject);
         }
     }
