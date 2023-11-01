@@ -2,18 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class CharacterInventory : MonoBehaviour
 {
-    Inventory2 inventory = new Inventory2();
+    Inventory inventory = new Inventory();
     [SerializeField] GameObject[] slotUI;
     // Start is called before the first frame update
     void Start() {
-        inventory.setSlotUI(slotUI);
+        inventory.setSlot(slotUI);
     }
 
     void Update() {
-        inventory.print();
-
         ItemController();
     }
 

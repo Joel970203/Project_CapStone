@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,8 +19,10 @@ public class ClickMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         //마우스 오른쪽 클릭. Idle 상태거나 Walk 상태일 때만 이동 명령 가능
-        if (Input.GetMouseButtonDown(1) && (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")))
+        if (Input.GetMouseButtonDown(1) && ((anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -31,8 +34,10 @@ public class ClickMove : MonoBehaviour
         }
         else if (agent.remainingDistance < 0.1f)
         {
+            agent.ResetPath();
             anim.SetBool("Walk", false);
         }
+
 
         //공격 받는다면 이동 취소 후 Walk 상태 초기화
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))

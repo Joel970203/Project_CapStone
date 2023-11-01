@@ -31,7 +31,6 @@ public class BossMove : MonoBehaviour
             case 1.0f:
                 if(!anim1HasExecuted) 
                 {
-                    Debug.Log("a1");
                     anim.SetFloat("IdleState", 1.0f);
                     anim1HasExecuted = true;
                 }
@@ -39,7 +38,6 @@ public class BossMove : MonoBehaviour
             case 2.0f:
                 if(!anim2HasExecuted) 
                 {
-                    Debug.Log("a2");
                     anim.SetFloat("IdleState", 2.0f);
                     anim2HasExecuted = true;
                 }
@@ -47,7 +45,6 @@ public class BossMove : MonoBehaviour
             case 3.0f:
                 if(!anim3HasExecuted) 
                 {
-                    Debug.Log("a3");
                     anim.SetFloat("IdleState", 3.0f);
                     anim3HasExecuted = true;
                 }
@@ -55,7 +52,6 @@ public class BossMove : MonoBehaviour
             case 4.0f:
                 if(!anim4HasExecuted) 
                 {
-                    Debug.Log("a4");
                     anim.SetFloat("IdleState", 4.0f);
                     anim4HasExecuted = true;
                 }
