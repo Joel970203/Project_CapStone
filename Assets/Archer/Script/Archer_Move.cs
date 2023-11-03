@@ -16,9 +16,14 @@ public class Archer_Move : MonoBehaviour
     // Update is called once per frame
        void Update()
     {
-         if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            anim.SetBool("Aiming", true);
+            if (anim.GetBool("Aiming")) 
+            {
+                anim.SetBool("Aiming", false);
+            }
+            else
+                anim.SetBool("Aiming", true);
         }
         //마우스 오른쪽 클릭. Idle 상태거나 Walk 상태일 때만 이동 명령 가능
         if (Input.GetMouseButtonDown(1) && ((anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")) 
