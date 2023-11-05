@@ -1157,7 +1157,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: R_Skill
-  m_Speed: 1.4
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2132733158786305003}
@@ -1173,7 +1173,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -203655887218126122, guid: effb039b896da364297574287dea1e02, type: 3}
+  m_Motion: {fileID: -203655887218126122, guid: 86471fa20aa2bcb408d76d0c4e7a06bd, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

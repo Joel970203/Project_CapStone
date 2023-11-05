@@ -36,12 +36,14 @@ public class Ninja_Skill : MonoBehaviour
     [HideInInspector]
     public bool R_Skill;
 
+    public GameObject weapon;
+    private ParticleSystem weaponParticles;
+
     [SerializeField]
     private float baseDamage = 10.0f; // 기본 공격 데미지
 
     private float damageMultiplier = 1.0f; // 데미지 배율
     private bool isBossBehind = false; // 보스가 뒤에 있는지 여부
-
     void Start()
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -51,6 +53,9 @@ public class Ninja_Skill : MonoBehaviour
         W_Skill = true;
         E_Skill = true;
         R_Skill = true;
+
+        weaponParticles = weapon.GetComponent<ParticleSystem>();
+        weaponParticles.Stop();
     }
 
     void Update()
@@ -111,6 +116,7 @@ public class Ninja_Skill : MonoBehaviour
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
             anim.SetTrigger("W");
+            weaponParticles.Play();
         }
         agent.ResetPath();
     }

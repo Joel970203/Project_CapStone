@@ -5,6 +5,8 @@ using UnityEngine;
 public class Archer_Skill : MonoBehaviour
 {
     Animator anim;
+    private float originalSpeed = 1.0f;
+    private float currentSpeed;
     private CharacterController characterController;
     UnityEngine.AI.NavMeshAgent agent;
     [SerializeField]
@@ -46,10 +48,13 @@ public class Archer_Skill : MonoBehaviour
     private bool isWActive = false;
     private float wSkillTimer = 0f;
 
+    public Dispenser dispenser;
     void Start()
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         anim = GetComponent<Animator>();
+        originalSpeed = agent.speed;
+        currentSpeed = agent.speed;
         // 모든 스킬을 사용 가능으로 설정
         Q_Skill = true;
         W_Skill = true;
@@ -59,43 +64,81 @@ public class Archer_Skill : MonoBehaviour
 
     void Update()
     {
+        
         Skill_Cooltime_Cal();
 
-        if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+        if (anim.GetBool("Aiming"))
         {
-            Active_Q_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.W) && W_Skill)
-        {
-            Active_W_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E) && E_Skill)
-        {
-            Active_E_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && R_Skill)
-        {
-            Active_R_Skill();
-        }
-
-
-        if (isWActive)
-        {
-            wSkillTimer -= Time.deltaTime;
-
-            if (wSkillTimer <= 0)
+            if (Input.GetMouseButtonDown(0))
             {
-                // 10초 후에 원래 상태로 복원
-                characterController.Move(Vector3.forward * Time.deltaTime);
-                anim.speed = 1.0f;
-                isWActive = false;
+                // 좌클릭 입력을 감지하여 attack 함수 실행
+                Aim_Attack();
             }
         }
+
+        if (!anim.GetBool("Aiming"))
+        {
+            if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+            {
+                Active_Q_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.W) && W_Skill)
+            {
+                Active_W_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && E_Skill)
+            {
+                Active_E_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R) && R_Skill)
+            {
+                Active_R_Skill();
+            }
+            if (Input.GetMouseButtonDown(0))
+            {
+                // 좌클릭 입력을 감지하여 attack 함수 실행
+                Attack();
+            }
+
+            if (isWActive)
+            {
+                wSkillTimer -= Time.deltaTime;
+
+                if (wSkillTimer <= 0)
+                {
+                    // 10초 후에 원래 상태로 복원
+                    if (!anim.GetBool("Aiming")) // 에임 모드(Aiming)가 아닌 경우에만 속도 복원
+                    {
+                        agent.speed = currentSpeed;
+                    }
+                    isWActive = false;
+                }
+            }
+        }
+
+    } 
+
+    public virtual void Attack()
+    {
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+        {
+            return; // Idle 또는 Walk 애니메이션 중일 때만 공격 가능하도록
+        }
+
+        anim.SetTrigger("Shot"); // Shot 애니메이션을 트리거합니다.
     }
 
+    public virtual void Aim_Attack()
+    {
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
+        {
+            return; // Idle 또는 Walk 애니메이션 중일 때만 공격 가능하도록
+        }
+        anim.SetTrigger("Shot"); // Shot 애니메이션을 트리거합니다.
+    }
     public virtual void Active_Q_Skill()
     {
         agent.ResetPath();
@@ -113,8 +156,8 @@ public class Archer_Skill : MonoBehaviour
         || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {
             anim.SetTrigger("W");
-            characterController.Move(Vector3.forward * Time.deltaTime * 1.2f);
-            anim.speed = 1.2f;
+            currentSpeed = agent.speed;
+            agent.speed = currentSpeed * 1.3f;
             isWActive = true;
             wSkillTimer = 10.0f;
         }
@@ -122,14 +165,13 @@ public class Archer_Skill : MonoBehaviour
     }
     public virtual void Active_E_Skill() 
     {  
-        agent.ResetPath();
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
         || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {
             anim.SetTrigger("E");
         }
-
     }    
+
     public virtual void Active_R_Skill() 
     {
         agent.ResetPath();
