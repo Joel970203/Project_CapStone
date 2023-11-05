@@ -4914,15 +4914,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d0a67289947f137468dd40ad75083da1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 550.0536
+      value: 739.9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d0a67289947f137468dd40ad75083da1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 51.1
+      value: 883.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d0a67289947f137468dd40ad75083da1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 650.2636
+      value: 1043.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d0a67289947f137468dd40ad75083da1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5186,6 +5186,7 @@ MonoBehaviour:
   W_Skill: 0
   E_Skill: 0
   R_Skill: 0
+  weapon: {fileID: 0}
   baseDamage: 10
 --- !u!1001 &8910118782137854125
 PrefabInstance:
