@@ -22,6 +22,7 @@ public class BossDamageHandler : MonoBehaviour
             if (IsHeadCollider() && !headHit)
             {
                 // 머리에 맞았을 때
+                Debug.Log("머리");
                 headHit = true; // 머리 트리거를 했다고 표시
                 float headDamage = CalculateDamage(attack) * headDamageMultiplier;
                 HandleDamage(headDamage);
@@ -29,11 +30,35 @@ public class BossDamageHandler : MonoBehaviour
             else
             {
                 // 다른 부분에 맞았을 때
+                Debug.Log("몸통");
                 float damage = CalculateDamage(attack);
+                Debug.Log(damage);
                 HandleDamage(damage);
             }
-            attack.gameObject.SetActive(false);
+            //attack.gameObject.SetActive(false);
+            attack.enabled = false;
         }
+    }
+
+    private void OnTriggerStay(Collider attack)
+    {
+        if (IsHeadCollider() && !headHit)
+        {
+            // 머리에 맞았을 때
+            Debug.Log("머리");
+            headHit = true; // 머리 트리거를 했다고 표시
+            float headDamage = CalculateDamage(attack) * headDamageMultiplier;
+            HandleDamage(headDamage);
+        }
+        else
+        {
+            // 다른 부분에 맞았을 때
+            Debug.Log("몸통");
+            float damage = CalculateDamage(attack);
+            HandleDamage(damage);
+        }
+        //attack.gameObject.SetActive(false);
+        attack.enabled = false;
     }
 
     private bool IsHeadCollider()
@@ -43,6 +68,10 @@ public class BossDamageHandler : MonoBehaviour
 
     private float CalculateDamage(Collider attack)
     {
+        if(attack.gameObject.GetComponent<SkillDamage>())
+        {
+            return attack.gameObject.GetComponent<SkillDamage>().damage;
+        }
         return attack.CompareTag("PlayerAttack") ? 10f : 0f;
     }
 
