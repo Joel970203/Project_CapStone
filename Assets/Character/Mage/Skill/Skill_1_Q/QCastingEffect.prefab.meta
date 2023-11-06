@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Character/Mage/Skill/Skill_1_Q/QCastingEffect.prefab.meta
 guid: 2a84b21d43f6c234582010d0437105b5
+========
+guid: 5487dddeee03c2c469a3df6c959f4744
+>>>>>>>> parent of 4c06305 (archer pull):Assets/Prefab/Arrow_01 Variant.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 
