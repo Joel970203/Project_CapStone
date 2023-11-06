@@ -67,6 +67,7 @@ public class PaladinCharacterController : Character_Skill
         
         agent.SetDestination(Point);
         QCastingEffect.SetActive(true);
+        QCastingEffect.transform.GetChild(0).transform.Find("AttackRange").GetComponent<Collider>().enabled=true;
         yield return new WaitForSeconds(Time);
         agent.ResetPath();
         
