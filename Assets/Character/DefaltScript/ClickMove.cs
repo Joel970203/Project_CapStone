@@ -48,7 +48,7 @@ public class ClickMove : MonoBehaviour
 
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Stand Up"))
         {
-            if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f)
+            if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.99f) // 3개로 나눠서 데미지 바꾸기 
             {
                 anim.ResetTrigger("Hit");
             }
