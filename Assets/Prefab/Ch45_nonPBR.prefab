@@ -4982,9 +4982,6 @@ PrefabInstance:
       addedObject: {fileID: 5159263518328151283}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0a67289947f137468dd40ad75083da1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4304393673111188684}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0a67289947f137468dd40ad75083da1, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 9203246250033235956}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0a67289947f137468dd40ad75083da1, type: 3}
       insertIndex: -1
@@ -5001,6 +4998,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0a67289947f137468dd40ad75083da1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1652321359621492480}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0a67289947f137468dd40ad75083da1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2561469634960505435}
   m_SourcePrefab: {fileID: 100100000, guid: d0a67289947f137468dd40ad75083da1, type: 3}
 --- !u!4 &1827980455824668535 stripped
 Transform:
@@ -5043,18 +5043,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4304393673111188684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8796029094357093647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99dea92ed98aff049820ebbed8578d54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!195 &9203246250033235956
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5186,8 +5174,27 @@ MonoBehaviour:
   W_Skill: 0
   E_Skill: 0
   R_Skill: 0
-  weapon: {fileID: 0}
-  baseDamage: 10
+  QCastingEffect: {fileID: 0}
+  QTargettingEffect: {fileID: 0}
+  WCastingEffect: {fileID: 0}
+  WTargettingEffect: {fileID: 0}
+  ECastingEffect: {fileID: 0}
+  ETargettingEffect: {fileID: 0}
+  RCastingEffect: {fileID: 0}
+  RCastingEffect2: {fileID: 0}
+  RTargettingEffect: {fileID: 0}
+--- !u!114 &2561469634960505435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8796029094357093647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a38b3c458f7e1204e8d73b548fc7ec1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8910118782137854125
 PrefabInstance:
   m_ObjectHideFlags: 0
