@@ -1,134 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Archer_Skill : MonoBehaviour
-{
-    Animator anim;
-    private float originalSpeed = 1.0f;
-    private float currentSpeed;
-    private CharacterController characterController;
-    UnityEngine.AI.NavMeshAgent agent;
-    [SerializeField]
-    private float Q_Cooltime;
-
-    [SerializeField]
-    private float W_Cooltime;
-
-    [SerializeField]
-    private float E_Cooltime;
-
-    [SerializeField]
-    private float R_Cooltime;
-
-    [HideInInspector]
-    public float Q_Cooltime_Check;
-    [HideInInspector]
-    public float W_Cooltime_Check;
-    [HideInInspector]
-    public float E_Cooltime_Check;
-    [HideInInspector]
-    public float R_Cooltime_Check;
-
-    [HideInInspector]
-    public bool Q_Skill;
-    [HideInInspector]
-    public bool W_Skill;
-    [HideInInspector]
-    public bool E_Skill;
-    [HideInInspector]
-    public bool R_Skill;
-
-    [SerializeField]
-    private float baseDamage = 10.0f; // 기본 공격 데미지
-
-    private float damageMultiplier = 1.0f; // 데미지 배율
-    private bool isBossBehind = false; // 보스가 뒤에 있는지 여부
-
-    private bool isWActive = false;
-    private float wSkillTimer = 0f;
-
-    public Dispenser dispenser;
-    void Start()
+/*
+public class Archer_Skill : Character_Skill
+{  
+    public override void Active_Base_Attack()
     {
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        anim = GetComponent<Animator>();
-        originalSpeed = agent.speed;
-        currentSpeed = agent.speed;
-        // 모든 스킬을 사용 가능으로 설정
-        Q_Skill = true;
-        W_Skill = true;
-        E_Skill = true;
-        R_Skill = true;
+        //좌클릭 누르고있으면 setbool (Aiming) true고 좌클릭이 끝날때 트리거로 shot 발동 해서 'shot' 애니메이션 실행
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")|| anim.GetCurrentAnimatorStateInfo(0).IsName("Aim walk"))
+        {
+            anim.SetBool("Walk", false);
+            agent.ResetPath();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                Vector3 targetPosition = hit.point;
+                Vector3 direction = targetPosition - transform.position;
+                direction.y = 0; 
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = targetRotation;
+            }
+            anim.SetTrigger("Shot");
+        }
     }
 
-    void Update()
-    {
-        
-        Skill_Cooltime_Cal();
-
-        if (anim.GetBool("Aiming"))
+    }
+      
+    public override void Active_Base_Attack()
+    {   
+        //좌클릭 누르고있으면 setbool (Aiming) true고 좌클릭이 끝날때 트리거로 shot 발동 해서 'shot' 애니메이션 실행
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")|| anim.GetCurrentAnimatorStateInfo(0).IsName("Aim walk"))
         {
-            if (Input.GetMouseButtonDown(0))
+            anim.SetBool("Walk", false);
+            agent.ResetPath();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
             {
-                // 좌클릭 입력을 감지하여 attack 함수 실행
-                Aim_Attack();
+                Vector3 targetPosition = hit.point;
+                Vector3 direction = targetPosition - transform.position;
+                direction.y = 0; 
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = targetRotation;
             }
+            anim.SetTrigger("Shot");
         }
-
-        if (!anim.GetBool("Aiming"))
-        {
-            if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
-            {
-                Active_Q_Skill();
-            }
-
-            if (Input.GetKeyDown(KeyCode.W) && W_Skill)
-            {
-                Active_W_Skill();
-            }
-
-            if (Input.GetKeyDown(KeyCode.E) && E_Skill)
-            {
-                Active_E_Skill();
-            }
-
-            if (Input.GetKeyDown(KeyCode.R) && R_Skill)
-            {
-                Active_R_Skill();
-            }
-            if (Input.GetMouseButtonDown(0))
-            {
-                // 좌클릭 입력을 감지하여 attack 함수 실행
-                Attack();
-            }
-
-            if (isWActive)
-            {
-                wSkillTimer -= Time.deltaTime;
-
-                if (wSkillTimer <= 0)
-                {
-                    // 10초 후에 원래 상태로 복원
-                    if (!anim.GetBool("Aiming")) // 에임 모드(Aiming)가 아닌 경우에만 속도 복원
-                    {
-                        agent.speed = currentSpeed;
-                    }
-                    isWActive = false;
-                }
-            }
-        }
-
-    } 
-
-    public virtual void Attack()
-    {
-        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {
-            return; // Idle 또는 Walk 애니메이션 중일 때만 공격 가능하도록
-        }
-
-        anim.SetTrigger("Shot"); // Shot 애니메이션을 트리거합니다.
     }
 
     public virtual void Aim_Attack()
@@ -139,128 +58,76 @@ public class Archer_Skill : MonoBehaviour
         }
         anim.SetTrigger("Shot"); // Shot 애니메이션을 트리거합니다.
     }
-    public virtual void Active_Q_Skill()
+    public override void Active_Q_Skill()
     {
-        agent.ResetPath();
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
         || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {       
-            anim.SetTrigger("Q");
+            anim.SetBool("Walk", false);
+            agent.ResetPath();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                Vector3 targetPosition = hit.point;
+                Vector3 direction = targetPosition - transform.position;
+                direction.y = 0; 
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = targetRotation;
+            }
+            anim.SetTrigger("Q"); // 덫 
         }
-        
     }
-    public virtual void Active_W_Skill()
-    { 
-        agent.ResetPath();
+    public override void Active_W_Skill()
+    {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
         || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {
-            anim.SetTrigger("W");
-            currentSpeed = agent.speed;
-            agent.speed = currentSpeed * 1.3f;
-            isWActive = true;
-            wSkillTimer = 10.0f;
+            anim.SetBool("Walk", false);
+            agent.ResetPath();
+            anim.SetTrigger("W"); 
+            /*
+                헤이스트 작업
+            
         }
-
     }
     public virtual void Active_E_Skill() 
     {  
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
         || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {
+             anim.SetBool("Walk", false);
+            agent.ResetPath();
             anim.SetTrigger("E");
-        }
-    }    
-
+        }    
+    }
     public virtual void Active_R_Skill() 
     {
         agent.ResetPath();
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
         || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
-        {
-            anim.SetTrigger("R");
-        }
-    }
+         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
 
-    private void Skill_Cooltime_Cal()
-    {
-        if (Q_Cooltime_Check >= 0)
+        if (Physics.Raycast(ray, out hit))
         {
-            Q_Cooltime_Check -= Time.deltaTime;
-            if (Q_Cooltime_Check <= 0)
+            Vector3 targetPosition = hit.point;
+
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
             {
-                Q_Cooltime_Check = 0;
-                Q_Skill = true;
+                anim.SetBool("Walk", false);
+                agent.ResetPath();
+    
+                // 커서방향으로 시전 
+                Vector3 direction = targetPosition - transform.position;
+                direction.y = 0; // y축고정
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = targetRotation;
+              
+                anim.SetTrigger("R");
             }
         }
-
-        if (W_Cooltime_Check >= 0)
-        {
-            W_Cooltime_Check -= Time.deltaTime;
-            if (W_Cooltime_Check <= 0)
-            {
-                W_Cooltime_Check = 0;
-                W_Skill = true;
-            }
-        }
-
-        if (E_Cooltime_Check >= 0)
-        {
-            E_Cooltime_Check -= Time.deltaTime;
-            if (E_Cooltime_Check <= 0)
-            {
-                E_Cooltime_Check = 0;
-                E_Skill = true;
-            }
-        }
-
-        if (R_Cooltime_Check >= 0)
-        {
-            R_Cooltime_Check -= Time.deltaTime;
-            if (R_Cooltime_Check <= 0)
-            {
-                R_Cooltime_Check = 0;
-                R_Skill = true;
-            }
-        }
-    }
-
-    // OnTriggerEnter로 보스와 충돌했을 때 호출됨
-  /*  void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("boss"))
-        {
-            Vector3 bossDirection = other.transform.position - transform.position;
-
-            // 거리를 확인하여 데미지 배율을 조절
-            if (Vector3.Dot(bossDirection, transform.forward) < 0)
-            {
-                // 보스가 뒤를 바라보는 경우
-                damageMultiplier = 1.3f;
-                isBossBehind = true;
-            }
-            else
-            {
-                // 보스가 플레이어를 바라보는 경우
-                damageMultiplier = 1.0f;
-                isBossBehind = false;
-            }
-        }
-    }
-    // OnTriggerExit로 보스와 충돌에서 벗어날 때 호출됨
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("boss"))
-        {
-            isBossBehind = false;
-        }
-    }
-*/
-    // 데미지 계산 함수
-    public float CalculateDamage()
-    {
-        // 실제 데미지 계산
-        float damage = baseDamage * damageMultiplier;
-        return damage;
     }
 }
+*/

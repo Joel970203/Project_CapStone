@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Archer_Move : MonoBehaviour
+public class Archer_Move : MonoBehaviour 
 {
     UnityEngine.AI.NavMeshAgent agent;
     Animator anim;

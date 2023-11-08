@@ -16,6 +16,8 @@ public class Ninja_Skill : Character_Skill
     [SerializeField] private ParticleSystem weaponParticles;
     [SerializeField] private ParticleSystem R_Particles;
 
+    public float damage;
+
     public override void Active_Base_Attack()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
