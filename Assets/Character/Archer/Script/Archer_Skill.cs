@@ -1,64 +1,253 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/*
-public class Archer_Skill : Character_Skill
-{  
-    public override void Active_Base_Attack()
-    {
-        //좌클릭 누르고있으면 setbool (Aiming) true고 좌클릭이 끝날때 트리거로 shot 발동 해서 'shot' 애니메이션 실행
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")|| anim.GetCurrentAnimatorStateInfo(0).IsName("Aim walk"))
-        {
-            anim.SetBool("Walk", false);
-            agent.ResetPath();
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit))
+public class Archer_Skill : MonoBehaviour 
+{
+    [SerializeField]
+    private float Q_Cooltime;
+
+    [SerializeField]
+    private float W_Cooltime;
+
+    [SerializeField]
+    private float E_Cooltime;
+
+    [SerializeField]
+    private float R_Cooltime;
+
+    [HideInInspector]
+    public float Q_Cooltime_Check;
+    [HideInInspector]
+    public float W_Cooltime_Check;
+    [HideInInspector]
+    public float E_Cooltime_Check;
+    [HideInInspector]
+    public float R_Cooltime_Check;
+
+    public bool Q_Skill, W_Skill, E_Skill, R_Skill, Base_Attack;
+
+    protected Animator anim;
+    protected UnityEngine.AI.NavMeshAgent agent;
+
+    bool isLeftMouseButtonPressed = false;
+    public GameObject arrowPrefab; // 화살 프리팹을 드래그하여 할당
+    public Transform arrowSpawnPoint; // 화살이 발사될 위치를 드래그하여 할당
+    void Start()
+    {
+        Q_Skill = true;
+        W_Skill = true;
+        E_Skill = true;
+        R_Skill = true;
+        Base_Attack = true;
+        anim = GetComponent<Animator>();
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        Skill_Cooltime_Cal();
+
+        if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+        {
+            Active_Q_Skill();
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) && W_Skill)
+        {
+            Active_W_Skill();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && E_Skill)
+        {
+            Active_E_Skill();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && R_Skill)
+        {
+            Active_R_Skill();
+        }
+        HandleMouseInput();
+    }
+
+    public void Skill_Cooltime_Cal()
+    {
+        if (Q_Cooltime_Check > 0)
+        {
+            Q_Cooltime_Check -= Time.deltaTime;
+        }
+        else
+        {
+            Q_Cooltime_Check = 0;
+            Q_Skill = true;
+        }
+
+        if (W_Cooltime_Check > 0)
+        {
+            W_Cooltime_Check -= Time.deltaTime;
+        }
+        else
+        {
+            W_Cooltime_Check = 0;
+            W_Skill = true;
+        }
+
+        if (E_Cooltime_Check > 0)
+        {
+            E_Cooltime_Check -= Time.deltaTime;
+        }
+        else
+        {
+            E_Cooltime_Check = 0;
+            E_Skill = true;
+        }
+
+        if (R_Cooltime_Check > 0)
+        {
+            R_Cooltime_Check -= Time.deltaTime;
+        }
+        else
+        {
+            R_Cooltime_Check = 0;
+            R_Skill = true;
+        }
+
+    }
+    
+    void HandleMouseInput()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            isLeftMouseButtonPressed = true;
+            Aim_Attack();
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            ContinuousAiming();
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (isLeftMouseButtonPressed)
             {
-                Vector3 targetPosition = hit.point;
-                Vector3 direction = targetPosition - transform.position;
-                direction.y = 0; 
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = targetRotation;
+                Active_Base_Attack();
+                isLeftMouseButtonPressed = false;
             }
-            anim.SetTrigger("Shot");
+        }
+}
+
+
+    void ContinuousAiming()
+    {
+        // 마우스 커서 위치를 기준으로 방향 계산
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            Vector3 targetPosition = hit.point;
+            Vector3 direction = targetPosition - transform.position;
+            direction.y = 0;
+
+            // 캐릭터를 마우스 커서 방향으로 회전
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            // 90도 추가 회전(방향 맞추기 용도)
+            targetRotation *= Quaternion.Euler(0, 90, 0);
+
+            transform.rotation = targetRotation;
         }
     }
 
-    }
-      
-    public override void Active_Base_Attack()
-    {   
-        //좌클릭 누르고있으면 setbool (Aiming) true고 좌클릭이 끝날때 트리거로 shot 발동 해서 'shot' 애니메이션 실행
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")|| anim.GetCurrentAnimatorStateInfo(0).IsName("Aim walk"))
-        {
-            anim.SetBool("Walk", false);
-            agent.ResetPath();
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                Vector3 targetPosition = hit.point;
-                Vector3 direction = targetPosition - transform.position;
-                direction.y = 0; 
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = targetRotation;
-            }
-            anim.SetTrigger("Shot");
-        }
-    }
-
-    public virtual void Aim_Attack()
+    public void Aim_Attack()
     {
-        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
             return; // Idle 또는 Walk 애니메이션 중일 때만 공격 가능하도록
         }
-        anim.SetTrigger("Shot"); // Shot 애니메이션을 트리거합니다.
+        anim.SetBool("Walk", false);
+        agent.ResetPath();
+        anim.SetTrigger("Aiming"); 
     }
-    public override void Active_Q_Skill()
+
+    public void Active_Base_Attack()
+    {
+        
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim walk") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming"))
+        {
+            anim.SetBool("Walk", false);
+            agent.ResetPath();
+
+            // 마우스 커서 위치를 기준으로 방향 계산
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                Vector3 targetPosition = hit.point;
+                Vector3 direction = targetPosition - transform.position;
+                direction.y = 0;
+
+                // 캐릭터를 마우스 커서 방향으로 회전
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+                // 90도 추가 회전
+                targetRotation *= Quaternion.Euler(0, 90, 0);
+
+                transform.rotation = targetRotation;
+
+                anim.SetTrigger("Shot");
+                anim.SetBool("Aiming", false);
+
+                // 화살 발사 시 목표 지점 설정
+                StartCoroutine(MoveArrowToTarget(hit.point));
+            }
+        }
+    }
+
+    IEnumerator MoveArrowToTarget(Vector3 targetPosition)
+    {
+        GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
+        Rigidbody arrowRigidbody = arrow.GetComponent<Rigidbody>();
+
+        float duration = 1f; // 화살이 목표 지점에 도달하는 시간
+
+        float time = 0f;
+        while (time < duration)
+        {
+            // 새 위치 계산
+            Vector3 newPosition = Vector3.Lerp(arrowSpawnPoint.position, targetPosition, time / duration);
+
+            // 방향 계산
+            Vector3 direction = newPosition - arrow.transform.position;
+
+            // y축 방향으로 -90도 회전
+            Quaternion targetRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(90, -90, 90);
+
+            // 회전 설정
+            arrow.transform.rotation = targetRotation;
+
+            // 화살을 새 위치로 이동
+            arrow.transform.position = newPosition;
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+        StartCoroutine(DestroyArrowAfterDelay(arrow, 2f)); // 2초 후에 화살 제거
+    }
+
+
+    IEnumerator DestroyArrowAfterDelay(GameObject arrow, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(arrow);
+    }
+
+
+    public void Active_Q_Skill()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
         || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
@@ -79,7 +268,7 @@ public class Archer_Skill : Character_Skill
             anim.SetTrigger("Q"); // 덫 
         }
     }
-    public override void Active_W_Skill()
+    public void Active_W_Skill()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
         || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
@@ -87,12 +276,12 @@ public class Archer_Skill : Character_Skill
             anim.SetBool("Walk", false);
             agent.ResetPath();
             anim.SetTrigger("W"); 
-            /*
-                헤이스트 작업
+            
+                //헤이스트 작업
             
         }
     }
-    public virtual void Active_E_Skill() 
+    public void Active_E_Skill() 
     {  
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
         || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
@@ -102,32 +291,32 @@ public class Archer_Skill : Character_Skill
             anim.SetTrigger("E");
         }    
     }
-    public virtual void Active_R_Skill() 
+    public void Active_R_Skill() 
     {
         agent.ResetPath();
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
-        || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
-         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
+            || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {
-            Vector3 targetPosition = hit.point;
-
-            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+            if (Physics.Raycast(ray, out hit))
             {
-                anim.SetBool("Walk", false);
-                agent.ResetPath();
+                Vector3 targetPosition = hit.point;
+
+                if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+                {
+                    anim.SetBool("Walk", false);
+                    agent.ResetPath();
     
-                // 커서방향으로 시전 
-                Vector3 direction = targetPosition - transform.position;
-                direction.y = 0; // y축고정
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = targetRotation;
-              
-                anim.SetTrigger("R");
+                    // 커서 방향으로 시전 
+                    Vector3 direction = targetPosition - transform.position;
+                    direction.y = 0; // y축고정
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = targetRotation;
+                    anim.SetTrigger("R");
+                }
             }
         }
     }
 }
-*/
