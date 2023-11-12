@@ -28,7 +28,7 @@ public class Character_Skill : MonoBehaviour
     [HideInInspector]
     public float R_Cooltime_Check;
 
-    public bool Q_Skill, W_Skill, E_Skill, R_Skill;
+    public bool Q_Skill, W_Skill, E_Skill, R_Skill, Base_Attack;
 
     protected Animator anim;
     protected NavMeshAgent agent;
@@ -37,8 +37,8 @@ public class Character_Skill : MonoBehaviour
         Q_Skill = true;
         W_Skill = true;
         E_Skill = true;
-        R_Skill = false;
-
+        R_Skill = true;
+        Base_Attack = true;
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
     }
@@ -73,12 +73,19 @@ public class Character_Skill : MonoBehaviour
         {
             Active_R_Skill();
         }
+
+        if (Input.GetMouseButtonDown(0) && Base_Attack)
+        {
+            Active_Base_Attack();
+        }
     }
     public virtual void NormalAttack() { }
     public virtual void Active_Q_Skill() { }
     public virtual void Active_W_Skill() { }
     public virtual void Active_E_Skill() { }
     public virtual void Active_R_Skill() { }
+
+    public virtual void Active_Base_Attack() {}
 
     private void Skill_Cooltime_Cal()
     {

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2992647382275263741}
   - component: {fileID: 3000734686370091519}
   - component: {fileID: 3115939194204507405}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pillar_Pref
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 6794885464362501185}
   - component: {fileID: 7892806433869754582}
   - component: {fileID: 543687735530861921}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Terrain 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 3968613442407278285}
   - component: {fileID: 7945960528124915732}
   - component: {fileID: 2004253975265736486}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pillar_Pref (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 5408406255952727846}
   - component: {fileID: 8980563864481366147}
   - component: {fileID: 6576847587906679881}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: floor_segment (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +403,7 @@ GameObject:
   - component: {fileID: 3662731254268217264}
   - component: {fileID: 323150257705605927}
   - component: {fileID: 7514378595698309243}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 767699303277584934}
   - component: {fileID: 8857500496941947698}
   - component: {fileID: 8022897173549542502}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pillar_Pref (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -614,7 +614,7 @@ GameObject:
   - component: {fileID: 2456586762941509249}
   - component: {fileID: 8266175733914421986}
   - component: {fileID: 3494944214326625161}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pillar_Pref (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
