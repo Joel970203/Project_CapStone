@@ -80,7 +80,7 @@ public class Ninja_Move : MonoBehaviour
                 anim.SetTrigger("Dodge");
 
                 // NavMeshAgent를 초기화하고 제자리로 돌리기
-                agent.ResetPath(); // NavMeshAgent의 경로 초기화
+                //agent.ResetPath(); // NavMeshAgent의 경로 초기화
         
                 }
             }

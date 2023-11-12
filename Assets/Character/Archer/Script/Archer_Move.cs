@@ -5,35 +5,15 @@ public class Archer_Move : MonoBehaviour
 {
     UnityEngine.AI.NavMeshAgent agent;
     Animator anim;
-
-    private float originalSpeed;
-    // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         anim = GetComponent<Animator>();
-        originalSpeed = agent.speed; 
     }
 
     // Update is called once per frame
        void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            if (anim.GetBool("Aiming")) 
-            {
-                agent.ResetPath();
-                anim.SetBool("Aiming", false);
-                agent.speed = originalSpeed;
-            }
-            else
-            {
-                agent.ResetPath();
-                anim.SetBool("Aiming", true);
-                agent.speed = originalSpeed * 0.1f;
-            }
-        }
-
         //마우스 오른쪽 클릭. Idle 상태거나 Walk 상태일 때만 이동 명령 가능
         if (Input.GetMouseButtonDown(1) && ((anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))))
         {
