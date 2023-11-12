@@ -116,7 +116,7 @@ public class Boss_Skill : MonoBehaviour
 
         if (!isFinished || !isCoroutineFinished) return;
 
-        Debug.Log("함수 진입");
+        //Debug.Log("함수 진입");
 
         isFinished = false;
 
@@ -360,7 +360,7 @@ public class Boss_Skill : MonoBehaviour
         yield return new WaitForSeconds(length);
         swordVfx.gameObject.SetActive(false);
         isCoroutineFinished = true;
-        Debug.Log("공격애니메이션 종료");
+        //Debug.Log("공격애니메이션 종료");
     }
 
     bool MeleeAttack()

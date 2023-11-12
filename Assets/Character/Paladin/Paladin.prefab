@@ -195,6 +195,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5856524748430588407, guid: 989c29fab989215439a90b607d5fea39, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6084352665632728166, guid: 989c29fab989215439a90b607d5fea39, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8012334926085197321, guid: 989c29fab989215439a90b607d5fea39, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -485,6 +497,7 @@ MonoBehaviour:
   armor: 0
   hitEffectPrefab: {fileID: 0}
   Immotal: 0
+  Grave: {fileID: 0}
 --- !u!54 &4725168041618660432
 Rigidbody:
   m_ObjectHideFlags: 0
