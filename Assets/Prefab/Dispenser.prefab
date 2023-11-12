@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8404258471151042868}
-  - component: {fileID: 3796057376011266206}
   m_Layer: 0
   m_Name: Dispenser
   m_TagString: Untagged
@@ -25,23 +24,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1958325353663592800}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.28474927, y: 0.6206475, z: -0.384648, w: 0.6210963}
+  m_LocalRotation: {x: 0.28475413, y: 0.62064385, z: -0.38464755, w: 0.62109786}
   m_LocalPosition: {x: 0.083, y: 0.001, z: 0.017}
   m_LocalScale: {x: 0.0625, y: 0.0625, z: 0.0625}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 56.22, y: 83.034, z: -12.923}
---- !u!114 &3796057376011266206
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1958325353663592800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c66af97060de6b40bd392d3478ae844, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  arrowPrefab: {fileID: 2499865757521943606, guid: 5487dddeee03c2c469a3df6c959f4744, type: 3}

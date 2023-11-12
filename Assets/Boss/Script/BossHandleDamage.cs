@@ -32,6 +32,7 @@ public class BossDamageHandler : MonoBehaviour
                 // 다른 부분에 맞았을 때
                 Debug.Log("몸통");
                 float damage = CalculateDamage(attack);
+                Debug.Log("피격");
                 Debug.Log(damage);
                 HandleDamage(damage);
             }
