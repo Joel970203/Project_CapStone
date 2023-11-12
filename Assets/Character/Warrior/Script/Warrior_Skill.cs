@@ -7,14 +7,10 @@ public class Warrior_Skill : Character_Skill
     private GameObject weapon;
 
     [SerializeField] private ParticleSystem weaponParticles;
-
     [SerializeField] private ParticleSystem Q_Particles;
     [SerializeField] private ParticleSystem W_Particles;
     [SerializeField] private ParticleSystem E_Particles;
     [SerializeField] private ParticleSystem R_Particles;
-
-    public float damage;
-
     public override void Active_Base_Attack()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
@@ -90,39 +86,26 @@ public class Warrior_Skill : Character_Skill
 
     public override void Active_E_Skill()
     {
-        // 스킬 E 실행
+        // 스킬 E 
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
             anim.SetTrigger("E");
+            E_Particles.Play();
 
-            // 3초 동안 애니메이션 유지
-            StartCoroutine(KeepAnimationForDuration(3f));
-
-            // 3초 동안 파티클 유지 후 꺼짐
-            StartCoroutine(KeepAndStopParticlesForDuration(E_Particles, 3f));
+            // 3초 뒤에 파티클을 정지하고 초기화
+            Invoke("StopAndClearParticles", 3f);
         }
     }
 
-    private IEnumerator KeepAnimationForDuration(float duration)
+    private void StopAndClearParticles()
     {
-        yield return new WaitForSeconds(duration);
-
-        // 애니메이션을 정지하거나 초기 상태로 돌릴 수 있는 코드를 여기에 추가
-    }
-
-    private IEnumerator KeepAndStopParticlesForDuration(ParticleSystem particles, float duration)
-    {
-        // 파티클 재생
-        particles.Play();
-
-        yield return new WaitForSeconds(duration);
-
         // 파티클 정지
-        particles.Stop();
-        particles.Clear();
+        E_Particles.Stop();
+        E_Particles.Clear();
     }
+
     public override void Active_R_Skill()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
@@ -130,6 +113,15 @@ public class Warrior_Skill : Character_Skill
             anim.SetBool("Walk", false);
             agent.ResetPath();
             anim.SetTrigger("R");
-            }
+            R_Particles.Play();
+            Invoke("StopParticles", 10f);
+        }
+    }
+
+     private void StopParticles()
+    {
+        // 파티클 정지
+        R_Particles.Stop();
+        R_Particles.Clear();
     }
 }

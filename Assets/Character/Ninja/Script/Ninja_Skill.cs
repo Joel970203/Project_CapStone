@@ -5,18 +5,14 @@ using UnityEngine;
 public class Ninja_Skill : Character_Skill
 {
     [SerializeField]
-    private GameObject WCastingEffect;
-
-    [SerializeField]
-    private GameObject WTargettingEffect;
-
-    [SerializeField]
     private GameObject weapon;
 
+    public GameObject shadowClonePrefab; 
+    public float cloneDuration = 20f; // 분신이 유지될 시간
     [SerializeField] private ParticleSystem weaponParticles;
+    [SerializeField] private ParticleSystem Q_Particles;
+    [SerializeField] private ParticleSystem W_Particles;
     [SerializeField] private ParticleSystem R_Particles;
-
-    public float damage;
 
     public override void Active_Base_Attack()
     {
@@ -63,49 +59,19 @@ public class Ninja_Skill : Character_Skill
                 transform.LookAt(boss.transform);
             
                 anim.SetTrigger("Q");
+                Q_Particles.Play();
+                Invoke("StopP", 1f);
             }
         }
     }
 
+    private void StopP()
+    {
+        // 파티클 정지
+        Q_Particles.Stop();
+        Q_Particles.Clear();
+    }
     public override void Active_W_Skill()
-    {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {
-            anim.SetBool("Walk", false);
-            agent.ResetPath();
-       
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                Vector3 targetPosition = hit.point;
-                Vector3 direction = targetPosition - transform.position;
-                direction.y = 0; 
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = targetRotation;
-            }
-        
-            anim.SetTrigger("W"); 
-            /*
-                표창 작업
-            */
-        }
-    }
-
-    public override void Active_E_Skill()
-    {
-        // 스킬 E 실행
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {
-            anim.SetBool("Walk", false);
-            agent.ResetPath();
-            anim.SetTrigger("E");
-            weaponParticles.Play();
-            Invoke("StopweaponParticles", 10.0f);
-        }
-    }
-    public override void Active_R_Skill()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -118,26 +84,99 @@ public class Ninja_Skill : Character_Skill
             {
                 anim.SetBool("Walk", false);
                 agent.ResetPath();
-    
+
                 // 커서방향으로 시전 
                 Vector3 direction = targetPosition - transform.position;
                 direction.y = 0; // y축고정
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
                 transform.rotation = targetRotation;
-              
+
+                anim.SetTrigger("W");
+                W_Particles.Play();
+                StartCoroutine(SpawnDelay(0.5f, 0.35f, 3)); 
+            }
+        }
+    }
+    private IEnumerator SpawnDelay(float initialDelay, float interval, int spawnCount)
+    {
+        yield return new WaitForSeconds(initialDelay);
+
+        for (int i = 0; i < spawnCount; i++)
+        {
+            yield return new WaitForSeconds(interval);
+
+            Vector3 spawnPosition = transform.position + transform.forward * 10f;
+            spawnPosition.y += 20f;
+            GameObject WParticlesObject = Instantiate(W_Particles.gameObject, spawnPosition, Quaternion.Euler(180f, 0f, 0f));
+            W_Particles.Play();
+
+            // 파티클의 지속 시간 이후에 파티클을 제거
+            float particleDuration = W_Particles.main.duration;
+            Destroy(WParticlesObject, particleDuration);
+        }
+    }
+    
+    public override void Active_E_Skill()
+    {
+        // 스킬 E 실행
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+        {
+            anim.SetBool("Walk", false);
+            agent.ResetPath();
+            anim.SetTrigger("E");
+            weaponParticles.Play();
+            Invoke("StopweaponParticles", 10.0f);
+        }
+    }
+    
+    public override void Active_R_Skill()
+    {
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+        {
+            anim.SetBool("Walk", false);
+            agent.ResetPath();
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                Vector3 targetPosition = hit.point;
+                Vector3 direction = targetPosition - transform.position;
+                direction.y = 0;
+                Quaternion targetRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                transform.rotation = targetRotation;
+
                 anim.SetTrigger("R");
-                R_Particles.Play();
-                Invoke("StopRParticles", 2.5f);
+                StartCoroutine(SpawnShadowClone(targetPosition));
+                Invoke("PlayWParticles", 1.5f);
             }
         }
     }
 
-    void StopweaponParticles()
+    private void PlayWParticles()
     {
-        weaponParticles.Stop();
+        R_Particles.Play();
+        Invoke("StopWParticles", 2f);
     }
-    void StopRParticles()
+
+    private void StopWParticles()
     {
         R_Particles.Stop();
+        R_Particles.Clear();
+    }
+
+    IEnumerator SpawnShadowClone(Vector3 targetPosition)
+    {
+        // 1.5초 뒤에 분신 생성
+        yield return new WaitForSeconds(1.5f);
+
+        // 분신 생성
+        GameObject shadowClone = Instantiate(shadowClonePrefab, transform.position, Quaternion.identity);
+
+        yield return new WaitForSeconds(cloneDuration - 1.5f);
+
+        // 분신 제거
+        Destroy(shadowClone);
     }
 }

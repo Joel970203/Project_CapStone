@@ -27,6 +27,7 @@ public class Archer_Skill : MonoBehaviour
 
     public bool Q_Skill, W_Skill, E_Skill, R_Skill, Base_Attack;
 
+    [SerializeField] private ParticleSystem R_Aura;
     protected Animator anim;
     protected UnityEngine.AI.NavMeshAgent agent;
 
@@ -239,7 +240,7 @@ public class Archer_Skill : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
-        StartCoroutine(DestroyArrowAfterDelay(arrow, 2f)); // 2초 후에 화살 제거
+        StartCoroutine(DestroyArrowAfterDelay(arrow, 1f)); // 2초 후에 화살 제거
     }
 
 
@@ -337,34 +338,46 @@ public class Archer_Skill : MonoBehaviour
         }
         hasShotArrow = true;
     }
-    public void Active_R_Skill() 
+    public void Active_R_Skill()
     {
-        agent.ResetPath();
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
-            || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
+        // 현재 애니메이션 상태가 Idle 또는 Walk인 경우에만 실행
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
+            anim.SetBool("Walk", false);
+            agent.ResetPath();
+            // 현재 마우스 위치를 기준으로 캐릭터가 바라볼 방향 계산
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
             if (Physics.Raycast(ray, out hit))
             {
                 Vector3 targetPosition = hit.point;
 
-                if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-                {
-                    anim.SetBool("Walk", false);
-                    agent.ResetPath();
+                // 커서 방향으로 시전
+                Vector3 direction = targetPosition - transform.position;
+                direction.y = 0; // y축 고정
+                Quaternion targetRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
 
-                    // 커서 방향으로 시전 
-                    Vector3 direction = targetPosition - transform.position;
-                    direction.y = 0; // y축고정
-                    Quaternion targetRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+                // 캐릭터 방향 조정
+                transform.rotation = targetRotation;
 
-                    transform.rotation = targetRotation;
-                    anim.SetTrigger("R");
-                }
+                // R 애니메이션 실행
+                anim.SetTrigger("R");
+
+                // R_Aura 활성화 및 5초 후 정지
+                R_Aura.Play();
+                StartCoroutine(StopAuraAfterDelay(5f));
+                StartCoroutine(FireArrows(5));
             }
         }
+    }
+    private IEnumerator StopAuraAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // R_Aura 정지
+        R_Aura.Stop();
+        R_Aura.Clear();
     }
 
 }
