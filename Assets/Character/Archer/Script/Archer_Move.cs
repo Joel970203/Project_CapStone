@@ -35,8 +35,7 @@ public class Archer_Move : MonoBehaviour
         }
 
         //마우스 오른쪽 클릭. Idle 상태거나 Walk 상태일 때만 이동 명령 가능
-        if (Input.GetMouseButtonDown(1) && ((anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")) 
-        || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk")))
+        if (Input.GetMouseButtonDown(1) && ((anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -48,18 +47,16 @@ public class Archer_Move : MonoBehaviour
         }
         else if (agent.remainingDistance < 0.1f)
         {
-            
-            anim.SetBool("Walk", false);
             agent.ResetPath();
+            anim.SetBool("Walk", false);
         }
 
 
         //공격 받는다면 이동 취소 후 Walk 상태 초기화
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
         {
-            
-            anim.SetBool("Walk", false);
             agent.ResetPath();
+            anim.SetBool("Walk", false);
         }
 
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Stand Up"))

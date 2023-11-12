@@ -31,8 +31,14 @@ public class Archer_Skill : MonoBehaviour
     protected UnityEngine.AI.NavMeshAgent agent;
 
     bool isLeftMouseButtonPressed = false;
+    bool hasShotArrow = false;
     public GameObject arrowPrefab; // 화살 프리팹을 드래그하여 할당
+    public GameObject grenadePrefab;
     public Transform arrowSpawnPoint; // 화살이 발사될 위치를 드래그하여 할당
+    public Transform GrenadeSpawnPoint;
+    public float grenadeThrowDistance = 15f;
+
+    public ParticleSystem Heyste;
     void Start()
     {
         Q_Skill = true;
@@ -118,27 +124,24 @@ public class Archer_Skill : MonoBehaviour
     
     void HandleMouseInput()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isLeftMouseButtonPressed)
         {
             isLeftMouseButtonPressed = true;
+            hasShotArrow = false;
             Aim_Attack();
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !hasShotArrow)
         {
             ContinuousAiming();
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && isLeftMouseButtonPressed && !hasShotArrow)
         {
-            if (isLeftMouseButtonPressed)
-            {
-                Active_Base_Attack();
-                isLeftMouseButtonPressed = false;
-            }
+            isLeftMouseButtonPressed = false;
+            Active_Base_Attack();
         }
-}
-
+    }
 
     void ContinuousAiming()
     {
@@ -175,8 +178,7 @@ public class Archer_Skill : MonoBehaviour
 
     public void Active_Base_Attack()
     {
-        
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim walk") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming"))
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming"))
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
@@ -204,6 +206,7 @@ public class Archer_Skill : MonoBehaviour
 
                 // 화살 발사 시 목표 지점 설정
                 StartCoroutine(MoveArrowToTarget(hit.point));
+                hasShotArrow = true;
             }
         }
     }
@@ -249,47 +252,90 @@ public class Archer_Skill : MonoBehaviour
 
     public void Active_Q_Skill()
     {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
-        || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
-        {       
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+        {
             anim.SetBool("Walk", false);
             agent.ResetPath();
+
+            // 마우스 커서 위치를 기준으로 방향 계산
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
             {
-                Vector3 targetPosition = hit.point;
-                Vector3 direction = targetPosition - transform.position;
-                direction.y = 0; 
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = targetRotation;
+                Vector3 throwDirection = (hit.point - GrenadeSpawnPoint.position).normalized;
+
+                // 수류탄 던지기
+                GameObject grenade = Instantiate(grenadePrefab, GrenadeSpawnPoint.position, Quaternion.identity);
+
+                // Rigidbody에 중력 설정 (중력 사용)
+                Rigidbody grenadeRigidbody = grenade.GetComponent<Rigidbody>();
+                grenadeRigidbody.useGravity = true;
+
+                // 수류탄에게 힘을 주어 날아가게 하기
+                grenadeRigidbody.AddForce(throwDirection * 200f, ForceMode.Impulse);
             }
-            anim.SetTrigger("Q"); // 덫 
         }
+        anim.SetTrigger("Q"); 
     }
+
+
+
+
     public void Active_W_Skill()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
-        || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
+            || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
-            anim.SetTrigger("W"); 
-            
-                //헤이스트 작업
-            
+            anim.SetTrigger("W");
+            agent.speed *= 1.2f;
+            Heyste.Play();
+            Invoke("StopHeyste", 10.0f);
         }
     }
-    public void Active_E_Skill() 
+
+    void StopHeyste()
+    {
+        Heyste.Stop();
+        agent.speed /= 1.2f;
+    }
+
+
+    public void Active_E_Skill()
     {  
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
-        || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
+            || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {
-             anim.SetBool("Walk", false);
-            agent.ResetPath();
+            anim.SetBool("Walk", false);
+            //agent.ResetPath();
             anim.SetTrigger("E");
+
+            // 3번 연속 화살 발사
+            StartCoroutine(FireArrows(3));
         }    
+    }
+
+    private IEnumerator FireArrows(int arrowCount)
+    {
+        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < arrowCount; i++)
+        {
+            // 마우스 커서 위치를 기준으로 방향 계산
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                // 화살 발사
+                StartCoroutine(MoveArrowToTarget(hit.point));
+
+                // 대기 시간 (필요에 따라 조절)
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+        hasShotArrow = true;
     }
     public void Active_R_Skill() 
     {
@@ -308,15 +354,17 @@ public class Archer_Skill : MonoBehaviour
                 {
                     anim.SetBool("Walk", false);
                     agent.ResetPath();
-    
+
                     // 커서 방향으로 시전 
                     Vector3 direction = targetPosition - transform.position;
                     direction.y = 0; // y축고정
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    Quaternion targetRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
+
                     transform.rotation = targetRotation;
                     anim.SetTrigger("R");
                 }
             }
         }
     }
+
 }
