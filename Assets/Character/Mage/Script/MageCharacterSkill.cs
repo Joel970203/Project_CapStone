@@ -87,8 +87,8 @@ public class MageCharacterSkill : Character_Skill
                 ResetForward(hit.point, -50f, 0.2f);
                 SettingParticle(hit.point, CastingPosition, QCastingEffect, QTargettingEffect, 0.2f);
                 anim.SetTrigger("QSkillTrigger");
-                Q_Cooltime_Check = Q_Cooltime;
-                Q_Skill = false;
+                Q_Cooltime_Check = Q_Cooltime; // 1
+                Q_Skill = false; // 2 
             }
         }
     }
