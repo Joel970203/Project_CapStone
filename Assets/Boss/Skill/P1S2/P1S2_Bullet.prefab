@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -1757897131884023957}
   - component: {fileID: 2907809924826899805}
   - component: {fileID: 9168439529742069214}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: P1S2_Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

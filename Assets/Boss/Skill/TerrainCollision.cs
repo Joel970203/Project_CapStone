@@ -7,7 +7,7 @@ public class TerrainCollision : MonoBehaviour
     [SerializeField] GameObject effect;
 
     private void OnTriggerEnter(Collider other) {
-        //Debug.Log("충돌함" + other.gameObject.tag);
+        Debug.Log("충돌함" + other.gameObject.tag);
         if (other.gameObject.tag == "Terrain") 
         {
             Vector3 targetPoint = transform.position;

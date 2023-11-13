@@ -8,6 +8,8 @@ TagManager:
   - BossAttack
   - PlayerAttack
   - Heal
+  - Grenade
+  - Terrain
   layers:
   - Default
   - TransparentFX
@@ -15,9 +17,9 @@ TagManager:
   - Enemy
   - Water
   - UI
-  - 
+  - Bullet
   - Player
-  - 
+  - Terrain
   - Grave
   - 
   - Moveable

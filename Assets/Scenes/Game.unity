@@ -3218,6 +3218,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 4322836956636126126, guid: c21ab2161ad0c4640afc11877da5c0d3, type: 3}
+      propertyPath: m_TagString
+      value: Terrain
+      objectReference: {fileID: 0}
     - target: {fileID: 4330678394026872630, guid: c21ab2161ad0c4640afc11877da5c0d3, type: 3}
       propertyPath: m_Layer
       value: 11
@@ -3407,6 +3411,10 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4801272360758367415, guid: 9cd2bcd2cef2249a294d59716e4fd0de, type: 3}
+      propertyPath: P1S2_Bullet
+      value: 
+      objectReference: {fileID: 138232, guid: 8585f4caf25fc467193c81c647bd25c5, type: 3}
     - target: {fileID: 5782106673779254072, guid: 9cd2bcd2cef2249a294d59716e4fd0de, type: 3}
       propertyPath: m_Name
       value: Boss

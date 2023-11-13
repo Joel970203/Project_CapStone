@@ -297,7 +297,8 @@ public class Boss_Skill : MonoBehaviour
     void Phase1_Attack()
     {
         //BaseAttack();
-        //StartCoroutine(UseSkillP1S3());
+        //StartCoroutine(UseSkillP1S2());
+        
         
         int randNum = Random.Range(1, 6);
 
@@ -574,9 +575,10 @@ public class Boss_Skill : MonoBehaviour
         {
             animDelay = 1.7f;
         }
+        
+        MakeEffectOnBoss(P1S2_CastingEffect, LeftFinger_Pos, true, 3.0f);
 
         yield return new WaitForSeconds(animDelay);
-        MakeEffectOnBoss(P1S2_CastingEffect, LeftFinger_Pos, true, 3.0f);
 
 
         MakeBulletAndShotLinear(P1S2_Bullet, LeftFinger_Pos, currentTarget.transform, 300.0f);
