@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 19856552}
   - component: {fileID: 19949918}
   - component: {fileID: -1757897131884023957}
-  m_Layer: 0
+  - component: {fileID: 2907809924826899805}
+  - component: {fileID: 9168439529742069214}
+  m_Layer: 8
   m_Name: P1S2_Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,9 +29,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 138232}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7078218, y: -0.00039983148, z: 0.0010877872, w: 0.7063901}
-  m_LocalPosition: {x: 0.002998352, y: 0.0050001144, z: 2.6160011}
-  m_LocalScale: {x: 1, y: 1, z: 0.36200285}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -43,7 +45,7 @@ ParticleSystem:
   m_GameObject: {fileID: 138232}
   serializedVersion: 8
   lengthInSec: 2
-  simulationSpeed: 1
+  simulationSpeed: 16
   stopAction: 0
   cullingMode: 1
   ringBufferMode: 0
@@ -107,7 +109,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
   randomSeed: 0
@@ -117,7 +119,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -817,7 +819,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 65
+      scalar: 40
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1097,7 +1099,7 @@ ParticleSystem:
     enabled: 1
     x:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -1150,7 +1152,7 @@ ParticleSystem:
         m_RotationOrder: 4
     y:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -1247,8 +1249,8 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.2784314, g: 0, b: 0, a: 0}
-        key1: {r: 0.23529412, g: 0.19607843, b: 0.19607843, a: 1}
-        key2: {r: 1, g: 0, b: 0, a: 0.95686275}
+        key1: {r: 0.23529412, g: 0.19607843, b: 0.19607843, a: 0.08627451}
+        key2: {r: 1, g: 0, b: 0, a: 0.78431374}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -1263,7 +1265,7 @@ ParticleSystem:
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 7710
+        atime1: 8096
         atime2: 49922
         atime3: 65535
         atime4: 65535
@@ -1271,7 +1273,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_ColorSpace: -1
+        m_ColorSpace: 0
         m_NumColorKeys: 2
         m_NumAlphaKeys: 4
       minGradient:
@@ -4742,8 +4744,42 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
+--- !u!135 &2907809924826899805
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138232}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 6.66
+  m_Center: {x: 0, y: 1.3734002, z: 0.099999905}
+--- !u!114 &9168439529742069214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f467eb6f674734a39a51330e93ccb552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effect: {fileID: 1091690319484337668, guid: 32d10c09d3f61425a8fb10e750365eae, type: 3}

@@ -15,12 +15,17 @@ public class ChangePhase : MonoBehaviour
     private bool phase3HasExecuted = false;
     private bool phase4HasExecuted = false; 
 
+    Boss_Info boss;
+    Animator anim;
+
     void Start() {
-        bossHealth = BossObject.instance.GetBossHealth();
-        BossObject.instance.SetBossPhase(1.0f);
+        boss = this.GetComponent<Boss_Info>();
+        bossHealth = boss.HP;
         phase2Health = bossHealth * 3 / 4;
         phase3Health = bossHealth * 1 / 2;
         phase4Health = bossHealth * 1 / 4;
+
+        anim = GetComponent<Animator>();
         Debug.Log(bossHealth);
         Debug.Log(phase2Health);
         Debug.Log(phase3Health);
@@ -30,27 +35,30 @@ public class ChangePhase : MonoBehaviour
     // Update is called once per frame
     void Update()
     { 
-        float currentHealth = BossObject.instance.GetBossCurrentHealth();
+        float currentHealth = boss.HP;
 
         if (currentHealth <= phase2Health && currentHealth > phase3Health) 
         {   
             if(!phase2HasExecuted) 
             {
-                BossObject.instance.SetBossPhase(2.0f);
+                anim.SetTrigger("Phase2");
+                boss.SetPhaseNum(2);
                 phase2HasExecuted = true;
             }
         }    
         else if (currentHealth <= phase3Health && currentHealth > phase4Health) 
         {
             if(!phase3HasExecuted) {
-                BossObject.instance.SetBossPhase(3.0f);
+                anim.SetTrigger("Phase3");
+                boss.SetPhaseNum(3);
                 phase3HasExecuted = true;
             }
         }    
         else if (currentHealth <= phase4Health) 
         {
             if(!phase4HasExecuted) {
-                BossObject.instance.SetBossPhase(4.0f);
+                anim.SetTrigger("Phase4");
+                boss.SetPhaseNum(4);
                 phase4HasExecuted = true;
             }
         }   

@@ -32,7 +32,6 @@ public class BossDamageHandler : MonoBehaviour
                 // 다른 부분에 맞았을 때
                 Debug.Log("몸통");
                 float damage = CalculateDamage(attack);
-                Debug.Log("피격");
                 Debug.Log(damage);
                 HandleDamage(damage);
             }
@@ -46,7 +45,7 @@ public class BossDamageHandler : MonoBehaviour
         if (IsHeadCollider() && !headHit)
         {
             // 머리에 맞았을 때
-            //Debug.Log("머리");
+            Debug.Log("머리");
             headHit = true; // 머리 트리거를 했다고 표시
             float headDamage = CalculateDamage(attack) * headDamageMultiplier;
             HandleDamage(headDamage);
@@ -54,7 +53,7 @@ public class BossDamageHandler : MonoBehaviour
         else
         {
             // 다른 부분에 맞았을 때
-            //Debug.Log("몸통");
+            Debug.Log("몸통");
             float damage = CalculateDamage(attack);
             HandleDamage(damage);
         }

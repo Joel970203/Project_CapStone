@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4267570101028113036}
   - component: {fileID: 3024611887297118283}
   - component: {fileID: 8443711409783188809}
-  - component: {fileID: 7175878208171044443}
   m_Layer: 0
   m_Name: P1S2_CastingEffect
   m_TagString: Untagged
@@ -28,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 3768675494318801096}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 577, y: 73.5, z: 672.5707}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4840,19 +4839,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &7175878208171044443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3768675494318801096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead21464d4eabed4eacbb080a10b618c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DeleteTime: 1.2
 --- !u!1 &4302354365287514405
 GameObject:
   m_ObjectHideFlags: 0

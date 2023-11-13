@@ -12,12 +12,16 @@ public class Boss_Skill : MonoBehaviour
 {
     [SerializeField] private float currentPhase;
 
-    [SerializeField] private Transform P1S2_CastingPosition;
+    [SerializeField] private Transform LeftFinger_Pos;
+    [SerializeField] private Transform RightHand_Pos;
+    [SerializeField] private Transform LeftHand_Pos;
 
     [SerializeField] private float P1S1_Cooltime; //Phase(P) 1의 Skill(S) 1이란 뜻
     [SerializeField] private float P1S2_Cooltime; //Phase 1의 Skill 2이란 뜻
+    [SerializeField] private float P1S3_Cooltime;
     [SerializeField] private float P2S1_Cooltime;
     [SerializeField] private float P2S2_Cooltime;
+    [SerializeField] private float P2S3_Cooltime;
     [SerializeField] private float P3S1_Cooltime;
     [SerializeField] private float P3S2_Cooltime;
     [SerializeField] private float P4S1_Cooltime;
@@ -25,8 +29,10 @@ public class Boss_Skill : MonoBehaviour
 
     private float P1S1_StartTime = -1f;
     private float P1S2_StartTime = -1f;
+    private float P1S3_StartTime = -1f;
     private float P2S1_StartTime = -1f;
     private float P2S2_StartTime = -1f;
+    private float P2S3_StartTime = -1f;
     private float P3S1_StartTime = -1f;
     private float P3S2_StartTime = -1f;
     private float P4S1_StartTime = -1f;
@@ -41,16 +47,23 @@ public class Boss_Skill : MonoBehaviour
     [SerializeField] private GameObject P4S1_CastingEffect;
     [SerializeField] private GameObject P4S2_CastingEffect;
 
+    [SerializeField] private GameObject P1S3_Effect;
+
+
     [SerializeField] private GameObject P1S2_Bullet;
+    [SerializeField] private GameObject P2S2_Bullet;
 
     [SerializeField] private GameObject P1S1_TargettingEffect;
     [SerializeField] private GameObject P1S2_TargettingEffect;
     [SerializeField] private GameObject P2S1_TargettingEffect;
     [SerializeField] private GameObject P2S2_TargettingEffect;
+    [SerializeField] private GameObject P2S3_TargettingEffect;
     [SerializeField] private GameObject P3S1_TargettingEffect;
     [SerializeField] private GameObject P3S2_TargettingEffect;
     [SerializeField] private GameObject P4S1_TargettingEffect;
     [SerializeField] private GameObject P4S2_TargettingEffect;
+
+    [SerializeField] private GameObject weapon;
 
     GameObject skillObjects;
 
@@ -65,7 +78,8 @@ public class Boss_Skill : MonoBehaviour
     const float tau = Mathf.PI * 2;
 
     private List<GameObject> targets;
-    Transform currentTarget;
+    private Transform nearTarget;
+    protected Transform currentTarget;
 
     [SerializeField] float chaseRange; //해당 범위보다 가까이 오면 추격을 시작한다.
     [SerializeField] float chaseDuration; //추격 지속 시간, 해당 초만큼 추격을 함
@@ -79,6 +93,11 @@ public class Boss_Skill : MonoBehaviour
     bool isFinished = true; // 데드락 방지
     bool isCoroutineFinished = true;
     bool isChaseTimerSet = false; //변화여부
+    bool isAttacking = false;
+
+    bool isRotate = false;
+    float rotateAngle;
+
 
     private enum State
     {
@@ -110,19 +129,24 @@ public class Boss_Skill : MonoBehaviour
 
         if (currentTarget != null)
         {
-            transform.LookAt(currentTarget);
+            transform.LookAt(currentTarget); //if (!isAttacking) 
+
+            if (isRotate) RotateBoss(rotateAngle);
             if (state != State.Attack) agent.SetDestination(currentTarget.position); //어택이면 stoppingDistance 에 더 갈 필요 없음
         }
 
         if (!isFinished || !isCoroutineFinished) return;
 
-        //Debug.Log("함수 진입");
+        Debug.Log("함수 진입");
 
         isFinished = false;
 
         //Debug.Log("State: " + state);
 
-        currentPhase = BossObject.instance.GetCurrentPhase();
+        currentPhase = this.GetComponent<Boss_Info>().phaseNum;
+
+        //nearTarget = FindnearTarget();
+
         switch (state)
         {
             case State.Idle:
@@ -141,7 +165,7 @@ public class Boss_Skill : MonoBehaviour
 
     void DrawRange(float x, float z, float radius, int vertexs)
     {
-        ChangeLineColor();
+        //ChangeLineColor();
         lineRenderer.positionCount = vertexs + 1;
 
         for (int i = 0; i <= vertexs; i++)
@@ -156,10 +180,6 @@ public class Boss_Skill : MonoBehaviour
             Vector3 pos = new Vector3(pos_X, 51f, pos_Z);
             lineRenderer.SetPosition(i, pos);
         }
-    }
-
-    void ChangeLineColor()
-    {
     }
 
     void JudgeStateInIdle()
@@ -252,12 +272,77 @@ public class Boss_Skill : MonoBehaviour
             return;
         }
 
-        BaseAttack();
-        //UseSkillP1S1();
+        switch (currentPhase)
+        {
+            case 1:
+                Phase1_Attack();
+                break;
+            case 2:
+                Phase2_Attack();
+                break;
+        }
+        //BaseAttack();
+        //StartCoroutine(UseSkillP1S2());
+        //StartCoroutine(UseSkillP1S1());
+        //currentTarget = nearTarget;
+        //StartCoroutine(UseSkillP2S2());
+        //StartCoroutine(UseSkillP1S3());
+        //StartCoroutine(UseSkillP2S3());
         //SkillAttack();
 
         //if (Random.value < baseAttackProb) BaseAttack();
         //else SkillAttack();
+    }
+
+    void Phase1_Attack()
+    {
+        //BaseAttack();
+        //StartCoroutine(UseSkillP1S3());
+        
+        int randNum = Random.Range(1, 6);
+
+        switch (randNum)
+        {
+            case 1:
+                if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) StartCoroutine(UseSkillP1S1());
+                else BaseAttack();
+                break;
+            case 2:
+                if (Time.time - P1S2_StartTime >= P1S2_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
+                else BaseAttack();
+                break;
+            case 3:
+                if (Time.time - P1S3_StartTime >= P1S3_Cooltime || P1S3_StartTime == -1f) StartCoroutine(UseSkillP1S3());
+                else BaseAttack();
+                break;
+            default:
+                BaseAttack();
+                break;
+        }
+    }
+
+    void Phase2_Attack()
+    {
+        int randNum = Random.Range(1, 6);
+
+        switch (randNum)
+        {
+            case 1:
+                if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) StartCoroutine(UseSkillP1S1());
+                else BaseAttack();
+                break;
+            case 2:
+                if (Time.time - P1S2_StartTime >= P1S2_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
+                else BaseAttack();
+                break;
+            case 3:
+                if (Time.time - P1S3_StartTime >= P1S3_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
+                else BaseAttack();
+                break;
+            default:
+                BaseAttack();
+                break;
+        }
     }
 
     Transform FindnearTarget()
@@ -329,138 +414,250 @@ public class Boss_Skill : MonoBehaviour
 
     void BaseAttack()
     {
+        isAttacking = true;
         swordVfx.gameObject.SetActive(true);
         isCoroutineFinished = false;
         string animName = "BaseAttack";
-
+        //RotateBoss(60f);
+        isRotate = true;
+        rotateAngle = 60f;
         anim.SetTrigger(animName);
-        StartCoroutine(EndAttack(2.1f));
+        //StopCoroutine("EndBaseAttack");
+        StartCoroutine(EndBaseAttack(2.1f));
     }
 
-    void SkillAttack()
-    {
-        bool isCooltime = false; //스킬이 사용가능한가 대한 여부 쿨타임이 돌고 있으면 스킬을 쓰면 안됨
-        float randProb = Random.value;
-
-        if (randProb < meleeSkillProb) //근접공격 확률에 따라 사용
-        {
-            isCooltime = MeleeAttack();
-        }
-        else
-        {
-            isCooltime = rangedAttack();
-        }
-
-        if (isCooltime) BaseAttack(); //쿨타임이 안끝났으면 그냥 기본공격을 한다.
-
-    }
-
-    IEnumerator EndAttack(float length)
+    IEnumerator EndBaseAttack(float length)
     {
         yield return new WaitForSeconds(length);
         swordVfx.gameObject.SetActive(false);
+        anim.SetTrigger("Idle");
+        isAttacking = false;
         isCoroutineFinished = true;
-        //Debug.Log("공격애니메이션 종료");
+        isRotate = false;
+        Debug.Log("공격애니메이션 종료");
     }
 
-    bool MeleeAttack()
+    void RotateBoss(float RotateDegree)
     {
-        bool isCooltime = false;
-        switch (currentPhase)
-        {
-            case 1.0f:
-                float tmp = Time.time - P1S1_StartTime;
-                //Debug.Log("스킬 사용시간" + tmp);
-                if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) UseSkillP1S1(); //쿨타임이 끝났으면 스킬 사용
-                else isCooltime = true;
-                break;
-            case 2.0f:
-                if (Time.time - P2S1_StartTime >= P2S1_Cooltime || P1S1_StartTime == -1f) UseSkillP2S1();
-                else isCooltime = true;
-                break;
-            case 3.0f:
-                if (Time.time - P3S1_StartTime >= P3S1_Cooltime || P1S1_StartTime == -1f) useSkillP3S1();
-                else isCooltime = true;
-                break;
-            case 4.0f:
-                if (Time.time - P4S1_StartTime >= P4S1_Cooltime || P1S1_StartTime == -1f) useSkillP4S1();
-                else isCooltime = true;
-                break;
-        }
-
-        return isCooltime;
+        Vector3 currentRotation = transform.rotation.eulerAngles;
+        currentRotation.y += RotateDegree;
+        transform.rotation = Quaternion.Euler(currentRotation);
     }
 
-    bool rangedAttack()
-    {
-        bool isCooltime = false;
-        switch (currentPhase)
-        {
-            case 1.0f:
-                if (Time.time - P1S2_StartTime >= P1S2_Cooltime) useSkillP1S2();
-                else isCooltime = true;
-                break;
-            case 2.0f:
-                if (Time.time - P2S2_StartTime >= P2S2_Cooltime) useSkillP2S2();
-                else isCooltime = true;
-                break;
-            case 3.0f:
-                if (Time.time - P3S2_StartTime >= P3S2_Cooltime) useSkillP3S2();
-                else isCooltime = true;
-                break;
-            case 4.0f:
-                if (Time.time - P4S2_StartTime >= P4S2_Cooltime) useSkillP4S2();
-                else isCooltime = true;
-                break;
-        }
-
-        return isCooltime;
-    }
-
-    IEnumerator MakeEffect(Transform castingPosition, GameObject castingEffect, GameObject bullet, float power, Transform targetPosition, GameObject targetEffect, float effectDelay, float length)
+    /*
+    IEnumerator MakeEffect(Transform castingPosition, GameObject castingEffect, GameObject bullet, float bulletPower,
+    Transform targetPosition, GameObject targetEffect, float castDelay, float bulletDelay, float targetPointY, float targetDelay)
     {
         if (castingEffect != null)
         {
-            GameObject CastingEffect = Instantiate(castingEffect, castingPosition.position, castingPosition.transform.rotation);
-            CastingEffect.transform.SetParent(castingPosition);
+            MakeEffectOnBoss(castingEffect, castingPosition);
         }
+
+        yield return new WaitForSeconds(castDelay);
 
         if (bullet != null)
         {
-            GameObject obj = Instantiate(bullet, castingPosition.position, Quaternion.identity);
-            obj.transform.SetParent(skillObjects.transform);
-            
-            Vector3 vec = targetPosition.position - castingPosition.position;
-            obj.GetComponent<Rigidbody>().AddForce(vec * power, ForceMode.Impulse);
+            MakeAndShotBullet(bullet, castingPosition, targetPosition, bulletPower);
+            yield return new WaitForSeconds(bulletDelay);
         }
 
         if (targetEffect != null)
         {
-            yield return new WaitForSeconds(effectDelay);
-
             Vector3 targetPoint = targetPosition.position;
-            targetPoint.y = 50.5f;
+            targetPoint.y = targetPointY;
 
             GameObject targetPointEffect = Instantiate(targetEffect, targetPoint, targetEffect.transform.rotation);
             targetPointEffect.transform.SetParent(skillObjects.transform);
         }
 
-        yield return new WaitForSeconds(length);
+        yield return new WaitForSeconds(targetDelay);
+        anim.SetTrigger("Idle");
+        isAttacking = false;
+        isCoroutineFinished = true;
+    }*/
+
+    void MakeEffectOnBoss(GameObject castingEffect, Transform castingPosition, bool destroy, float destroyTime)
+    {
+        GameObject castEffect = Instantiate(castingEffect, castingPosition.position, castingPosition.transform.rotation);
+        castEffect.transform.SetParent(castingPosition);
+
+        //Vector3 dirVector = (castingPosition.position - currentTarget.position).normalized;
+        //castEffect.transform.rotation = Quaternion.LookRotation(new Vector3(90f, 0f ,0f));
+        if (destroy) Destroy(castEffect, destroyTime);
+    }
+
+    void MakeBulletAndShotLinear(GameObject bullet, Transform bulletPosition, Transform targetPosition, float bulletPower) //직선으로 발사
+    {
+        //Make Bullet
+        GameObject bulletInstant = Instantiate(bullet, bulletPosition.position, bulletPosition.rotation); //보스의 몸에서 발사
+        Rigidbody bulletRigid = bulletInstant.GetComponent<Rigidbody>();
+
+        //Shot Bullet
+        Vector3 dirVector = (targetPosition.position - bulletPosition.position).normalized;
+
+        bulletInstant.transform.rotation = Quaternion.LookRotation(dirVector);
+        bulletRigid.AddForce(bulletInstant.transform.forward * bulletPower, ForceMode.Impulse);
+        //bulletRigid.AddForce(dirVector * bulletPower, ForceMode.Impulse); (이전코드)
+    }
+
+    void MakeBulletAndShotNav(GameObject bullet, Transform bulletPosition, Transform targetPosition) //Nav를 이용해 발사
+    {
+        GameObject bulletInstant = Instantiate(bullet, bulletPosition.position, bulletPosition.rotation); //보스의 몸에서 발사
+        NavMeshAgent nav = bulletInstant.GetComponent<NavMeshAgent>();
+        nav.SetDestination(targetPosition.position);
+    }
+
+    void MakeEffectOnTarget(GameObject targetEffect, Transform targetPosition, float targetPointY, float destroyTime)
+    {
+        Vector3 targetPoint = targetPosition.position;
+        //if(fixY)   bool fixY, float targetPointY, bool destroy, float destroyTime)
+        targetPoint.y = targetPointY;
+
+        GameObject targetPointEffect = Instantiate(targetEffect, targetPoint, targetEffect.transform.rotation);
+        //targetPointEffect.transform.SetParent(skillObjects.transform);
+        Destroy(targetPointEffect, destroyTime);
+    }
+
+    void EndSkill()
+    {
+        anim.SetTrigger("Idle");
+        isAttacking = false;
         isCoroutineFinished = true;
     }
 
-    void UseSkillP1S1()
+    /*
+    Rigidbody MakeBullet(GameObject bullet, Transform bulletPosition)
     {
-        isCoroutineFinished = false;
-        string animName = "P1S1";
-        anim.SetTrigger(animName);
-        P1S1_StartTime = Time.time;
-        StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 2.0f, 3.0f));
+        GameObject bulletInstant = Instantiate(bullet, bulletPosition.position, bulletPosition.rotation); //보스의 몸에서 발사
+        Rigidbody bulletRigid = bulletInstant.GetComponent<Rigidbody>();
+
+        return bulletRigid;
     }
 
-    void UseSkillP2S1()
+    void ShotBullet(Transform targetPosition, Transform bulletPosition, Rigidbody bulletRigid, float bulletPower)
     {
+        Vector3 dirVector = (targetPosition.position - bulletPosition.position).normalized;
+        bulletRigid.AddForce(dirVector * bulletPower, ForceMode.Impulse);
+    }
+    */
 
+    IEnumerator UseSkillP1S1()
+    {
+        isCoroutineFinished = false;
+        P1S1_StartTime = Time.time;
+
+        float castDelay = 1.5f;
+        //if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")) castDelay = 1.5f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.7f;
+
+        anim.SetTrigger("P1S1");
+
+        yield return new WaitForSeconds(castDelay);
+        MakeEffectOnTarget(P1S1_TargettingEffect, this.transform, 52.5f, 2.0f);
+
+        yield return new WaitForSeconds(1.0f);
+        EndSkill();
+        //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
+    }
+
+    IEnumerator UseSkillP1S2()
+    {
+        isCoroutineFinished = false;
+        isAttacking = true;
+        //RotateBoss(50f);
+        anim.SetTrigger("P1S2");
+        P1S2_StartTime = Time.time;
+
+
+        float animDelay = 1.5f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+        {
+            animDelay = 1.7f;
+        }
+
+        yield return new WaitForSeconds(animDelay);
+        MakeEffectOnBoss(P1S2_CastingEffect, LeftFinger_Pos, true, 3.0f);
+
+
+        MakeBulletAndShotLinear(P1S2_Bullet, LeftFinger_Pos, currentTarget.transform, 300.0f);
+
+
+        yield return new WaitForSeconds(2.0f);
+        EndSkill();
+        //StartCoroutine(MakeEffect(LeftFinger_Pos, P1S2_CastingEffect, P1S2_Bullet, 300.0f, currentTarget.transform, null, 1.5f, 1.0f, 0f, 1.0f));
+    }
+
+    IEnumerator UseSkillP1S3()
+    {
+        isCoroutineFinished = false;
+        //P1S3_StartTime = Time.time;
+
+        float castDelay = 0.3f;
+        //if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")) castDelay = 1.0f;
+        //else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.0f;
+
+        anim.SetTrigger("P1S3");
+        anim.SetTrigger("Walk");
+
+        yield return new WaitForSeconds(castDelay);
+        MakeEffectOnBoss(P1S3_Effect, LeftHand_Pos, true, 5.0f);
+        MakeEffectOnBoss(P1S3_Effect, RightHand_Pos, true, 5.0f);
+
+        yield return new WaitForSeconds(5.0f);
+        EndSkill();
+        //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
+    }
+
+    IEnumerator UseSkillP2S2()
+    {
+        weapon.SetActive(false);
+        isCoroutineFinished = false;
+        string animName = "P2S2";
+        isAttacking = true;
+        //RotateBoss(50f);
+        anim.SetTrigger(animName);
+        P1S1_StartTime = Time.time;
+
+        float animDelay = 0.5f;
+        float castDelay = 2.2f;
+        /*
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+
+        }
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+        {
+            animDelay = 1.5f;
+        }*/
+
+        yield return new WaitForSeconds(animDelay);
+        MakeEffectOnBoss(P2S2_CastingEffect, RightHand_Pos, true, 2.0f);
+
+        yield return new WaitForSeconds(castDelay);
+        MakeBulletAndShotNav(P2S2_Bullet, RightHand_Pos, currentTarget.transform);
+
+        yield return new WaitForSeconds(10.0f);
+        EndSkill();
+        weapon.SetActive(true);
+        //StartCoroutine(MakeEffect(LeftFinger_Pos, P1S2_CastingEffect, P1S2_Bullet, 300.0f, currentTarget.transform, null, 1.5f, 1.0f, 0f, 1.0f));
+    }
+
+    IEnumerator UseSkillP2S3()
+    {
+        isCoroutineFinished = false;
+        //PS1_StartTime = Time.time;
+
+        float castDelay = 1.0f;
+        //if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")) castDelay = 1.0f;
+        //else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.0f;
+
+        anim.SetTrigger("P2S3");
+
+        yield return new WaitForSeconds(castDelay);
+        //MakeEffectOnTarget(P2S3_TargettingEffect, this.transform, 54f);
+
+        yield return new WaitForSeconds(10.0f);
+        EndSkill();
     }
 
     void useSkillP3S1()
@@ -471,15 +668,6 @@ public class Boss_Skill : MonoBehaviour
     void useSkillP4S1()
     {
 
-    }
-
-    void useSkillP1S2()
-    {
-        isCoroutineFinished = false;
-        string animName = "P1S2";
-        anim.SetTrigger(animName);
-        P1S1_StartTime = Time.time;
-        StartCoroutine(MakeEffect(P1S2_CastingPosition, P1S2_CastingEffect, P1S2_Bullet, 6f, transform, P1S2_TargettingEffect, 2.0f, 5.0f));
     }
 
     void useSkillP2S2()
