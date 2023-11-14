@@ -75,7 +75,7 @@ public class Character_Info : MonoBehaviour
 
     private void Death()
     {
-
+            
     }
 
     public float GetArmor() 
