@@ -44,5 +44,16 @@ public class Dropper : MonoBehaviour
             rb.velocity = Vector3.zero;
             rb.isKinematic = true;
         }
+        else if (!hasCollided && collision.collider.CompareTag("Player"))
+        {
+            Rigidbody playerRb = collision.collider.GetComponent<Rigidbody>();
+            if (playerRb != null)
+            {
+                playerRb.velocity = Vector3.zero;
+                playerRb.isKinematic = true;
+                Debug.Log("Player stopped!");
+            }
+            hasCollided = true;
+        }
     }
 }

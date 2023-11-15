@@ -6,6 +6,7 @@ public class Ninja_Clone : Character_Skill
 {
     [SerializeField]
     private GameObject weapon;
+    [SerializeField] private ParticleSystem B_Particles;
     bool isAttacking = false;
 
     public override void Active_Base_Attack()
@@ -41,13 +42,37 @@ public class Ninja_Clone : Character_Skill
             anim.transform.rotation = finalRotation;
             anim.SetTrigger("Base Attack");
 
-            yield return new WaitForSeconds(1.0f); // 애니메이션 시간에 맞게 조절
-
-            agent.isStopped = false;
-            isAttacking = false;
+            // 0.1초 간격으로 파티클 생성
+            yield return new WaitForSeconds(0.4f);
+            CreateBParticles(targetPosition, 60f, 10f); // X 좌표에 10만큼 더하여 생성
+            yield return new WaitForSeconds(0.4f);
+            CreateBParticles(targetPosition, 60f, 10f); // X 좌표에 10만큼 더하여 생성
         }
+
+        yield return new WaitForSeconds(1.0f); // 애니메이션 시간에 맞게 조절
+
+        agent.isStopped = false;
+        isAttacking = false;
     }
 
+    void CreateBParticles(Vector3 targetPosition, float yRotation, float xOffset)
+    {
+        Vector3 spawnPosition = transform.position + transform.forward * 20f;
+        spawnPosition.x += xOffset; // X 좌표에 xOffset을 더함
+        spawnPosition.y += 20f;
+
+        Quaternion spawnRotation = Quaternion.Euler(0, yRotation, 0);
+
+        GameObject ParticlesObject = Instantiate(B_Particles.gameObject, spawnPosition, spawnRotation);
+        var particleSystem = ParticlesObject.GetComponent<ParticleSystem>();
+        if (particleSystem != null)
+        {
+            particleSystem.Play();
+            ParticleSystem.MainModule mainModule = particleSystem.main;
+            float particleDuration = mainModule.duration;
+            Destroy(ParticlesObject, particleDuration);
+        }
+    }
     public override void Active_Q_Skill()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))

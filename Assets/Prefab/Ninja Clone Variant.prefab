@@ -165,6 +165,7 @@ MonoBehaviour:
   R_Skill: 0
   Base_Attack: 0
   weapon: {fileID: 5147441161682827253}
+  B_Particles: {fileID: 7820242584224803771, guid: cf8337445a325534796e2208c35c1110, type: 3}
 --- !u!1 &5147441161682827253 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5804850331479144672, guid: e91217970c7ae7244b2ac3e19d719d98, type: 3}

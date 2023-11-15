@@ -125,17 +125,6 @@ public class Warrior_Skill : Character_Skill
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
-            anim.SetTrigger("W");
-
-            // 1초 대기 후에 파티클 생성
-            StartCoroutine(SpawnWParticlesAfterDelay(1.1f));
-        }
-    }
-/*
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {
-            anim.SetBool("Walk", false);
-            agent.ResetPath();
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
@@ -146,10 +135,11 @@ public class Warrior_Skill : Character_Skill
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
                 Quaternion finalRotation = Quaternion.Euler(0,0,0) * targetRotation;
                 transform.rotation = finalRotation;
-                anim.SetTrigger("Q");
-                StartCoroutine(SpawnQParticlesAfterDelay(2.65f));
+                anim.SetTrigger("W");
+                StartCoroutine(SpawnWParticlesAfterDelay(1.1f));
             }
-*/
+        }
+    }
     private IEnumerator SpawnWParticlesAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
