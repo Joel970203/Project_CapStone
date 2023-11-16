@@ -6,6 +6,7 @@ public class Ninja_Move : MonoBehaviour
 {
     UnityEngine.AI.NavMeshAgent agent;
     Animator anim;
+    bool SkillInProgress = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,8 +17,6 @@ public class Ninja_Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         //마우스 오른쪽 클릭. Idle 상태거나 Walk 상태일 때만 이동 명령 가능
         if (Input.GetMouseButtonDown(1) && ((anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))))
         {
