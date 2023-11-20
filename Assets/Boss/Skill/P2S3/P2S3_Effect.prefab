@@ -10,11 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3488128874255987128}
   - component: {fileID: 6293701295357887854}
+  - component: {fileID: 264597272057587772}
   - component: {fileID: 7112987360450136014}
-  - component: {fileID: 7263451151787697746}
-  - component: {fileID: 7949607539170527803}
-  - component: {fileID: 3118119011657973329}
-  m_Layer: 0
+  - component: {fileID: 3696248767516248943}
+  m_Layer: 6
   m_Name: P2S3_Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,14 +43,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91426031799525742}
   serializedVersion: 8
-  lengthInSec: 1
+  lengthInSec: 1.2
   simulationSpeed: 0.2
-  stopAction: 0
+  stopAction: 2
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -109,7 +108,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
   randomSeed: 0
@@ -4711,6 +4710,20 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &264597272057587772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91426031799525742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90fe9080dbb440a8b944d11ccf7ee5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  castDelay: 1.2
+  scriptName: DonutDamageHandler
 --- !u!199 &7112987360450136014
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -4785,33 +4798,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &7263451151787697746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 91426031799525742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f922a3f221d104e9ea9cb6a4551b4df3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7949607539170527803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 91426031799525742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72adbccc380df4214bfba5855b0c8d80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  castDelay: 1
-  scriptName: Donut_Attack
---- !u!114 &3118119011657973329
+--- !u!114 &3696248767516248943
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4820,9 +4807,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 91426031799525742}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e39057b067544c6880d3a93d75d598e, type: 3}
+  m_Script: {fileID: 11500000, guid: e41732ef793044cc291e4fa1e88f7692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outerRadius: 8.7
-  innerRadius: 6
-  damagePerSec: 3
+  outerRadius: 170
+  innerRadius: 120
+  dotDamage: 25

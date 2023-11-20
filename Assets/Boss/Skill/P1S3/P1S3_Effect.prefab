@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7112987360450136014}
   - component: {fileID: 9064182579914441389}
   - component: {fileID: 8847999028673749177}
-  - component: {fileID: 477191305450627436}
-  m_Layer: 8
+  - component: {fileID: 1002848665094868913}
+  m_Layer: 6
   m_Name: P1S3_Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,14 +44,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91426031799525742}
   serializedVersion: 8
-  lengthInSec: 1
+  lengthInSec: 2.2
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -1105,7 +1105,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 1
+    enabled: 0
     x:
       serializedVersion: 2
       minMaxState: 3
@@ -3568,7 +3568,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     type: 1
     collisionMode: 0
@@ -3747,7 +3747,7 @@ ParticleSystem:
     radiusScale: 0.01
     collidesWith:
       serializedVersion: 2
-      m_Bits: 1152
+      m_Bits: 3200
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
@@ -4804,8 +4804,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.9, y: 3.1, z: 106.4}
-  m_Center: {x: 0.17814541, y: 0, z: 49.2}
+  m_Size: {x: 3.36, y: 3.1, z: 106.4}
+  m_Center: {x: 0, y: 0, z: 49.2}
 --- !u!54 &8847999028673749177
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4833,7 +4833,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &477191305450627436
+--- !u!114 &1002848665094868913
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4842,7 +4842,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 91426031799525742}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e09480893ad034e03afff17cd3e4c34e, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f3d37d46dbcd437e90d439c5ca9b208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagePerSec: 5
+  damage: 10
+  isDot: 1
