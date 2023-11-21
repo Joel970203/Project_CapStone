@@ -5092,9 +5092,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4334720229974137441, guid: 1bc417e2afe2e834fad5253a6b601f5b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8340572222499603971}
-    - targetCorrespondingSourceObject: {fileID: 4334720229974137441, guid: 1bc417e2afe2e834fad5253a6b601f5b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8039984884081832634}
   m_SourcePrefab: {fileID: 100100000, guid: 1bc417e2afe2e834fad5253a6b601f5b, type: 3}
 --- !u!4 &1590472140420115031 stripped
 Transform:
@@ -5127,19 +5124,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.26, y: 1.52, z: 0.19162282}
   m_Center: {x: 0.00000006244513, y: 1.21, z: -0.000000013452471}
---- !u!114 &8039984884081832634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2114912062094520557}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ecf44dc9dfd4c759d772a98aa36265, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 5
 --- !u!1001 &6701148108929769065
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5202,7 +5186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
       propertyPath: m_Name
-      value: Boss 1
+      value: Boss
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
       propertyPath: m_IsActive
@@ -5243,9 +5227,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6909994455853048058}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5693867821505941370}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3758908672520726538}
@@ -5335,21 +5316,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7318d64596510247bbb960d37dac493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Max_HP: 0
   HP: 1000
   armor: 0
-  phaseNum: 1
---- !u!114 &5693867821505941370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5782106673779254072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3de7a11a9bfaf47cfacb4a364cf8b401, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3758908672520726538
 MonoBehaviour:
   m_ObjectHideFlags: 0

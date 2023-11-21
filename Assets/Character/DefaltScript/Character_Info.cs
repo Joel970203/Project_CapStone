@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class Character_Info : MonoBehaviour
 {
-    [SerializeField]
-    private float Max_HP;
-    public float HP;
+    [SerializeField] private float Max_HP;
+    [SerializeField] private float HP;
 
-    [SerializeField]
-    private int AD;
+    [SerializeField] private int AD;
 
-    [SerializeField]
-    private float armor;
+    [SerializeField] private float armor;
 
-    [SerializeField]
-    private GameObject hitEffectPrefab;
+    [SerializeField] private GameObject hitEffectPrefab;
 
     public bool Immotal;
 
@@ -44,7 +40,7 @@ public class Character_Info : MonoBehaviour
             // 타격 이펙트를 생성하거나 처리
             //GameObject spawnedHit =Instantiate(hitEffectPrefab, hitPoint, Quaternion.identity);
 
-            TakeDamage(20);
+            //TakeDamage(20);
         }
     }
 
@@ -52,7 +48,7 @@ public class Character_Info : MonoBehaviour
     public virtual void TakeDamage(float damage)
     {
         //Debug.Log("Take Damage");
-        if (damage - armor > 0)
+        if (damage - armor > 0 && !Immotal)
         {
             HP -= damage - armor;
             if (HP <= 0)
@@ -75,7 +71,17 @@ public class Character_Info : MonoBehaviour
 
     private void Death()
     {
-            
+
+    }
+
+    public float GetHP()
+    {
+        return HP;
+    }
+
+    public void SetHP(float HP) 
+    {
+        this.HP = HP;
     }
 
     public float GetArmor() 

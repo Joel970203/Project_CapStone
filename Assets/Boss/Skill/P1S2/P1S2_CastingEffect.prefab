@@ -44,9 +44,9 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3768675494318801096}
   serializedVersion: 8
-  lengthInSec: 0.1
+  lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 1
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4880,14 +4880,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4302354365287514405}
   serializedVersion: 8
-  lengthInSec: 0.5
+  lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -9671,14 +9671,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7954000503785417267}
   serializedVersion: 8
-  lengthInSec: 0.25
+  lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0

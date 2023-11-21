@@ -13,10 +13,11 @@ GameObject:
   - component: {fileID: 19949918}
   - component: {fileID: -1757897131884023957}
   - component: {fileID: 2907809924826899805}
+  - component: {fileID: 202731642447171267}
   - component: {fileID: 6434213649336725632}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: P2S2_Bullet
-  m_TagString: Untagged
+  m_TagString: BossAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44,14 +45,14 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 138232}
   serializedVersion: 8
-  lengthInSec: 2
+  lengthInSec: 50
   simulationSpeed: 10
-  stopAction: 0
+  stopAction: 2
   cullingMode: 1
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -929,7 +930,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4689,7 +4690,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -4744,8 +4745,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
@@ -4768,8 +4769,24 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 6.66
-  m_Center: {x: 0, y: 1.3734002, z: 0.099999905}
+  m_Radius: 11
+  m_Center: {x: 0, y: 1.3734002, z: 0.1}
+--- !u!114 &202731642447171267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f467eb6f674734a39a51330e93ccb552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effect: {fileID: 192648, guid: d42426c8c63ab4444b47f513d84377ac, type: 3}
+  customY: 65
+  isDamage: 1
+  damage: 50
 --- !u!195 &6434213649336725632
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4779,16 +4796,16 @@ NavMeshAgent:
   m_GameObject: {fileID: 138232}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 15
-  m_Speed: 100
-  m_Acceleration: 100
+  m_Radius: 8
+  m_Speed: 300
+  m_Acceleration: 300
   avoidancePriority: 50
   m_AngularSpeed: 900
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
-  m_Height: 42.360596
+  m_Height: 20
   m_BaseOffset: 21.180298
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1

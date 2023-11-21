@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: P1S1_TargetEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 160996, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 477322, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
       propertyPath: m_LocalScale.x
       value: 30
@@ -105,12 +109,32 @@ PrefabInstance:
       value: 29105
       objectReference: {fileID: 0}
     - target: {fileID: 19893274, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.a
+      value: 0.9843137
+      objectReference: {fileID: 0}
+    - target: {fileID: 19893274, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
       propertyPath: ColorModule.gradient.maxGradient.key1.a
-      value: 0.34509805
+      value: 0.827451
       objectReference: {fileID: 0}
     - target: {fileID: 19893274, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
       propertyPath: ColorModule.gradient.maxGradient.key2.a
-      value: 0.20784314
+      value: 0.7607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 19893274, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key2.b
+      value: 0.43832323
+      objectReference: {fileID: 0}
+    - target: {fileID: 19893274, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key2.g
+      value: 0.43832323
+      objectReference: {fileID: 0}
+    - target: {fileID: 19893274, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key2.r
+      value: 0.4716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 19893274, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key3.a
+      value: 0.44705883
       objectReference: {fileID: 0}
     - target: {fileID: 19893274, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
       propertyPath: ColorModule.gradient.maxGradient.key3.b
@@ -222,14 +246,31 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 160996, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -6156037645354103914}
+      addedObject: {fileID: 7654371033025423788}
+    - targetCorrespondingSourceObject: {fileID: 160996, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8778047836226469506}
   m_SourcePrefab: {fileID: 100100000, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
 --- !u!1 &4284365289243807553 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 160996, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
   m_PrefabInstance: {fileID: 4284365289243966373}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-6156037645354103914
+--- !u!114 &7654371033025423788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4284365289243807553}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f90fe9080dbb440a8b944d11ccf7ee5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  castDelay: 1.5
+  scriptName: SphereDamageHandler
+--- !u!114 &8778047836226469506
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -238,9 +279,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4284365289243807553}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abe6079f497774f98865fc25d5228652, type: 3}
+  m_Script: {fileID: 11500000, guid: 01dc6f2c856b642ffad37a0f973351fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 0
-  radius: 120
-  damage: 10
+  damage: 15
+  isDot: 0
+  radius: 140
