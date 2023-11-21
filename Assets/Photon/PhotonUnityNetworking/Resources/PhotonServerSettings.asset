@@ -57,6 +57,11 @@ MonoBehaviour:
   - SetUserInfoPosition
   - SetActiveBaseAttackRoutine
   - ExecuteBaseAttack
+  - SyncActiveBaseAttack
+  - SpawnQParticles
+  - SpawnWParticles
+  - SyncEParticles
+  - SyncRParticles
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

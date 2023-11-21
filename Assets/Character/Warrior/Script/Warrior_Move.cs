@@ -1,21 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Warrior_Move : MonoBehaviour 
+using Photon.Pun;
+
+public class Warrior_Move : MonoBehaviourPunCallbacks
 {
     UnityEngine.AI.NavMeshAgent agent;
-    Animator anim;
+    public Animator anim;
+    PhotonView PV;
+
     void Start()
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         anim = GetComponent<Animator>();
+        PV = GetComponent<PhotonView>();
+
+        // 다른 플레이어일 경우, 애니메이션 동기화를 위한 PhotonAnimatorView 비활성화
+        if (!PV.IsMine)
+        {
+            PhotonAnimatorView photonAnimatorView = GetComponent<PhotonAnimatorView>();
+            if (photonAnimatorView != null)
+            {
+                Destroy(photonAnimatorView);
+            }
+        }
     }
 
-    // Update is called once per frame
-       void Update()
+    void Update()
     {
-        //마우스 오른쪽 클릭. Idle 상태거나 Walk 상태일 때만 이동 명령 가능
-        if (Input.GetMouseButtonDown(1) && ((anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))))
+        if (!PV.IsMine)
+            return; // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
+
+        HandleMovement();
+        HandleAttack();
+        HandleDodge();
+    }
+
+    void HandleMovement()
+    {
+        if (Input.GetMouseButtonDown(1) && (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -23,20 +46,24 @@ public class Warrior_Move : MonoBehaviour
             {
                 agent.SetDestination(hit.point);
                 anim.SetBool("Walk", true);
+                PV.RPC("SetWalkAnimationState", RpcTarget.Others, true);
             }
         }
         else if (agent.remainingDistance < 0.1f)
         {
-            agent.ResetPath();
             anim.SetBool("Walk", false);
+            agent.ResetPath();
+            PV.RPC("SetWalkAnimationState", RpcTarget.Others, false);
         }
+    }
 
-
-        //공격 받는다면 이동 취소 후 Walk 상태 초기화
+    void HandleAttack()
+    {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
         {
-            agent.ResetPath();
             anim.SetBool("Walk", false);
+            agent.ResetPath();
+            PV.RPC("SetWalkAnimationState", RpcTarget.Others, false);
         }
 
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Stand Up"))
@@ -46,15 +73,16 @@ public class Warrior_Move : MonoBehaviour
                 anim.ResetTrigger("Hit");
             }
         }
+    }
 
-        //스페이스바 입력. 회피
+    void HandleDodge()
+    {
         if (Input.GetButtonDown("Jump"))
         {
             if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Hit") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Stand Up") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Dodge"))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                // 마우스 바라보는 방향 구함. 마우스 위치에서 자신 위치 빼기.
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     Vector3 dodge_Direction = new Vector3(hit.point.x, transform.position.y, hit.point.z) - transform.position;
@@ -69,15 +97,22 @@ public class Warrior_Move : MonoBehaviour
                     {
                         anim.SetBool("Right_Dodge", false);
                     }
-
-                // Dodge 애니메이션 실행
-                anim.SetTrigger("Dodge");
-
-                // NavMeshAgent를 초기화하고 제자리로 돌리기
-                //agent.ResetPath(); // NavMeshAgent의 경로 초기화
-        
+                    anim.SetTrigger("Dodge");
+                    PV.RPC("PerformDodgeAnimation", RpcTarget.All);
                 }
             }
         }
+    }
+
+    [PunRPC]
+    void SetWalkAnimationState(bool isWalking)
+    {
+        anim.SetBool("Walk", isWalking);
+    }
+
+    [PunRPC]
+    void PerformDodgeAnimation()
+    {
+        anim.SetTrigger("Dodge");
     }
 }
