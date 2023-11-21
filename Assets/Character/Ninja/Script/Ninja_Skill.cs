@@ -8,8 +8,6 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
     PhotonView PV;
     [SerializeField]
     private GameObject weapon;
-    public GameObject shadowClonePrefab; 
-    public float cloneDuration = 20f; // 분신이 유지될 시간
     [SerializeField] private ParticleSystem weaponParticles;
     [SerializeField] private ParticleSystem B_Particles;
     [SerializeField] private ParticleSystem Q_Particles;
@@ -158,16 +156,10 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
                 else
                 {
                     isAttacking = true;
-                    PV.RPC("SetActiveBaseAttack", RpcTarget.All);
+                    StartCoroutine(SetActiveBaseAttackRoutine());
                 }
             }
         }
-    }
-
-    [PunRPC]
-    private void SetActiveBaseAttack()
-    {
-        StartCoroutine(SetActiveBaseAttackRoutine());
     }
 
     private IEnumerator SetActiveBaseAttackRoutine()
@@ -200,6 +192,7 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
         agent.isStopped = false;
         isAttacking = false;
     }
+
     [PunRPC]
     private void ActivateCloneForBaseAttack()
     {
@@ -209,7 +202,15 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
         {
             ninjaClone.SetActive(true);
 
-            PV.RPC("SetActiveBaseAttack", RpcTarget.All);
+            // 클론의 NinjaClone 스크립트를 가져옴
+            NinjaClone cloneScript = ninjaClone.GetComponent<NinjaClone>();
+            if (cloneScript != null)
+            {
+                // 클론의 메서드 호출
+                StartCoroutine(SetActiveBaseAttackRoutine());
+                cloneScript.SetActiveBaseAttack();
+            }
+
             StartCoroutine(DeactivateCloneAfterDuration(ninjaClone, 1.0f));
         }
     }
@@ -224,6 +225,7 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
             cloneObject.SetActive(false);
         }
     }
+
 
     void CreateBParticles(Vector3 targetPosition, float yRotation, float xOffset)
     {
@@ -372,12 +374,32 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
     private void ActivateCloneForW()
     {
         // 클론을 활성화
-        GameObject ninjaClone = transform.Find("Ninja Clone").gameObject;
+        GameObject ninjaClone = transform.Find("Ninja Clone (W)").gameObject;
         if (ninjaClone != null)
         {
+            // 클론 활성화
             ninjaClone.SetActive(true);
-            StartCoroutine(DeactivateCloneAfterDuration(ninjaClone, 2.0f));
+
+            // 클론이 활성화되면 기본 공격 시작 및 클론 비활성화
+            StartCoroutine(StartBaseAttackAndDeactivateClone(ninjaClone));
         }
+    }
+
+    // 클론이 활성화된 후 기본 공격을 시작하고 일정 시간이 지난 후에 클론을 비활성화하는 코루틴
+    private IEnumerator StartBaseAttackAndDeactivateClone(GameObject cloneObject)
+    {
+        // 클론의 NinjaClone 스크립트를 가져옴
+        NinjaClone cloneScript = cloneObject.GetComponent<NinjaClone>();
+        if (cloneScript != null)
+        {
+            // 클론의 W 스킬 메서드 호출
+            cloneScript.Active_W_Skill();
+        }
+
+        yield return new WaitForSeconds(1.5f);
+
+        // 클론 비활성화
+        cloneObject.SetActive(false);
     }
 
     public void Active_E_Skill()
