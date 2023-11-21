@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
@@ -10,14 +12,21 @@ using Random = UnityEngine.Random;
 
 public class Boss_Skill2 : MonoBehaviour
 {
-    [SerializeField] private float currentPhase;
+    private int currentPhase;
+    private int previousPhase = 1;
+    private int currentHP;
+    [SerializeField] private int previousHP = 1000;
 
-    [SerializeField] private Transform P1S2_CastingPosition;
+    [SerializeField] private Transform LeftFinger_Pos;
+    [SerializeField] private Transform RightHand_Pos;
+    [SerializeField] private Transform LeftHand_Pos;
 
     [SerializeField] private float P1S1_Cooltime; //Phase(P) 1의 Skill(S) 1이란 뜻
     [SerializeField] private float P1S2_Cooltime; //Phase 1의 Skill 2이란 뜻
+    [SerializeField] private float P1S3_Cooltime;
     [SerializeField] private float P2S1_Cooltime;
     [SerializeField] private float P2S2_Cooltime;
+    [SerializeField] private float P2S3_Cooltime;
     [SerializeField] private float P3S1_Cooltime;
     [SerializeField] private float P3S2_Cooltime;
     [SerializeField] private float P4S1_Cooltime;
@@ -25,14 +34,15 @@ public class Boss_Skill2 : MonoBehaviour
 
     private float P1S1_StartTime = -1f;
     private float P1S2_StartTime = -1f;
+    private float P1S3_StartTime = -1f;
     private float P2S1_StartTime = -1f;
     private float P2S2_StartTime = -1f;
+    private float P2S3_StartTime = -1f;
     private float P3S1_StartTime = -1f;
     private float P3S2_StartTime = -1f;
     private float P4S1_StartTime = -1f;
     private float P4S2_StartTime = -1f;
 
-    [SerializeField] private GameObject P1S1_CastingEffect;
     [SerializeField] private GameObject P1S2_CastingEffect;
     [SerializeField] private GameObject P2S1_CastingEffect;
     [SerializeField] private GameObject P2S2_CastingEffect;
@@ -41,12 +51,15 @@ public class Boss_Skill2 : MonoBehaviour
     [SerializeField] private GameObject P4S1_CastingEffect;
     [SerializeField] private GameObject P4S2_CastingEffect;
 
+    [SerializeField] private GameObject P1S3_Effect;
+
+
     [SerializeField] private GameObject P1S2_Bullet;
+    [SerializeField] private GameObject P2S2_Bullet;
 
     [SerializeField] private GameObject P1S1_TargettingEffect;
-    [SerializeField] private GameObject P1S2_TargettingEffect;
     [SerializeField] private GameObject P2S1_TargettingEffect;
-    [SerializeField] private GameObject P2S2_TargettingEffect;
+    [SerializeField] private GameObject P2S3_TargettingEffect;
     [SerializeField] private GameObject P3S1_TargettingEffect;
     [SerializeField] private GameObject P3S2_TargettingEffect;
     [SerializeField] private GameObject P4S1_TargettingEffect;
@@ -54,10 +67,13 @@ public class Boss_Skill2 : MonoBehaviour
 
     GameObject skillObjects;
 
+    [SerializeField] Transform model;
+    [SerializeField] GameObject sword;
     [SerializeField] Transform swordVfx;
-    ParticleSystem swordParticle;
+    [SerializeField] ParticleSystem swordParticle;
+    private bool isP2P3 = false;
 
-    Color color = Color.white;
+    Color swordColor = Color.white;
 
     private Animator anim;
     private NavMeshAgent agent;
@@ -65,22 +81,22 @@ public class Boss_Skill2 : MonoBehaviour
     const float tau = Mathf.PI * 2;
 
     private List<GameObject> targets;
-    Transform nearTarget;
-    Transform currentTarget;
+    [SerializeField] protected Transform currentTarget;
 
-    [SerializeField] float chaseRange; //해당 범위보다 가까이 오면 추격을 시작한다.
-    [SerializeField] float chaseDuration; //추격 지속 시간, 해당 초만큼 추격을 함
+    [SerializeField] private float rotationSpeed;
+    [SerializeField] private float chaseRange; //해당 범위보다 가까이 오면 추격을 시작한다.
+    [SerializeField] private float chaseDuration; //추격 지속 시간, 해당 초만큼 추격을 함
     float chaseStartTime; //추격을 시작한 시간을 기록
-    [SerializeField] float baseAttackProb; //공격시에 기본공격을 할 확률 (스킬쓸 확률 = 1 - BaseAttackProb)
-    [SerializeField] float meleeSkillProb; //근접 스킬을 쓸 확률
-    [SerializeField] float useSkillInChaseProb; //추격 상황에서 스킬을 쓸 확률
 
     float distanceToTarget = Mathf.Infinity;
 
     bool isFinished = true; // 데드락 방지
     bool isCoroutineFinished = true;
     bool isChaseTimerSet = false; //변화여부
-    bool isAttacking = false;
+
+    bool isRotate = false;
+    float rotateAngle;
+
 
     private enum State
     {
@@ -89,7 +105,7 @@ public class Boss_Skill2 : MonoBehaviour
         Attack
     }
 
-    State currentState = State.Idle;
+    State state = State.Idle;
 
     // Start is called before the first frame update
     void Start()
@@ -100,34 +116,60 @@ public class Boss_Skill2 : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         targets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
         swordVfx.gameObject.SetActive(false);
-        swordParticle = swordVfx.GetComponent<ParticleSystem>();
         skillObjects = new GameObject("SkillObjects");
         skillObjects.transform.SetParent(transform);
+        //StartCoroutine(CheckPhase2());
     }
+
+    /*
+    IEnumerator CheckPhase2()
+    {
+        while (this.GetComponent<Boss_Info>().GetPhaseNum() != 2) yield return null;
+        isChanging = true;
+        yield return new WaitForSeconds(1.0f);
+        currentTarget = null;
+        isCoroutineFinished = false;
+        agent.isStopped = true; //agent를 멈추고 경로 재설정
+        agent.velocity = Vector3.zero;
+        agent.ResetPath();
+        yield return new WaitForSeconds(2.0f);;
+        anim.SetTrigger("Phase2");
+
+        ChangeSword(new Color(0.3f, 0.65f, 0.7f), new Color(0.6f, 1f, 0.6f));
+        currentPhase = 2;
+        isCoroutineFinished = true;
+        yield return null;
+        isChanging = false;
+        //StartCoroutine(CheckPhase3());
+    }
+    */
 
     // Update is called once per frame
     void Update()
     {
-        DrawRange(transform.position.x, transform.position.z, chaseRange, 50);
+        //DrawRange(this.transform.position.x, this.transform.position.z, chaseRange, 50);
+        //Debug.Log(state);
+
+        currentPhase = GetComponent<Boss_Info>().GetPhaseNum();
+        if(previousPhase != currentPhase && previousPhase != 4) 
+        {
+            StopAllCoroutines();
+            ChangePhase();
+        }
+        previousPhase = currentPhase;
 
         if (currentTarget != null)
         {
-            transform.LookAt(currentTarget); //if (!isAttacking) 
-            if (currentState != State.Attack) agent.SetDestination(currentTarget.position); //어택이면 stoppingDistance 에 더 갈 필요 없음
+            transform.LookAt(currentTarget);
+            if (isRotate) RotateBoss(rotateAngle);
+            if (state != State.Attack) agent.SetDestination(currentTarget.position); //어택이면 stoppingDistance 라 더 가까이 갈 필요 없음
         }
 
         if (!isFinished || !isCoroutineFinished) return;
 
-        Debug.Log("함수 진입");
-
         isFinished = false;
 
-        //Debug.Log("State: " + currentState);
-
-        currentPhase = BossObject.instance.GetCurrentPhase();
-        nearTarget = FindnearTarget();
-
-        switch (currentState)
+        switch (state)
         {
             case State.Idle:
                 JudgeStateInIdle(); //플레이어들이 접근 했는 지를 판별하고 접근 시 가장 가까운 플레이어를 추격하도록 함
@@ -143,9 +185,49 @@ public class Boss_Skill2 : MonoBehaviour
         isFinished = true;
     }
 
+    void ChangePhase() 
+    {
+        StartCoroutine(PhaseDelay());
+        agent.isStopped = true; 
+        agent.velocity = Vector3.zero;
+        agent.ResetPath();
+        currentTarget = null;
+        state = State.Idle;
+        
+        switch(currentPhase)
+        {
+            case 2:
+                anim.SetTrigger("Phase2");
+                ChangeSword(new Color(0.3f, 0.65f, 0.7f), new Color(0.6f, 1f, 0.6f));        
+                return;
+            case 3:
+                anim.SetTrigger("Phase3");
+                return;
+        }
+    }
+
+    void ChangeSword(Color swordColor, Color BossColor)
+    {
+        var col = swordParticle.colorOverLifetime;
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(new GradientColorKey[] { new(swordColor, 0.0f), new(swordColor, 1.0f) }
+                        , new GradientAlphaKey[] { new(1.0f, 0.0f), new(0.0f, 1.0f) });
+        col.color = gradient;
+
+        sword.GetComponent<Renderer>().material.color = swordColor;
+        model.GetComponent<Renderer>().material.color = swordColor;
+    }
+
+    IEnumerator PhaseDelay()
+    {
+        isCoroutineFinished = false;
+        yield return new WaitForSeconds(5.0f);
+        isCoroutineFinished = true;
+    }
+
     void DrawRange(float x, float z, float radius, int vertexs)
     {
-        ChangeLineColor();
+        //ChangeLineColor();
         lineRenderer.positionCount = vertexs + 1;
 
         for (int i = 0; i <= vertexs; i++)
@@ -162,13 +244,11 @@ public class Boss_Skill2 : MonoBehaviour
         }
     }
 
-    void ChangeLineColor()
-    {
-    }
-
     void JudgeStateInIdle()
     {
-        //공격받을 때는 추가적으로 따로 작성
+        //if (isChaseTimerSet) SetChase(currentTarget);
+
+        Transform nearTarget = FindNearTarget(); //가장 가까운 플레이어를 탐색
 
         if (nearTarget != null)
         {
@@ -176,73 +256,59 @@ public class Boss_Skill2 : MonoBehaviour
             else SetAttack(nearTarget); //안이면 공격 상태로
         }
         //else Debug.Log("범위 내에 플레이어가 없음");
+
+        currentHP = this.GetComponent<Boss_Info>().HP;
+        if (previousHP != currentHP) SetChase(FindFarTarget());
     }
 
     void JudgeStateInChase()
     {
-        Transform nearTarget = FindnearTarget();
+        Transform nearTarget = FindNearTarget();
 
-        /*Debug.Log("추격시작: " + chaseStartTime);
-        float tmp = Time.time - chaseStartTime;
-        Debug.Log("추격지속: " + tmp);*/
-
-        if (nearTarget == null) //근처에 타겟도 없고 추격 시간도 끝나면 상태를 Idle로
+        if (nearTarget != null)
         {
-            if (!isChaseTimerSet)
+            if (nearTarget == currentTarget)
             {
-                chaseStartTime = Time.time; //타이머가 꺼져있다면 추격타이머 설정
-                isChaseTimerSet = true;
-                return;
+                //switch (Random.Range(1, 3)) { case 1: RangedAttack(); return; } // 1/3 확률로 멀리있는 적에게 원거리 공격
+
+                if (distanceToTarget < agent.stoppingDistance) SetAttack(currentTarget); //만일 공격 범위 내에 있으면 타겟을 공격하도록 
+                else return; //공격 범위 밖이면 계속 추격하도록
             }
             else
             {
-                if (Time.time - chaseStartTime >= chaseDuration)
+                if (distanceToTarget < agent.stoppingDistance) SetAttack(nearTarget); //대상이 바껴도 공격 범위 내에 있으면 타겟을 공격하도록 
+                else //만일 현재 타겟이랑 일치하지 않으면 바꿔줌
                 {
-                    isChaseTimerSet = false;
-                    SetIdle();
-                    return;
+                    currentTarget = nearTarget;
+                    agent.SetDestination(currentTarget.position);
                 }
-                else return;
             }
         }
         else
         {
-            isChaseTimerSet = false; //범위 내에 플레이어가 존재하면 타이머는 꺼짐
-        }
-
-        if (nearTarget == currentTarget) //가까운 타겟이 현재 타겟과 일치
-        {
-            /*if (Random.value < useSkillInChaseProb) //일정확률로 원거리 스킬을 사용하여 타겟을 공격하도록
+            if (Time.time - chaseStartTime >= chaseDuration) //만일 범위내에 플레이어가 없고 추격시간도 끝났다면 Idle 상태로
             {
-                Debug.Log("추격중 원거리 공격 " + nearTarget.name);
-                rangedAttack(); 
+                isChaseTimerSet = false;
+                SetIdle();
                 return;
-            }*/
-
-            if (distanceToTarget < agent.stoppingDistance) SetAttack(nearTarget); //만일 공격 범위 내에 있으면 타겟을 공격하도록 
-            else return;
-        }
-        else //현재 타겟과 다른 경우 
-        {
-            if (distanceToTarget < agent.stoppingDistance) SetAttack(nearTarget); //현재 타겟과 달라도 범위내에 있으면 공격
-            else currentTarget = nearTarget; //타겟을 바꿔줌
+            }
+            else return; //추격 시간이 남아있다면 계속 추격한다.
         }
     }
 
     void JudgeStateInAttack()
     {
-
-        Transform nearTarget = FindnearTarget();
+        Transform nearTarget = FindNearTarget();
 
         if (nearTarget != null)
         {
-            //공격 범위 내에 플레이어가 있으면 if문 나가도록, 없다면 현재타겟과 일치하는 지 확인 후 제어 
-            if (distanceToTarget >= agent.stoppingDistance)
+            if (distanceToTarget >= agent.stoppingDistance) //공격 범위 밖이라면 쫓아가도록
             {
-                if (currentTarget == nearTarget) SetChase(nearTarget); //타겟이 변하지 않았으니 추격 상태로
-                else SetChase(nearTarget);
-
-                return;
+                SetChase(nearTarget);
+            }
+            else //공격 범위 안이면 공격
+            {
+                SetAttack(nearTarget);
             }
         }
         else
@@ -253,17 +319,125 @@ public class Boss_Skill2 : MonoBehaviour
 
             return;
         }
-
-        //BaseAttack();
-        //StartCoroutine(UseSkillP1S2());
-        StartCoroutine(UseSkillP1S1());
-        //SkillAttack();
-
-        //if (Random.value < baseAttackProb) BaseAttack();
-        //else SkillAttack();
     }
 
-    Transform FindnearTarget()
+    void SetIdle()
+    {
+        if (state != State.Idle) state = State.Idle;
+        anim.SetTrigger("Idle");
+
+        agent.isStopped = true; //agent를 멈추고 경로 재설정
+        agent.velocity = Vector3.zero;
+        agent.ResetPath();
+
+        currentTarget = null;
+        previousHP = this.GetComponent<Boss_Info>().HP;
+    }
+
+    void SetChase(Transform nearTarget)
+    {
+        state = State.Chase; //상태를 추격(Chase) 상태로 바꿈
+        anim.SetTrigger("Chase");
+
+        if (!isChaseTimerSet) isChaseTimerSet = true;
+        chaseStartTime = Time.time;
+
+        currentTarget = nearTarget;
+        agent.SetDestination(currentTarget.position);
+        if (agent.isStopped) agent.isStopped = false;
+    }
+
+    void SetAttack(Transform nearTarget)
+    {
+        state = State.Attack;
+
+        if (currentTarget != nearTarget) currentTarget = nearTarget;
+
+        //BaseAttack();
+        //StartCoroutine(UseSkillP2S1());
+
+        switch (currentPhase)
+        {
+            case 1:
+                Phase1_Attack();
+                return;
+            case 2:
+                Phase2_Attack();
+                return;
+        }
+    }
+
+    void RangedAttack()
+    {
+        switch (currentPhase)
+        {
+            case 1:
+                StartCoroutine(UseSkillP1S2());
+                return;
+            case 2:
+                StartCoroutine(UseSkillP2S2());
+                return;
+        }
+    }
+
+    void Phase1_Attack()
+    {
+        //BaseAttack();
+        //StartCoroutine(UseSkillP1S2());
+
+        switch (Random.Range(1, 6))
+        {
+            case 1:
+                //Debug.Log(Time.time - P1S1_StartTime + " " + P1S1_Cooltime);
+                if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) StartCoroutine(UseSkillP1S1());
+                else BaseAttack();
+                return;
+            case 2:
+                //Debug.Log(Time.time - P1S2_StartTime + " " + P1S2_Cooltime);
+                if (Time.time - P1S2_StartTime >= P1S2_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
+                else BaseAttack();
+                return;
+            case 3:
+                //Debug.Log(Time.time - P1S3_StartTime + " " + P1S3_Cooltime);
+                if (Time.time - P1S3_StartTime >= P1S3_Cooltime || P1S3_StartTime == -1f) StartCoroutine(UseSkillP1S3());
+                else BaseAttack();
+                return;
+            default:
+                BaseAttack();
+                return;
+        }
+    }
+
+    void Phase2_Attack()
+    {
+        int randNum = Random.Range(1, 6);
+
+        switch (randNum)
+        {
+            case 1:
+            case 2:
+                if (Time.time - P2S1_StartTime >= P2S1_Cooltime || P2S1_StartTime == -1f) StartCoroutine(UseSkillP2S1());
+                else BaseAttack();
+                return;
+            case 3:
+                if (Time.time - P2S2_StartTime >= P2S2_Cooltime || P2S2_StartTime == -1f)
+                {
+                    if (!isP2P3) StartCoroutine(UseSkillP2S2());
+                    else BaseAttack();
+                }
+                else BaseAttack();
+                return;
+            case 4:
+                if (Time.time - P2S3_StartTime >= P2S3_Cooltime || P2S3_StartTime == -1f) StartCoroutine(UseSkillP2S3());
+                else BaseAttack();
+                return;
+            default:
+                BaseAttack();
+                return;
+        }
+    }
+
+    Transform FindNearTarget()
     {
         Transform nearTarget = null;
         float minDistance = Mathf.Infinity;
@@ -283,17 +457,18 @@ public class Boss_Skill2 : MonoBehaviour
 
         if (nearTarget != null)
         {
-            color = Color.red;
+            swordColor = Color.red;
             distanceToTarget = minDistance;
             //Debug.Log("nearTarget: " + nearTarget.name);
         }
-        else color = Color.white;
+        else swordColor = Color.white;
 
         return nearTarget;
     }
 
-    void FindFarTarget()
+    Transform FindFarTarget()
     {
+        Transform farTarget = null;
         float distance;
         float maxDistance = float.Epsilon;
 
@@ -301,127 +476,44 @@ public class Boss_Skill2 : MonoBehaviour
         {
             distance = Vector3.Distance(this.transform.position, target.transform.position);
 
-            if (distance > maxDistance) maxDistance = distance;
+            if (distance > maxDistance)
+            {
+                maxDistance = distance;
+                farTarget = target.transform;
+            }
         }
-    }
 
-    void SetIdle()
-    {
-        agent.isStopped = true; //agent를 멈추고 경로 재설정
-        agent.ResetPath();
-
-        currentTarget = null;
-
-        anim.SetTrigger("Idle");
-        currentState = State.Idle;
-    }
-
-    void SetChase(Transform nearTarget)
-    {
-        currentState = State.Chase; //상태를 추격(Chase) 상태로 바꿈
-        anim.SetTrigger("Chase");
-        currentTarget = nearTarget;
-    }
-
-    void SetAttack(Transform nearTarget)
-    {
-        chaseStartTime = -1f;
-        currentTarget = nearTarget;
-        currentState = State.Attack; //공격하도록
+        return farTarget;
     }
 
     void BaseAttack()
     {
-        isAttacking = true;
+        agent.isStopped = true;
+        agent.velocity = Vector3.zero;
+
         swordVfx.gameObject.SetActive(true);
+
         isCoroutineFinished = false;
-        string animName = "BaseAttack";
-        RotateBoss(60f);
-        anim.SetTrigger(animName);
-        StopCoroutine("EndBaseAttack");
-        StartCoroutine(EndBaseAttack(2.1f));
+        //RotateBoss(60f);
+        isRotate = true;
+        rotateAngle = 60f;
+
+        anim.SetTrigger("BaseAttack");
+        StartCoroutine(EndBaseAttack());
     }
 
-    void SkillAttack()
+    IEnumerator EndBaseAttack()
     {
-        bool isCooltime = false; //스킬이 사용가능한가 대한 여부 쿨타임이 돌고 있으면 스킬을 쓰면 안됨
-        float randProb = Random.value;
+        yield return new WaitForSeconds(1.65f);
 
-        if (randProb < meleeSkillProb) //근접공격 확률에 따라 사용
-        {
-            isCooltime = MeleeAttack();
-        }
-        else
-        {
-            isCooltime = rangedAttack();
-        }
-
-        if (isCooltime) BaseAttack(); //쿨타임이 안끝났으면 그냥 기본공격을 한다.
-
-    }
-
-    IEnumerator EndBaseAttack(float length)
-    {
-        yield return new WaitForSeconds(length);
         swordVfx.gameObject.SetActive(false);
-        anim.SetTrigger("Idle");
-        isAttacking = false;
+        anim.SetTrigger("Rest");
+
+        if (!isChaseTimerSet) isChaseTimerSet = true;
+        chaseStartTime = Time.time;
+
+        isRotate = false;
         isCoroutineFinished = true;
-        Debug.Log("공격애니메이션 종료");
-    }
-
-    bool MeleeAttack()
-    {
-        bool isCooltime = false;
-        switch (currentPhase)
-        {
-            case 1.0f:
-                float tmp = Time.time - P1S1_StartTime;
-                //Debug.Log("스킬 사용시간" + tmp);
-                if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) UseSkillP1S1(); //쿨타임이 끝났으면 스킬 사용
-                else isCooltime = true;
-                break;
-            case 2.0f:
-                if (Time.time - P2S1_StartTime >= P2S1_Cooltime || P1S1_StartTime == -1f) UseSkillP2S1();
-                else isCooltime = true;
-                break;
-            case 3.0f:
-                if (Time.time - P3S1_StartTime >= P3S1_Cooltime || P1S1_StartTime == -1f) useSkillP3S1();
-                else isCooltime = true;
-                break;
-            case 4.0f:
-                if (Time.time - P4S1_StartTime >= P4S1_Cooltime || P1S1_StartTime == -1f) useSkillP4S1();
-                else isCooltime = true;
-                break;
-        }
-
-        return isCooltime;
-    }
-
-    bool rangedAttack()
-    {
-        bool isCooltime = false;
-        switch (currentPhase)
-        {
-            case 1.0f:
-                if (Time.time - P1S2_StartTime >= P1S2_Cooltime) UseSkillP1S2();
-                else isCooltime = true;
-                break;
-            case 2.0f:
-                if (Time.time - P2S2_StartTime >= P2S2_Cooltime) useSkillP2S2();
-                else isCooltime = true;
-                break;
-            case 3.0f:
-                if (Time.time - P3S2_StartTime >= P3S2_Cooltime) useSkillP3S2();
-                else isCooltime = true;
-                break;
-            case 4.0f:
-                if (Time.time - P4S2_StartTime >= P4S2_Cooltime) useSkillP4S2();
-                else isCooltime = true;
-                break;
-        }
-
-        return isCooltime;
     }
 
     void RotateBoss(float RotateDegree)
@@ -431,42 +523,10 @@ public class Boss_Skill2 : MonoBehaviour
         transform.rotation = Quaternion.Euler(currentRotation);
     }
 
-    /*
-    IEnumerator MakeEffect(Transform castingPosition, GameObject castingEffect, GameObject bullet, float bulletPower,
-    Transform targetPosition, GameObject targetEffect, float castDelay, float bulletDelay, float targetPointY, float targetDelay)
+    void MakeEffectOnBoss(GameObject castingEffect, Transform castingPosition)
     {
-        if (castingEffect != null)
-        {
-            MakeCastEffect(castingEffect, castingPosition);
-        }
-
-        yield return new WaitForSeconds(castDelay);
-
-        if (bullet != null)
-        {
-            MakeAndShotBullet(bullet, castingPosition, targetPosition, bulletPower);
-            yield return new WaitForSeconds(bulletDelay);
-        }
-
-        if (targetEffect != null)
-        {
-            Vector3 targetPoint = targetPosition.position;
-            targetPoint.y = targetPointY;
-
-            GameObject targetPointEffect = Instantiate(targetEffect, targetPoint, targetEffect.transform.rotation);
-            targetPointEffect.transform.SetParent(skillObjects.transform);
-        }
-
-        yield return new WaitForSeconds(targetDelay);
-        anim.SetTrigger("Idle");
-        isAttacking = false;
-        isCoroutineFinished = true;
-    }*/
-
-    void MakeCastEffect(GameObject castingEffect, Transform castingPosition)
-    {
-        GameObject CastingEffect = Instantiate(castingEffect, castingPosition.position, castingPosition.transform.rotation);
-        CastingEffect.transform.SetParent(castingPosition);
+        GameObject castEffect = Instantiate(castingEffect, castingPosition.position, castingPosition.transform.rotation);
+        castEffect.transform.SetParent(castingPosition);
     }
 
     void MakeBulletAndShotLinear(GameObject bullet, Transform bulletPosition, Transform targetPosition, float bulletPower) //직선으로 발사
@@ -476,21 +536,36 @@ public class Boss_Skill2 : MonoBehaviour
         Rigidbody bulletRigid = bulletInstant.GetComponent<Rigidbody>();
 
         //Shot Bullet
-        Vector3 dirVector = (targetPosition.position - bulletPosition.position).normalized;
+        Vector3 targetPos = targetPosition.position;
+        //targetPos.y += 30;
+        Vector3 dirVector = (targetPos - bulletPosition.position).normalized;
 
         bulletInstant.transform.rotation = Quaternion.LookRotation(dirVector);
         bulletRigid.AddForce(bulletInstant.transform.forward * bulletPower, ForceMode.Impulse);
         //bulletRigid.AddForce(dirVector * bulletPower, ForceMode.Impulse); (이전코드)
     }
 
-    void MakeBulletAndShotProjectile() //포물선으로 발사
+    void MakeBulletAndShotNav(GameObject bullet, Transform bulletPosition, Transform targetPosition) //Nav를 이용해 발사
     {
-
+        GameObject bulletInstant = Instantiate(bullet, bulletPosition.position, bulletPosition.rotation); //보스의 몸에서 발사
+        Transform target = targetPosition;
+        StartCoroutine(UpdateTarget(bulletInstant, target));
     }
 
-    void MakeTargetEffect(GameObject targetEffect, Transform targetPosition, float targetPointY)
+    IEnumerator UpdateTarget(GameObject bullet, Transform target)
+    {
+        NavMeshAgent nav = bullet.GetComponent<NavMeshAgent>();
+        while (bullet != null)
+        {
+            nav.SetDestination(target.position);
+            yield return null;
+        }
+    }
+
+    void MakeEffectOnTarget(GameObject targetEffect, Transform targetPosition, float targetPointY)
     {
         Vector3 targetPoint = targetPosition.position;
+        //if(fixY)   bool fixY, float targetPointY, bool destroy, float destroyTime)
         targetPoint.y = targetPointY;
 
         GameObject targetPointEffect = Instantiate(targetEffect, targetPoint, targetEffect.transform.rotation);
@@ -499,43 +574,33 @@ public class Boss_Skill2 : MonoBehaviour
 
     void EndSkill()
     {
-        anim.SetTrigger("Idle");
-        isAttacking = false;
+        anim.SetTrigger("Rest");
+        //anim.SetTrigger("WalkStop");
+        //isAttacking = false;
+
+        if (!isChaseTimerSet) isChaseTimerSet = true;
+        chaseStartTime = Time.time;
+
+        if (agent.isStopped) agent.isStopped = false;
         isCoroutineFinished = true;
     }
-
-    /*
-    Rigidbody MakeBullet(GameObject bullet, Transform bulletPosition)
-    {
-        GameObject bulletInstant = Instantiate(bullet, bulletPosition.position, bulletPosition.rotation); //보스의 몸에서 발사
-        Rigidbody bulletRigid = bulletInstant.GetComponent<Rigidbody>();
-
-        return bulletRigid;
-    }
-
-    void ShotBullet(Transform targetPosition, Transform bulletPosition, Rigidbody bulletRigid, float bulletPower)
-    {
-        Vector3 dirVector = (targetPosition.position - bulletPosition.position).normalized;
-        bulletRigid.AddForce(dirVector * bulletPower, ForceMode.Impulse);
-    }
-    */
 
     IEnumerator UseSkillP1S1()
     {
         isCoroutineFinished = false;
-        string animName = "P1S1";
+        agent.isStopped = true;
         P1S1_StartTime = Time.time;
 
-        float castDelay = 0f;
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")) castDelay = 1.5f;
-        else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.5f;
+        anim.SetTrigger("P1S1");
 
-        anim.SetTrigger(animName);
+        float castDelay = 1.5f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")) castDelay = 1.3f;
+        //if (anim.GetCurrentAnimatorStateInfo(0).IsName("P1S1")) castDelay = 1.7f;
 
         yield return new WaitForSeconds(castDelay);
-        MakeTargetEffect(P1S1_TargettingEffect, this.transform, 52.5f);
+        MakeEffectOnTarget(P1S1_TargettingEffect, this.transform, 52.5f);
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
         EndSkill();
         //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
     }
@@ -543,38 +608,109 @@ public class Boss_Skill2 : MonoBehaviour
     IEnumerator UseSkillP1S2()
     {
         isCoroutineFinished = false;
-        string animName = "P1S2";
-        isAttacking = true;
-        //RotateBoss(50f);
-        anim.SetTrigger(animName);
-        P1S1_StartTime = Time.time;
+        P1S2_StartTime = Time.time;
 
+        anim.SetTrigger("P1S2");
 
-        float animDelay = 0f;
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
-
-        }
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
-        {
-            animDelay = 1.5f;
-        }
+        float animDelay = 0.3f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")) animDelay = 0.1f;
+        //if (anim.GetCurrentAnimatorStateInfo(0).IsName("P1S2")) animDelay = 0.3f;
 
         yield return new WaitForSeconds(animDelay);
-        MakeCastEffect(P1S2_CastingEffect, P1S2_CastingPosition);
 
-        
-        MakeBulletAndShotLinear(P1S2_Bullet, P1S2_CastingPosition, currentTarget.transform, 300.0f);
+        MakeEffectOnBoss(P1S2_CastingEffect, LeftFinger_Pos);
 
+        yield return new WaitForSeconds(1.2f);
 
-        yield return new WaitForSeconds(2.0f);
+        MakeBulletAndShotLinear(P1S2_Bullet, LeftFinger_Pos, currentTarget.transform, 300.0f);
+
+        yield return new WaitForSeconds(0.8f);
         EndSkill();
-        //StartCoroutine(MakeEffect(P1S2_CastingPosition, P1S2_CastingEffect, P1S2_Bullet, 300.0f, currentTarget.transform, null, 1.5f, 1.0f, 0f, 1.0f));
+        //StartCoroutine(MakeEffect(LeftFinger_Pos, P1S2_CastingEffect, P1S2_Bullet, 300.0f, currentTarget.transform, null, 1.5f, 1.0f, 0f, 1.0f));
     }
 
-    void UseSkillP2S1()
+    IEnumerator UseSkillP1S3()
     {
+        isCoroutineFinished = false;
+        P1S3_StartTime = Time.time;
 
+        float castDelay = 0.3f;
+        //if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")) castDelay = 1.0f;
+        //else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.0f;
+
+        anim.SetTrigger("P1S3");
+        //anim.SetTrigger("Walk");
+
+        yield return new WaitForSeconds(castDelay);
+        MakeEffectOnBoss(P1S3_Effect, LeftHand_Pos);
+        MakeEffectOnBoss(P1S3_Effect, RightHand_Pos);
+        //isWalkingSkill = true;
+
+        yield return new WaitForSeconds(2.5f);
+        EndSkill();
+        //isWalkingSkill = false;
+        //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
+    }
+
+    IEnumerator UseSkillP2S1()
+    {
+        swordVfx.gameObject.SetActive(true);
+        isCoroutineFinished = false;
+        P2S1_StartTime = Time.time;
+
+        float animDelay = 1.4f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle2")) animDelay = 1.2f;
+
+        anim.SetTrigger("P2S1");
+        yield return new WaitForSeconds(animDelay);
+        swordVfx.gameObject.SetActive(false);
+        EndSkill();
+    }
+
+    IEnumerator UseSkillP2S2()
+    {
+        sword.SetActive(false);
+        isCoroutineFinished = false;
+        P2S2_StartTime = Time.time;
+
+        string animName = "P2S2";
+        anim.SetTrigger(animName);
+
+        float animDelay = 1.4f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle2")) animDelay = 1.2f;
+        float castDelay = 4.3f;
+
+        yield return new WaitForSeconds(animDelay);
+        MakeEffectOnBoss(P2S2_CastingEffect, RightHand_Pos);
+
+        yield return new WaitForSeconds(castDelay);
+        MakeBulletAndShotNav(P2S2_Bullet, RightHand_Pos, currentTarget.transform);
+
+        yield return new WaitForSeconds(3.0f);
+        sword.SetActive(true);
+        EndSkill();
+        //StartCoroutine(MakeEffect(LeftFinger_Pos, P1S2_CastingEffect, P1S2_Bullet, 300.0f, currentTarget.transform, null, 1.5f, 1.0f, 0f, 1.0f));
+    }
+
+    IEnumerator UseSkillP2S3()
+    {
+        isCoroutineFinished = false;
+        P2S3_StartTime = Time.time;
+        isP2P3 = true;
+
+        float castDelay = 1.2f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle2")) castDelay = 1.0f;
+        //else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.0f;
+
+        anim.SetTrigger("P2S3");
+
+        yield return new WaitForSeconds(castDelay);
+        MakeEffectOnTarget(P2S3_TargettingEffect, this.transform, 54f);
+
+        yield return new WaitForSeconds(0.5f);
+        EndSkill();
+        yield return new WaitForSeconds(8.0f);
+        isP2P3 = false;
     }
 
     void useSkillP3S1()

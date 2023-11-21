@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Ninja_Skill : Character_Skill
+public class Ninja_Skill : MonoBehaviourPunCallbacks
 {
+    PhotonView PV;
     [SerializeField]
     private GameObject weapon;
-
     public GameObject shadowClonePrefab; 
     public float cloneDuration = 20f; // 분신이 유지될 시간
     [SerializeField] private ParticleSystem weaponParticles;
@@ -15,8 +16,133 @@ public class Ninja_Skill : Character_Skill
     [SerializeField] private ParticleSystem W_Particles;
     [SerializeField] private ParticleSystem R_Particles;
     bool isAttacking = false;
+    bool isRSkillActive = false;
+    [SerializeField]
+    protected float Q_Cooltime;
 
-    public override void Active_Base_Attack()
+    [SerializeField]
+    protected float W_Cooltime;
+
+    [SerializeField]
+    protected float E_Cooltime;
+
+    [SerializeField]
+    protected float R_Cooltime;
+
+    [HideInInspector]
+    public float Q_Cooltime_Check;
+    [HideInInspector]
+    public float W_Cooltime_Check;
+    [HideInInspector]
+    public float E_Cooltime_Check;
+    [HideInInspector]
+    public float R_Cooltime_Check;
+
+    public bool Q_Skill, W_Skill, E_Skill, R_Skill, Base_Attack;
+
+    protected Animator anim;
+    protected UnityEngine.AI.NavMeshAgent agent;
+    void Start()
+    {
+        PV = GetComponent<PhotonView>();
+        Q_Skill = true;
+        W_Skill = true;
+        E_Skill = true;
+        R_Skill = true;
+        Base_Attack = true;
+        anim = GetComponent<Animator>();
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        Skill_Cooltime_Cal();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Active_Base_Attack();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+        {
+            Active_Q_Skill();
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) && W_Skill)
+        {
+            Active_W_Skill();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && E_Skill)
+        {
+            Active_E_Skill();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && R_Skill)
+        {
+            Active_R_Skill();
+        }
+    }
+    private void Skill_Cooltime_Cal()
+    {
+        if (Q_Cooltime_Check >= 0)
+        {
+            Q_Cooltime_Check -= Time.deltaTime;
+            if (Q_Cooltime_Check <= 0)
+            {
+                Q_Cooltime_Check = 0;
+                Q_Skill = true;
+            }
+        }
+
+        if (W_Cooltime_Check >= 0)
+        {
+            W_Cooltime_Check -= Time.deltaTime;
+            if (W_Cooltime_Check <= 0)
+            {
+                W_Cooltime_Check = 0;
+                W_Skill = true;
+            }
+        }
+
+        if (E_Cooltime_Check >= 0)
+        {
+            E_Cooltime_Check -= Time.deltaTime;
+            if (E_Cooltime_Check <= 0)
+            {
+                E_Cooltime_Check = 0;
+                E_Skill = true;
+            }
+        }
+
+        if (R_Cooltime_Check >= 0)
+        {
+            R_Cooltime_Check -= Time.deltaTime;
+            if (R_Cooltime_Check <= 0)
+            {
+                R_Cooltime_Check = 0;
+                R_Skill = true;
+            }
+        }
+    }
+    //공격 애니메이션 작동 중에 클릭 연타시 해당 위치로 이동하는 문제점 발견(의도는 가만히 서서 애니메이션 작동하길 원함)
+    //이동하면서 walk 애니메이션이 재생되는 문제를 해결하기 위해 모든 이동 입력을 막는 bool 값 "AllStop"을 설정해줘서 컨트롤 하고자 함.
+    protected void StopMove(float delay)
+    {
+        StartCoroutine(StopClickMove(delay));
+    }
+
+    IEnumerator StopClickMove(float delay)
+    {
+        this.gameObject.GetComponent<ClickMove>().AllStop=true;
+        yield return new WaitForSeconds(delay);
+        this.gameObject.GetComponent<ClickMove>().AllStop=false;
+        yield break;
+    }
+
+    public void Active_Base_Attack()
     {
         if ((anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")) && agent.remainingDistance < 0.1f)
         {
@@ -25,13 +151,26 @@ public class Ninja_Skill : Character_Skill
 
             if (!isAttacking)
             {
-                isAttacking = true;
-                StartCoroutine(SetActiveBaseAttack());
+                if (isRSkillActive)
+                {
+                    PV.RPC("ActivateCloneForBaseAttack", RpcTarget.All);
+                }
+                else
+                {
+                    isAttacking = true;
+                    PV.RPC("SetActiveBaseAttack", RpcTarget.All);
+                }
             }
         }
     }
 
-    IEnumerator SetActiveBaseAttack()
+    [PunRPC]
+    private void SetActiveBaseAttack()
+    {
+        StartCoroutine(SetActiveBaseAttackRoutine());
+    }
+
+    private IEnumerator SetActiveBaseAttackRoutine()
     {
         agent.velocity = Vector3.zero;
         agent.isStopped = true;
@@ -61,6 +200,30 @@ public class Ninja_Skill : Character_Skill
         agent.isStopped = false;
         isAttacking = false;
     }
+    [PunRPC]
+    private void ActivateCloneForBaseAttack()
+    {
+        GameObject ninjaClone = transform.Find("Ninja Clone").gameObject;
+
+        if (ninjaClone != null)
+        {
+            ninjaClone.SetActive(true);
+
+            PV.RPC("SetActiveBaseAttack", RpcTarget.All);
+            StartCoroutine(DeactivateCloneAfterDuration(ninjaClone, 1.0f));
+        }
+    }
+
+    private IEnumerator DeactivateCloneAfterDuration(GameObject cloneObject, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        // 클론 비활성화
+        if (cloneObject != null)
+        {
+            cloneObject.SetActive(false);
+        }
+    }
 
     void CreateBParticles(Vector3 targetPosition, float yRotation, float xOffset)
     {
@@ -80,11 +243,7 @@ public class Ninja_Skill : Character_Skill
             Destroy(ParticlesObject, particleDuration);
         }
     }
-
-
-
-
-    public override void Active_Q_Skill()
+    public void Active_Q_Skill()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {       
@@ -108,25 +267,27 @@ public class Ninja_Skill : Character_Skill
                 // 보스를 향하도록 회전
                 transform.LookAt(boss.transform);
                 
-                anim.SetTrigger("Q");
-                Invoke("PlayQParticles",0.2f); 
+                
+                photonView.RPC("PlayQParticles", RpcTarget.All);
             }
         }
     }
+
+    [PunRPC]
     private void PlayQParticles()
     {
+        anim.SetTrigger("Q");
         Q_Particles.Play();
         Invoke("StopQParticles", 1f);
-        
     }
+
     private void StopQParticles()
     {
         Q_Particles.Stop();
         Q_Particles.Clear();
     }
 
-
-    public override void Active_W_Skill()
+    public void Active_W_Skill()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -143,18 +304,45 @@ public class Ninja_Skill : Character_Skill
                 direction.y = 0;
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-                // 시계 방향으로 55도 회전
                 Quaternion finalRotation = Quaternion.Euler(0, 90f, 0) * targetRotation;
 
-                // 공격 모션 방향을 설정하고 공격 애니메이션 실행
                 anim.transform.rotation = finalRotation;
 
-                anim.SetTrigger("W");
-                W_Particles.Play();
-                StartCoroutine(SpawnDelay(0.5f, 0.35f, 3)); 
+                if (isRSkillActive)
+                {
+                    photonView.RPC("ActivateCloneForW", RpcTarget.All);
+                    photonView.RPC("PlayWParticles", RpcTarget.All);
+                    photonView.RPC("SpawnDelay", RpcTarget.All, 0.5f, 0.35f, 3);
+                }
+                else
+                {
+                    photonView.RPC("PlayWParticles", RpcTarget.All);
+                    photonView.RPC("SpawnDelay", RpcTarget.All, 0.5f, 0.35f, 3);
+                }
             }
         }
     }
+
+
+
+    [PunRPC]
+    private void PlayWParticles()
+    {
+        anim.SetTrigger("W");
+
+        W_Particles.Play();
+
+        float duration = W_Particles.main.duration;
+        Invoke("StopWParticles", duration);
+    }
+
+    private void StopWParticles()
+    {
+        W_Particles.Stop();
+        W_Particles.Clear();
+    }
+
+    [PunRPC]
     private IEnumerator SpawnDelay(float initialDelay, float interval, int spawnCount)
     {
         yield return new WaitForSeconds(initialDelay);
@@ -180,9 +368,20 @@ public class Ninja_Skill : Character_Skill
         }
     }
 
-    public override void Active_E_Skill()
+    [PunRPC]
+    private void ActivateCloneForW()
     {
-        // 스킬 E 실행
+        // 클론을 활성화
+        GameObject ninjaClone = transform.Find("Ninja Clone").gameObject;
+        if (ninjaClone != null)
+        {
+            ninjaClone.SetActive(true);
+            StartCoroutine(DeactivateCloneAfterDuration(ninjaClone, 2.0f));
+        }
+    }
+
+    public void Active_E_Skill()
+    {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
             anim.SetBool("Walk", false);
@@ -198,15 +397,28 @@ public class Ninja_Skill : Character_Skill
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
                 Quaternion finalRotation = Quaternion.Euler(0, 55f, 0) * targetRotation;
                 transform.rotation = finalRotation;
-                anim.SetTrigger("E");
+    
                 weaponParticles.Play();
                 Invoke("StopweaponParticles", 10.0f);
+
+                // 다른 플레이어에게 E 스킬을 동기화하기 위해 Photon RPC 호출
+                photonView.RPC("PlayWeaponParticles", RpcTarget.All);
             }
         }
     }
 
-    
-    public override void Active_R_Skill()
+    [PunRPC]
+    private void PlayWeaponParticles()
+    {
+        anim.SetTrigger("E");
+        // 해당 플레이어의 무기 파티클 실행
+        weaponParticles.Play();
+
+        // 이펙트 재생 시간동안 기다린 후에 파티클 정리
+        float duration = weaponParticles.main.duration;
+        Invoke("StopWeaponParticles", duration);
+    }
+    public void Active_R_Skill()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
@@ -223,37 +435,34 @@ public class Ninja_Skill : Character_Skill
                 direction.y = 0;
                 Quaternion targetRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
                 transform.rotation = targetRotation;
-
-                anim.SetTrigger("R");
-                StartCoroutine(SpawnShadowClone(targetPosition));
-                Invoke("PlayWParticles", 1.5f);
+                photonView.RPC("ActivateRSkill", RpcTarget.All, targetPosition);
             }
         }
     }
 
-    private void PlayWParticles()
+    [PunRPC]
+    private void ActivateRSkill(Vector3 targetPosition)
     {
+        anim.SetTrigger("R");
+        isRSkillActive = true;
         R_Particles.Play();
-        Invoke("StopWParticles", 2f);
+        StartCoroutine(DeactivateRSkillAfterDurationCoroutine()); // R 스킬 지속 시간 후에 비활성화
     }
 
-    private void StopWParticles()
+    private IEnumerator DeactivateRSkillAfterDurationCoroutine()
     {
-        R_Particles.Stop();
-        R_Particles.Clear();
+        yield return new WaitForSeconds(20.0f); // 20초 지연
+
+        isRSkillActive = false;
+
+        // R 스킬 파티클 정지 및 클리어
+        if (R_Particles != null)
+        {
+            R_Particles.Stop();
+            R_Particles.Clear();
+        }
     }
 
-    IEnumerator SpawnShadowClone(Vector3 targetPosition)
-    {
-        // 1.5초 뒤에 분신 생성
-        yield return new WaitForSeconds(1.5f);
+    
 
-        // 분신 생성
-        GameObject shadowClone = Instantiate(shadowClonePrefab, transform.position, Quaternion.identity);
-
-        yield return new WaitForSeconds(cloneDuration - 1.5f);
-
-        // 분신 제거
-        Destroy(shadowClone);
-    }
-}
+} 

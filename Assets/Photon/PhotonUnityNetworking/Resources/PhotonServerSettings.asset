@@ -39,7 +39,21 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
-  - SetUserInfoPosition
+  - <Update>g__SetWalkAnimationState|5_0
+  - PerformDodgeAnimation
+  - SetWalkAnimationState
+  - SetActiveBaseAttack
+  - PlayQParticles
+  - PlayWeaponParticles
+  - PlayWParticles
+  - SpawnDelay
+  - ActivateRSkill
+  - SpawnShadowClone
+  - PlayRParticles
+  - Active_Base_Attack
+  - ActivateCloneForW
+  - DeactivateRSkillAfterDuration
+  - ActivateCloneForBaseAttack
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

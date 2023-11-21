@@ -5,14 +5,18 @@ using UnityEngine;
 public class TerrainCollision : MonoBehaviour
 {
     [SerializeField] GameObject effect;
+    [SerializeField] float customY;
+    [SerializeField] bool isDamage;
+    [SerializeField] float damage;
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log("충돌함" + other.gameObject.tag);
-        if (other.gameObject.tag == "Terrain") 
+        if (other.gameObject.tag == "Terrain" || other.gameObject.tag == "Player") 
         {
             Vector3 targetPoint = transform.position;
-            targetPoint.y = 51.5f;
-            Instantiate(effect, targetPoint, Quaternion.identity);
+            targetPoint.y = customY;
+            GameObject targetEffect = Instantiate(effect, targetPoint, Quaternion.identity);
+            Destroy(targetEffect, 3f);
+            if(isDamage && other.gameObject.tag == "Player") other.transform.GetComponent<Character_Info>().TakeDamage(damage);
             Destroy(gameObject);
         }
     }

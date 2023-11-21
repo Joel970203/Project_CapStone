@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BossAttack : MonoBehaviour
 {
+    /*
     public float normalDamage = 20.0f; // 기본 공격 데미지 
 
     public void PerformAttack()
@@ -28,5 +29,5 @@ public class BossAttack : MonoBehaviour
     float GetAttackMultiplier()
     {
         return 1;
-    }
+    }*/
 }

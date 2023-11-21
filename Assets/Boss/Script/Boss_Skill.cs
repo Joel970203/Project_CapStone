@@ -143,7 +143,7 @@ public class Boss_Skill : MonoBehaviour
 
         //Debug.Log("State: " + state);
 
-        currentPhase = this.GetComponent<Boss_Info>().phaseNum;
+        currentPhase = this.GetComponent<Boss_Info>().GetPhaseNum();
 
         //nearTarget = FindnearTarget();
 

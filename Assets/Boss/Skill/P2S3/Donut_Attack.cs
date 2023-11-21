@@ -6,9 +6,9 @@ public class Donut_Attack : MonoBehaviour
 {
     [SerializeField] private float outerRadius;
     [SerializeField] private float innerRadius;
-    [SerializeField] private float damagePerSec;
+    [SerializeField] private float dotDamage;
 
-    private void Update()
+    private void FixedUpdate()
     {
         RaycastHit[] outerHits = Physics.SphereCastAll(this.transform.position, outerRadius, Vector3.up, 0f, LayerMask.GetMask("Player"));
 
@@ -35,8 +35,7 @@ public class Donut_Attack : MonoBehaviour
             if (!isInner)
             {
                 float armor = outerHit.transform.GetComponent<Character_Info>().GetArmor();
-                //Debug.Log("armor" + armor);
-                outerHit.transform.GetComponent<Character_Info>().TakeDamage(damagePerSec * Time.deltaTime + armor);
+                outerHit.transform.GetComponent<Character_Info>().TakeDamage(dotDamage * Time.deltaTime + armor);
             }
         }
     }
