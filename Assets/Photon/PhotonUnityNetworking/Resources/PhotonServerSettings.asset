@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: kr
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -39,6 +39,21 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - <Update>g__SetWalkAnimationState|5_0
+  - PerformDodgeAnimation
+  - SetWalkAnimationState
+  - SetActiveBaseAttack
+  - PlayQParticles
+  - PlayWeaponParticles
+  - PlayWParticles
+  - SpawnDelay
+  - ActivateRSkill
+  - SpawnShadowClone
+  - PlayRParticles
+  - Active_Base_Attack
+  - ActivateCloneForW
+  - DeactivateRSkillAfterDuration
+  - ActivateCloneForBaseAttack
   DisableAutoOpenWizard: 1
   ShowSettings: 1
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1

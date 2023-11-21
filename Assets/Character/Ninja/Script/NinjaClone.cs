@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Ninja_Skill : MonoBehaviourPunCallbacks
+public class NinjaClone : MonoBehaviourPunCallbacks
 {
     PhotonView PV;
     [SerializeField]
@@ -38,17 +38,14 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
     [HideInInspector]
     public float R_Cooltime_Check;
 
-    public bool Q_Skill, W_Skill, E_Skill, R_Skill, Base_Attack;
+    public bool W_Skill, Base_Attack;
 
     protected Animator anim;
     protected UnityEngine.AI.NavMeshAgent agent;
     void Start()
     {
         PV = GetComponent<PhotonView>();
-        Q_Skill = true;
         W_Skill = true;
-        E_Skill = true;
-        R_Skill = true;
         Base_Attack = true;
         anim = GetComponent<Animator>();
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -64,39 +61,13 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
         {
             Active_Base_Attack();
         }
-
-        if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
-        {
-            Active_Q_Skill();
-        }
-
         if (Input.GetKeyDown(KeyCode.W) && W_Skill)
         {
             Active_W_Skill();
         }
-
-        if (Input.GetKeyDown(KeyCode.E) && E_Skill)
-        {
-            Active_E_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && R_Skill)
-        {
-            Active_R_Skill();
-        }
     }
     private void Skill_Cooltime_Cal()
     {
-        if (Q_Cooltime_Check >= 0)
-        {
-            Q_Cooltime_Check -= Time.deltaTime;
-            if (Q_Cooltime_Check <= 0)
-            {
-                Q_Cooltime_Check = 0;
-                Q_Skill = true;
-            }
-        }
-
         if (W_Cooltime_Check >= 0)
         {
             W_Cooltime_Check -= Time.deltaTime;
@@ -104,26 +75,6 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
             {
                 W_Cooltime_Check = 0;
                 W_Skill = true;
-            }
-        }
-
-        if (E_Cooltime_Check >= 0)
-        {
-            E_Cooltime_Check -= Time.deltaTime;
-            if (E_Cooltime_Check <= 0)
-            {
-                E_Cooltime_Check = 0;
-                E_Skill = true;
-            }
-        }
-
-        if (R_Cooltime_Check >= 0)
-        {
-            R_Cooltime_Check -= Time.deltaTime;
-            if (R_Cooltime_Check <= 0)
-            {
-                R_Cooltime_Check = 0;
-                R_Skill = true;
             }
         }
     }
@@ -148,19 +99,8 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
         {
             agent.ResetPath();
             anim.SetBool("Walk", false);
-
-            if (!isAttacking)
-            {
-                if (isRSkillActive)
-                {
-                    PV.RPC("ActivateCloneForBaseAttack", RpcTarget.All);
-                }
-                else
-                {
-                    isAttacking = true;
-                    PV.RPC("SetActiveBaseAttack", RpcTarget.All);
-                }
-            }
+            isAttacking = true;
+            PV.RPC("SetActiveBaseAttack", RpcTarget.All);
         }
     }
 
@@ -200,30 +140,6 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
         agent.isStopped = false;
         isAttacking = false;
     }
-    [PunRPC]
-    private void ActivateCloneForBaseAttack()
-    {
-        GameObject ninjaClone = transform.Find("Ninja Clone").gameObject;
-
-        if (ninjaClone != null)
-        {
-            ninjaClone.SetActive(true);
-
-            PV.RPC("SetActiveBaseAttack", RpcTarget.All);
-            StartCoroutine(DeactivateCloneAfterDuration(ninjaClone, 1.0f));
-        }
-    }
-
-    private IEnumerator DeactivateCloneAfterDuration(GameObject cloneObject, float duration)
-    {
-        yield return new WaitForSeconds(duration);
-
-        // 클론 비활성화
-        if (cloneObject != null)
-        {
-            cloneObject.SetActive(false);
-        }
-    }
 
     void CreateBParticles(Vector3 targetPosition, float yRotation, float xOffset)
     {
@@ -243,50 +159,6 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
             Destroy(ParticlesObject, particleDuration);
         }
     }
-    public void Active_Q_Skill()
-    {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {       
-            anim.SetBool("Walk", false);
-            agent.ResetPath();
-            GameObject boss = GameObject.FindWithTag("Boss");
-            if (boss != null)
-            {
-                // 보스와 플레이어 간의 거리와 방향 계산
-                Vector3 bossPosition = boss.transform.position;
-                Vector3 playerPosition = transform.position;
-                Vector3 bossDirection = (bossPosition - playerPosition).normalized;
-                float skillDistance = 50.0f; // 이동할 거리 (적절한 값 찾기)
-
-                // 보스가 바라보는 방향의 뒤로 이동 위치 계산
-                Vector3 movePosition = bossPosition + bossDirection * skillDistance;
-
-                // 이동 위치로 플레이어 이동
-                transform.position = movePosition;
-
-                // 보스를 향하도록 회전
-                transform.LookAt(boss.transform);
-                
-                
-                photonView.RPC("PlayQParticles", RpcTarget.All);
-            }
-        }
-    }
-
-    [PunRPC]
-    private void PlayQParticles()
-    {
-        anim.SetTrigger("Q");
-        Q_Particles.Play();
-        Invoke("StopQParticles", 1f);
-    }
-
-    private void StopQParticles()
-    {
-        Q_Particles.Stop();
-        Q_Particles.Clear();
-    }
-
     public void Active_W_Skill()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -323,6 +195,29 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
+    private void ActivateCloneForW()
+    {
+        // 클론을 활성화
+        GameObject ninjaClone = transform.Find("Ninja Clone").gameObject;
+        if (ninjaClone != null)
+        {
+            ninjaClone.SetActive(true);
+            // 2초 뒤에 클론 비활성화
+            StartCoroutine(DeactivateCloneAfterDuration(ninjaClone, 2.0f));
+        }
+    }
+
+    private IEnumerator DeactivateCloneAfterDuration(GameObject cloneObject, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        // 클론 비활성화
+        if (cloneObject != null)
+        {
+            cloneObject.SetActive(false);
+        }
+    }
 
 
     [PunRPC]
@@ -367,102 +262,4 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
             }
         }
     }
-
-    [PunRPC]
-    private void ActivateCloneForW()
-    {
-        // 클론을 활성화
-        GameObject ninjaClone = transform.Find("Ninja Clone").gameObject;
-        if (ninjaClone != null)
-        {
-            ninjaClone.SetActive(true);
-            StartCoroutine(DeactivateCloneAfterDuration(ninjaClone, 2.0f));
-        }
-    }
-
-    public void Active_E_Skill()
-    {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {
-            anim.SetBool("Walk", false);
-            agent.ResetPath();
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                Vector3 targetPosition = hit.point;
-                Vector3 direction = targetPosition - transform.position;
-                direction.y = 0;
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                Quaternion finalRotation = Quaternion.Euler(0, 55f, 0) * targetRotation;
-                transform.rotation = finalRotation;
-    
-                weaponParticles.Play();
-                Invoke("StopweaponParticles", 10.0f);
-
-                // 다른 플레이어에게 E 스킬을 동기화하기 위해 Photon RPC 호출
-                photonView.RPC("PlayWeaponParticles", RpcTarget.All);
-            }
-        }
-    }
-
-    [PunRPC]
-    private void PlayWeaponParticles()
-    {
-        anim.SetTrigger("E");
-        // 해당 플레이어의 무기 파티클 실행
-        weaponParticles.Play();
-
-        // 이펙트 재생 시간동안 기다린 후에 파티클 정리
-        float duration = weaponParticles.main.duration;
-        Invoke("StopWeaponParticles", duration);
-    }
-    public void Active_R_Skill()
-    {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {
-            anim.SetBool("Walk", false);
-            agent.ResetPath();
-
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                Vector3 targetPosition = hit.point;
-                Vector3 direction = targetPosition - transform.position;
-                direction.y = 0;
-                Quaternion targetRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
-                transform.rotation = targetRotation;
-                photonView.RPC("ActivateRSkill", RpcTarget.All, targetPosition);
-            }
-        }
-    }
-
-    [PunRPC]
-    private void ActivateRSkill(Vector3 targetPosition)
-    {
-        anim.SetTrigger("R");
-        isRSkillActive = true;
-        R_Particles.Play();
-        StartCoroutine(DeactivateRSkillAfterDurationCoroutine()); // R 스킬 지속 시간 후에 비활성화
-    }
-
-    private IEnumerator DeactivateRSkillAfterDurationCoroutine()
-    {
-        yield return new WaitForSeconds(20.0f); // 20초 지연
-
-        isRSkillActive = false;
-
-        // R 스킬 파티클 정지 및 클리어
-        if (R_Particles != null)
-        {
-            R_Particles.Stop();
-            R_Particles.Clear();
-        }
-    }
-
-    
-
 } 
