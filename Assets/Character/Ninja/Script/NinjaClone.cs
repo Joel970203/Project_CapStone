@@ -30,46 +30,12 @@ public class NinjaClone : MonoBehaviourPunCallbacks
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public IEnumerator DelayedBaseAttack(float delay)
     {
-
-        Skill_Cooltime_Cal();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Active_Base_Attack();
-        }
-        if (Input.GetKeyDown(KeyCode.W) && W_Skill)
-        {
-            Active_W_Skill();
-        }
-    }
-    private void Skill_Cooltime_Cal()
-    {
-        if (W_Cooltime_Check >= 0)
-        {
-            W_Cooltime_Check -= Time.deltaTime;
-            if (W_Cooltime_Check <= 0)
-            {
-                W_Cooltime_Check = 0;
-                W_Skill = true;
-            }
-        }
-    }
-    //공격 애니메이션 작동 중에 클릭 연타시 해당 위치로 이동하는 문제점 발견(의도는 가만히 서서 애니메이션 작동하길 원함)
-    //이동하면서 walk 애니메이션이 재생되는 문제를 해결하기 위해 모든 이동 입력을 막는 bool 값 "AllStop"을 설정해줘서 컨트롤 하고자 함.
-    protected void StopMove(float delay)
-    {
-        StartCoroutine(StopClickMove(delay));
-    }
-
-    IEnumerator StopClickMove(float delay)
-    {
-        this.gameObject.GetComponent<ClickMove>().AllStop=true;
         yield return new WaitForSeconds(delay);
-        this.gameObject.GetComponent<ClickMove>().AllStop=false;
-        yield break;
+
+        // 클론의 Base Attack 실행
+        Active_Base_Attack();
     }
 
     public void Active_Base_Attack()
@@ -77,19 +43,28 @@ public class NinjaClone : MonoBehaviourPunCallbacks
         if ((anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")) && agent.remainingDistance < 0.1f)
         {
             agent.ResetPath();
-            anim.SetBool("Walk", false);
+            anim.SetBool("Wak", false);
             isAttacking = true;
-            PV.RPC("SetActiveBaseAttack", RpcTarget.All);
+            PV.RPC("ExecuteBaseAttack", RpcTarget.All);
         }
     }
 
     [PunRPC]
-    public void SetActiveBaseAttack()
+    public void ExecuteBaseAttack()
     {
-        StartCoroutine(SetActiveBaseAttackRoutine());
+        // RPC로 애니메이션 트리거를 설정합니다.
+        anim.SetTrigger("Base Attack");
+
+        // 일반 공격을 수행하는 함수를 호출합니다.
+        RegularAttack();
     }
 
-    private IEnumerator SetActiveBaseAttackRoutine()
+    private void RegularAttack()
+    {
+        StartCoroutine(CreateBParticlesRoutine());
+    }
+
+    private IEnumerator CreateBParticlesRoutine()
     {
         agent.velocity = Vector3.zero;
         agent.isStopped = true;
@@ -105,9 +80,7 @@ public class NinjaClone : MonoBehaviourPunCallbacks
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             Quaternion finalRotation = Quaternion.Euler(0, 55f, 0) * targetRotation;
             anim.transform.rotation = finalRotation;
-            anim.SetTrigger("Base Attack");
 
-            // 0.1초 간격으로 파티클 생성
             yield return new WaitForSeconds(0.4f);
             CreateBParticles(targetPosition, 60f, 10f); // X 좌표에 10만큼 더하여 생성
             yield return new WaitForSeconds(0.4f);
