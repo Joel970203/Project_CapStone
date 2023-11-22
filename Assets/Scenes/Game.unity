@@ -831,7 +831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 1944410763}
-  Character: {fileID: 1092932108}
+  Character: {fileID: 1019917109}
 --- !u!1 &410007709
 GameObject:
   m_ObjectHideFlags: 0
@@ -2248,15 +2248,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2046486417392170583, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
   m_PrefabInstance: {fileID: 9078125596089720881}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1019917109 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3442414748564991516, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
+  m_PrefabInstance: {fileID: 1768240112520568960}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1068895937 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6794885464362501185, guid: c21ab2161ad0c4640afc11877da5c0d3, type: 3}
   m_PrefabInstance: {fileID: 1581494725}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1092932108 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1670065946705931501, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
-  m_PrefabInstance: {fileID: 9078125596089720881}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1105196270
 GameObject:
@@ -2827,6 +2827,107 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2634105870291072166, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
   m_PrefabInstance: {fileID: 1768240112520568960}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1405990794 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8245551614744964828, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
+  m_PrefabInstance: {fileID: 1768240112520568960}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1405990795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019917109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 1405990797}
+  - {fileID: 1405990796}
+  sceneViewId: 8
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &1405990796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019917109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &1405990797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019917109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: Walk
+  - Type: 9
+    SynchronizeType: 0
+    Name: Hit
+  - Type: 9
+    SynchronizeType: 0
+    Name: Dodge
+  - Type: 4
+    SynchronizeType: 0
+    Name: Right_Dodge
+  - Type: 9
+    SynchronizeType: 0
+    Name: QSkillTrigger
+  - Type: 9
+    SynchronizeType: 0
+    Name: WSkillTrigger
+  - Type: 9
+    SynchronizeType: 0
+    Name: ESkillTrigger
+  - Type: 9
+    SynchronizeType: 0
+    Name: RSkillTrigger
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
+--- !u!114 &1405990798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019917109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34913c96486ffc4fb627ab03f63eba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 1405990794}
+  AllStop: 0
 --- !u!1 &1452845939
 GameObject:
   m_ObjectHideFlags: 0
@@ -4790,12 +4891,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3442414748564991516, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4585754681702232593, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3442414748564991516, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1405990797}
+    - targetCorrespondingSourceObject: {fileID: 3442414748564991516, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1405990796}
+    - targetCorrespondingSourceObject: {fileID: 3442414748564991516, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1405990795}
+    - targetCorrespondingSourceObject: {fileID: 3442414748564991516, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1405990798}
   m_SourcePrefab: {fileID: 100100000, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
 --- !u!1001 &2983340004576914900
 PrefabInstance:
@@ -5181,6 +5295,10 @@ PrefabInstance:
     - target: {fileID: 1670065946705931501, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
       propertyPath: m_Name
       value: Paladin
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670065946705931501, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2046486417392170583, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
       propertyPath: m_LocalPosition.x

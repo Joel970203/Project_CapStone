@@ -92,6 +92,11 @@ MonoBehaviour:
   - Paladin_QSkill
   - Paladin_RSkill
   - Paladin_WSkill
+  - HealerESkill
+  - HealerNormalAttack
+  - HealerQSkill
+  - HealerRSkill
+  - HealerWSkill
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -194,7 +194,6 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
     //공격 애니메이션 작동 중에 클릭 연타시 해당 위치로 이동하는 문제점 발견(의도는 가만히 서서 애니메이션 작동하길 원함)
     //이동하면서 walk 애니메이션이 재생되는 문제를 해결하기 위해 모든 이동 입력을 막는 bool 값 "AllStop"을 설정해줘서 컨트롤 하고자 함.
-    [PunRPC]
     protected void StopMove(float delay)
     {
         StartCoroutine(StopClickMove(delay));
@@ -202,9 +201,9 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
     IEnumerator StopClickMove(float delay)
     {
-        this.gameObject.GetComponent<Mage_Move>().AllStop=true;
+        this.gameObject.GetComponent<Paladin_Move>().AllStop=true;
         yield return new WaitForSeconds(delay);
-        this.gameObject.GetComponent<Mage_Move>().AllStop=false;
+        this.gameObject.GetComponent<Paladin_Move>().AllStop=false;
         yield break;
     }
 
