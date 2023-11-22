@@ -220,7 +220,7 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
                 particleRotation = Quaternion.Euler(new Vector3(0f, 90f, 0f));
             }
 
-            // 클라이언트에서 파티클 생성
+            // 파티클 생성
             GameObject ParticlesObject = Instantiate(weaponParticles.gameObject, spawnPosition, particleRotation);
             var particleSystem = ParticlesObject.GetComponent<ParticleSystem>();
             if (particleSystem != null)

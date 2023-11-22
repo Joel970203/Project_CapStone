@@ -72,6 +72,22 @@ MonoBehaviour:
   - ActivateESkillAnimation
   - FireArrows
   - SimulateArrowMovement
+  - DestroyEffectRPC
+  - PlayQSkill
+  - ShootEnergyBolt
+  - SettingParticle
+  - TriggerAnimation
+  - NormalAttack
+  - Active_E_Skill
+  - Active_Q_Skill
+  - Active_R_Skill
+  - Active_W_Skill
+  - callNormalAttack
+  - callE
+  - callQ
+  - callR
+  - callW
+  - StopMove
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
