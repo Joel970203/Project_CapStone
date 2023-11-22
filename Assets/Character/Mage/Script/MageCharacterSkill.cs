@@ -66,7 +66,7 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
     PhotonView PV;
 
 
-void Start()
+    void Start()
     {
         Q_Skill = true;
         W_Skill = true;

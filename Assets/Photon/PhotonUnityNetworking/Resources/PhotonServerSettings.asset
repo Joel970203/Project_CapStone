@@ -88,6 +88,10 @@ MonoBehaviour:
   - callR
   - callW
   - StopMove
+  - Paladin_ESkill
+  - Paladin_QSkill
+  - Paladin_RSkill
+  - Paladin_WSkill
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
