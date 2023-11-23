@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 using Random = UnityEngine.Random;
 
 public class ItemSpawn : MonoBehaviour
@@ -40,7 +40,6 @@ public class ItemSpawn : MonoBehaviour
         RaycastHit hit;
         while (Physics.SphereCast(spawn_Pos, sphereCastRad, Vector3.up, out hit, 0f))
         {
-            //Debug.Log("cc");
             spawn_Pos = MakeSpawnPos();
         }
         var hitt = Physics.SphereCastAll(spawn_Pos, sphereCastRad, Vector3.up, 0f);
@@ -65,10 +64,12 @@ public class ItemSpawn : MonoBehaviour
 
     void SpawnItem(Vector3 spawn_Pos)
     {
-        int rand_Num = Random.Range(0, items.Length);
-        GameObject item = items[rand_Num];
-
-        Instantiate(item, spawn_Pos, Quaternion.identity);
+        if (PhotonNetwork.IsConnected)
+        {
+            int rand_Num = Random.Range(0, items.Length);
+            GameObject itemPrefab = items[rand_Num];
+            PhotonNetwork.Instantiate(itemPrefab.name, spawn_Pos, Quaternion.identity);
+        }
     }
 }
 

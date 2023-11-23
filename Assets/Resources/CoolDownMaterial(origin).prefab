@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 3569027841896422399}
   - component: {fileID: 6514859597605942180}
   - component: {fileID: 6395896934799886124}
-  - component: {fileID: 4920126318387252209}
+  - component: {fileID: 7153897559414607774}
+  - component: {fileID: -8626088816848656059}
   m_Layer: 0
-  m_Name: HpItem
+  m_Name: CoolDownMaterial(origin)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d663f877e90204dce8d399f2185b8f99, type: 2}
+  - {fileID: 2100000, guid: bf311e618b4584ff3b7dbd14d64e817f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,9 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 440d42d8bcb754cce8c4a4a2e1b3f4dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  sprite: {fileID: 21300000, guid: 41f6e3d5c40b77d4699e8893efa683be, type: 3}
---- !u!54 &4920126318387252209
+  itemType: 2
+  sprite: {fileID: 21300000, guid: 1d2b2c647b9eb584f88616beda1ce5ec, type: 3}
+--- !u!54 &7153897559414607774
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,3 +149,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-8626088816848656059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6842309005120179054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
