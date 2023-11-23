@@ -7,14 +7,14 @@ public class CollectItem : MonoBehaviour
     [SerializeField] ItemType itemType;
     [SerializeField] Sprite sprite;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.tag == "Player")
+        if (collision.gameObject.CompareTag("Player"))
         {
             Item item = new Item();
             item.setItem(itemType, sprite);
 
-            other.gameObject.GetComponent<CharacterInventory>().CollectItem(item);
+            collision.gameObject.GetComponent<CharacterInventory>().CollectItem(item);
             Destroy(gameObject);
         }
     }

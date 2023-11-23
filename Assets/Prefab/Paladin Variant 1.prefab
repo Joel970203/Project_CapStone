@@ -54,10 +54,129 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5674347575092166980, guid: fe15cd86973abe94ab1bad54bc4a9453, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8829264811583239486, guid: fe15cd86973abe94ab1bad54bc4a9453, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5674347575092166980, guid: fe15cd86973abe94ab1bad54bc4a9453, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3293520441434284400}
+    - targetCorrespondingSourceObject: {fileID: 5674347575092166980, guid: fe15cd86973abe94ab1bad54bc4a9453, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8118760955137079130}
+    - targetCorrespondingSourceObject: {fileID: 5674347575092166980, guid: fe15cd86973abe94ab1bad54bc4a9453, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5837980792123007464}
+    - targetCorrespondingSourceObject: {fileID: 5674347575092166980, guid: fe15cd86973abe94ab1bad54bc4a9453, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6133102011843912023}
   m_SourcePrefab: {fileID: 100100000, guid: fe15cd86973abe94ab1bad54bc4a9453, type: 3}
+--- !u!1 &1670065946705931501 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5674347575092166980, guid: fe15cd86973abe94ab1bad54bc4a9453, type: 3}
+  m_PrefabInstance: {fileID: 6454240111307910569}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3293520441434284400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670065946705931501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 8118760955137079130}
+  - {fileID: 5837980792123007464}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &8118760955137079130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670065946705931501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &5837980792123007464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670065946705931501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: Walk
+  - Type: 9
+    SynchronizeType: 0
+    Name: Hit
+  - Type: 9
+    SynchronizeType: 0
+    Name: Dodge
+  - Type: 4
+    SynchronizeType: 0
+    Name: Right_Dodge
+  - Type: 9
+    SynchronizeType: 0
+    Name: QSkillTrigger
+  - Type: 9
+    SynchronizeType: 0
+    Name: WSkillTrigger
+  - Type: 9
+    SynchronizeType: 0
+    Name: ESkillTrigger
+  - Type: 9
+    SynchronizeType: 0
+    Name: RSkillTrigger
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
+--- !u!114 &6133102011843912023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670065946705931501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a6f358ee5c263543bab2cd87560bb4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 5370182299406019629}
+  AllStop: 0
+--- !u!95 &5370182299406019629 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1374910111175819652, guid: fe15cd86973abe94ab1bad54bc4a9453, type: 3}
+  m_PrefabInstance: {fileID: 6454240111307910569}
+  m_PrefabAsset: {fileID: 0}

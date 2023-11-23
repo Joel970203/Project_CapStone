@@ -156,12 +156,13 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
                 else
                 {
                     isAttacking = true;
-                    StartCoroutine(SetActiveBaseAttackRoutine());
+                    PV.RPC("SetActiveBaseAttackRoutine", RpcTarget.All);
                 }
             }
         }
     }
 
+    [PunRPC]
     private IEnumerator SetActiveBaseAttackRoutine()
     {
         agent.velocity = Vector3.zero;
@@ -208,7 +209,7 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
             {
                 // 클론의 메서드 호출
                 StartCoroutine(SetActiveBaseAttackRoutine());
-                cloneScript.SetActiveBaseAttack();
+                StartCoroutine(cloneScript.DelayedBaseAttack(0.05f));
             }
 
             StartCoroutine(DeactivateCloneAfterDuration(ninjaClone, 1.0f));
@@ -393,6 +394,7 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
         if (cloneScript != null)
         {
             // 클론의 W 스킬 메서드 호출
+            yield return new WaitForSeconds(0.05f);
             cloneScript.Active_W_Skill();
         }
 
