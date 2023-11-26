@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Loading/ConnectToServer.cs.meta
-guid: a30f4a3fc7030a242a4121923b8e99a9
-========
-guid: 10b16cc960455294d957308ea7f89fa2
->>>>>>>> origin/main:Assets/NetWork/NetWorkManager.cs.meta
+guid: 40749b0bef97524428f64a7ad933907f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
