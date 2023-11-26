@@ -82,6 +82,13 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
         HandleMouseInput();
     }
 
+    public void ResetCoolDown()
+    {
+       Q_Cooltime_Check = Q_Cooltime;
+       W_Cooltime_Check = W_Cooltime;
+       E_Cooltime_Check = E_Cooltime;
+       R_Cooltime_Check = R_Cooltime;
+    }
     public void Skill_Cooltime_Cal()
     {
         if (Q_Cooltime_Check > 0)

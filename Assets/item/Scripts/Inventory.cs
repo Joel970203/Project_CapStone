@@ -10,8 +10,10 @@ using UnityEngine.UI;
 
 using Image = UnityEngine.UI.Image;
 
-public class Inventory
+public class Inventory : MonoBehaviour
 {
+    public Character_Info characterInfo;
+    public UnityEngine.AI.NavMeshAgent agent;
     Dictionary<ItemType, Item> itemList = new Dictionary<ItemType, Item>();
     ItemType[] slotArr = new ItemType[6]; //슬롯 번호에 해당되는 아이템 타입의 정보가 들어간다.
 
@@ -95,18 +97,71 @@ public class Inventory
         if (slotArr[index] == ItemType.Nothing) return ItemType.Nothing;
 
         ItemType useItemType = slotArr[index];
-        itemList[useItemType].quantity--;
+
+        switch (useItemType)
+        {
+            case ItemType.Hp:
+                // HP 아이템 사용
+                HandleHpItem(index, useItemType);
+                break;
+
+            case ItemType.Speed:
+                // Speed 아이템 사용
+                HandleSpeedItem(index, useItemType);
+                break;
+
+            case ItemType.CoolDown:
+                // CoolDown 아이템 사용
+                HandleCoolDownItem(index, useItemType);
+                break;
+
+            default:
+                break;
+        }
+
+        return useItemType;
+    }
+
+    private void HandleHpItem(int index, ItemType itemType)
+    {
+        // HP 아이템 사용 처리
+        itemList[itemType].quantity--;
 
         TextMeshProUGUI quantityText = slotUI[index].transform.Find("QuantityText").GetComponentInChildren<TextMeshProUGUI>();
-        quantityText.text = itemList[useItemType].quantity.ToString();
+        quantityText.text = itemList[itemType].quantity.ToString();
 
-        if (itemList[useItemType].quantity == 0)
+        if (itemList[itemType].quantity == 0)
         {
-            itemList.Remove(useItemType);
+            itemList.Remove(itemType);
+            slotUI[index].GetComponent<Image>().sprite = null;
+            slotArr[index] = ItemType.Nothing;
+        }
+        if (characterInfo != null)
+        {
+            float hpToRestore = characterInfo.Max_HP * 0.3f;
+            float restoredHP = Mathf.Min(hpToRestore, characterInfo.Max_HP - characterInfo.HP);
+            characterInfo.HP += restoredHP;
+        }
+    }
+
+    private void HandleCoolDownItem(int index, ItemType itemType)
+    {
+        //
+    }
+
+    private void HandleSpeedItem(int index, ItemType itemType)
+    {
+        itemList[itemType].quantity--;
+
+        TextMeshProUGUI quantityText = slotUI[index].transform.Find("QuantityText").GetComponentInChildren<TextMeshProUGUI>();
+        quantityText.text = itemList[itemType].quantity.ToString();
+
+        if (itemList[itemType].quantity == 0)
+        {
+            itemList.Remove(itemType);
             slotUI[index].GetComponent<Image>().sprite = null;
             slotArr[index] = ItemType.Nothing;
         }
 
-        return useItemType;
     }
 }
