@@ -4637,6 +4637,11 @@ PrefabInstance:
       addedObject: {fileID: 1541386750}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
+--- !u!4 &262423136366281345 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+  m_PrefabInstance: {fileID: 7615799555920702415}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1768240112520568960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4881,6 +4886,71 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2683099851254355990, guid: 2f0406b6719e44c4ca6334ed30d16dba, type: 3}
   m_PrefabInstance: {fileID: 8133712053257103707}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7615799555920702415
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4980682784381033875}
+    m_Modifications:
+    - target: {fileID: 2297451649326999441, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_Name
+      value: Ninja Clone (W)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2297451649326999441, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.157
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 360
+      objectReference: {fileID: 0}
+    - target: {fileID: 2959098122433193902, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6363146692899824976, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
 --- !u!1001 &8133712053257103707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4999,7 +5069,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2683099851254355990, guid: 2f0406b6719e44c4ca6334ed30d16dba, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 262423136366281345}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f0406b6719e44c4ca6334ed30d16dba, type: 3}
 --- !u!1001 &9078125596089720881

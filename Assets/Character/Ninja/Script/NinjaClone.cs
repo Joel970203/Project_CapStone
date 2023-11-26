@@ -6,37 +6,16 @@ using Photon.Pun;
 public class NinjaClone : MonoBehaviourPunCallbacks
 {
     PhotonView PV;
-    [SerializeField]
-    private GameObject weapon;
-    public GameObject shadowClonePrefab; 
-    public float cloneDuration = 20f; // 분신이 유지될 시간
-    [SerializeField] private ParticleSystem weaponParticles;
     [SerializeField] private ParticleSystem B_Particles;
-    [SerializeField] private ParticleSystem Q_Particles;
     [SerializeField] private ParticleSystem W_Particles;
-    [SerializeField] private ParticleSystem R_Particles;
     bool isAttacking = false;
     bool isRSkillActive = false;
     [SerializeField]
-    protected float Q_Cooltime;
-
-    [SerializeField]
     protected float W_Cooltime;
 
-    [SerializeField]
-    protected float E_Cooltime;
-
-    [SerializeField]
-    protected float R_Cooltime;
-
-    [HideInInspector]
-    public float Q_Cooltime_Check;
     [HideInInspector]
     public float W_Cooltime_Check;
-    [HideInInspector]
-    public float E_Cooltime_Check;
-    [HideInInspector]
-    public float R_Cooltime_Check;
+
 
     public bool W_Skill, Base_Attack;
 
@@ -105,7 +84,7 @@ public class NinjaClone : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void SetActiveBaseAttack()
+    public void SetActiveBaseAttack()
     {
         StartCoroutine(SetActiveBaseAttackRoutine());
     }
