@@ -5,13 +5,15 @@ using UnityEngine;
 public class Ninja_Info : MonoBehaviour
 {
     [SerializeField]
+    public int N_MaxHP;
+    [SerializeField]
     public int N_HP;
 
     [SerializeField]
-    private int N_AD;
+    public int N_AD;
 
     [SerializeField]
-    private int N_armor;
+    public int N_armor;
 
     [SerializeField]
     private GameObject hitEffectPrefab;

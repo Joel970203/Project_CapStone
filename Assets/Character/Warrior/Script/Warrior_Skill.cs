@@ -86,10 +86,10 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
 
     public void ResetCoolDown()
     {
-       Q_Cooltime_Check = Q_Cooltime;
-       W_Cooltime_Check = W_Cooltime;
-       E_Cooltime_Check = E_Cooltime;
-       R_Cooltime_Check = R_Cooltime;
+        Q_Skill = true;
+        W_Skill = true;
+        E_Skill = true;
+        R_Skill = true;
     }
 
     private void Skill_Cooltime_Cal()
