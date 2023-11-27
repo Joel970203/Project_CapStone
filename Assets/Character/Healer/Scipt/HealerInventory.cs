@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HealerInventory : MonoBehaviour
 {
+    [SerializeField] ParticleSystem healParticle;
+    [SerializeField] ParticleSystem speedParticle;
+    [SerializeField] ParticleSystem coolDownParticle;
     Character_Info characterInfo;
     [SerializeField] UnityEngine.AI.NavMeshAgent agent;
     HealerCharacterSkill healer_Skill;
@@ -53,21 +56,45 @@ public class HealerInventory : MonoBehaviour
         switch (item)
         {
             case ItemType.Hp:
-                characterInfo.HP += 20;
+                characterInfo.TakeHeal(20);
+                PlayParticle(healParticle);
+                StartCoroutine(StopParticleAfterDuration(healParticle, 1f)); 
                 break;
             case ItemType.Speed:
                 if (!isSpeedIncreased)
                 {
                     agent.speed = agent.speed * 1.5f;
                     isSpeedIncreased = true;
-                    StartCoroutine(ResetSpeedAfterDuration(5f)); // 5초 후에 속도 원래대로 복구
+                    PlayParticle(speedParticle);
+                    StartCoroutine(StopParticleAfterDuration(speedParticle, 5f)); 
+                    StartCoroutine(ResetSpeedAfterDuration(5f)); 
                 }
                 break;
             case ItemType.CoolDown:
                 healer_Skill.ResetCoolDown();
+                PlayParticle(coolDownParticle);
+                StartCoroutine(StopParticleAfterDuration(coolDownParticle, 1f)); 
                 break;
             default:
                 break;
+        }
+    }
+
+    void PlayParticle(ParticleSystem particle)
+    {
+        if (particle != null)
+        {
+            particle.Play();
+        }
+    }
+
+    IEnumerator StopParticleAfterDuration(ParticleSystem particle, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        
+        if (particle != null)
+        {
+            particle.Stop();
         }
     }
 
