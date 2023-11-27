@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Waiting Room.unity
     guid: 681f61d726303cb4288e3a7f6b404651
+  - enabled: 1
+    path: Assets/Scenes/Game Sync Test.unity
+    guid: d0f8b9f98f26b7b429a71c9bb5ac5265
   m_configObjects: {}

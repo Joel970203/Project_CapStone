@@ -137,7 +137,7 @@ public class Boss_Skill : MonoBehaviour
 
         if (!isFinished || !isCoroutineFinished) return;
 
-        Debug.Log("함수 진입");
+        //Debug.Log("함수 진입");
 
         isFinished = false;
 

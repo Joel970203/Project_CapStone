@@ -57,6 +57,9 @@ MonoBehaviour:
   - SetUserInfoPosition
   - AlertCharacterName
   - AlertReadyOrStart
+  - AlertReady
+  - StartAndLoadScene
+  - CharacterSetting
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

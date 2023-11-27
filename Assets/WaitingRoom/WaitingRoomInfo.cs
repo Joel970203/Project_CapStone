@@ -11,6 +11,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.UI;
 using ExitGames.Client.Photon.StructWrapping;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class WaitingRoomInfo : MonoBehaviourPunCallbacks
 {
@@ -138,7 +139,8 @@ public class WaitingRoomInfo : MonoBehaviourPunCallbacks
                 }
                 if (check)
                 {
-                    Debug.Log("AllReady");
+                    Debug.Log("AllReady Start");
+                    PV.RPC("StartAndLoadScene", RpcTarget.AllViaServer);
                 }
                 else
                 {
@@ -147,14 +149,14 @@ public class WaitingRoomInfo : MonoBehaviourPunCallbacks
             }
             else
             {
-                PV.RPC("AlertReadyOrStart", RpcTarget.AllBuffered);
+                PV.RPC("AlertReady", RpcTarget.AllBuffered);
             }
         }
 
     }
 
     [PunRPC]
-    void AlertReadyOrStart()
+    void AlertReady()
     {
 
         if (ReadyUI.activeSelf)
@@ -167,5 +169,11 @@ public class WaitingRoomInfo : MonoBehaviourPunCallbacks
             ReadyUI.SetActive(true);
             PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() { { "IsReady", true } });
         }
+    }
+
+    [PunRPC]
+    void StartAndLoadScene()
+    {
+        SceneManager.LoadScene("Game Sync Test");
     }
 }
