@@ -17,6 +17,7 @@ public class PaladinInventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        characterInfo = GetComponent<Character_Info>();
         inventory.setSlot(slotUI);
         paladin_Skill = GetComponent<PaladinCharacterController>();
         originalSpeed = agent.speed; // 초기 속도 저장

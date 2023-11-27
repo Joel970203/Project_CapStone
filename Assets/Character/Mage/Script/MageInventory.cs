@@ -17,6 +17,7 @@ public class MageInventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        characterInfo = GetComponent<Character_Info>();
         inventory.setSlot(slotUI);
         mage_Skill = GetComponent<MageCharacterSkill>();
         originalSpeed = agent.speed; // 초기 속도 저장
@@ -52,7 +53,7 @@ public class MageInventory : MonoBehaviour
         switch (item)
         {
             case ItemType.Hp:
-                characterInfo.HP += 20;
+                characterInfo.TakeHeal(20);
                 break;
             case ItemType.Speed:
                 if (!isSpeedIncreased)

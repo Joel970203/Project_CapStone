@@ -17,6 +17,7 @@ public class ArcherInventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        characterInfo = GetComponent<Character_Info>();
         inventory.setSlot(slotUI);
         archer_Skill = GetComponent<Archer_Skill>();
         originalSpeed = agent.speed; // 초기 속도 저장
