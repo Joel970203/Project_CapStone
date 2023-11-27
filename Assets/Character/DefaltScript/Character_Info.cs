@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Character_Info : MonoBehaviour
 {
-    [SerializeField] private float Max_HP;
-    [SerializeField] private float HP;
+    [SerializeField] public float Max_HP;
+    [SerializeField] public float HP;
 
     [SerializeField] private int AD;
 

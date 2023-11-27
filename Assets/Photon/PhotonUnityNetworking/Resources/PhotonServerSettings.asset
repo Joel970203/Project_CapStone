@@ -97,6 +97,8 @@ MonoBehaviour:
   - HealerQSkill
   - HealerRSkill
   - HealerWSkill
+  - SyncBossHP
+  - SyncBossPhase
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

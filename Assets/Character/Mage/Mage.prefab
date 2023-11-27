@@ -188,16 +188,10 @@ PrefabInstance:
       addedObject: {fileID: 3383475934082135512}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 384cdffad0010374788a3b507c1e0374, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2672677853368197624}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 384cdffad0010374788a3b507c1e0374, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7729759469403473229}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 384cdffad0010374788a3b507c1e0374, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1340686443011403773}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 384cdffad0010374788a3b507c1e0374, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3537579391459705141}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 384cdffad0010374788a3b507c1e0374, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8825505778850883978}
@@ -230,20 +224,6 @@ MonoBehaviour:
   armor: 0
   hitEffectPrefab: {fileID: 0}
   Immotal: 0
-  Grave: {fileID: 1457544351701714696, guid: d31bfd14d7bd2624da8e7a665575e1f3, type: 3}
---- !u!114 &2672677853368197624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4174570069165591984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a38b3c458f7e1204e8d73b548fc7ec1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AllStop: 0
 --- !u!195 &7729759469403473229
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -289,25 +269,6 @@ CapsuleCollider:
   m_Height: 2.15
   m_Direction: 1
   m_Center: {x: 0, y: 0.94, z: 0}
---- !u!114 &3537579391459705141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4174570069165591984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9c9149e4d7da4e2e936c1ad7aeb95bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slotUI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &8825505778850883978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,6 +293,7 @@ MonoBehaviour:
   W_Skill: 0
   E_Skill: 0
   R_Skill: 0
+  Base_Attack: 0
   CastingPosition: {fileID: 3552972912140878335}
   NormalAttackObject: {fileID: 6015474860719745765, guid: 25ed0b7cc64c621409dd48aa6b29dbf7, type: 3}
   QCastingEffect: {fileID: 3768675494318801096, guid: 2a84b21d43f6c234582010d0437105b5, type: 3}

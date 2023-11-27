@@ -107,6 +107,13 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
         }
     }
 
+    public void ResetCoolDown()
+    {
+        Q_Skill = true;
+        W_Skill = true;
+        E_Skill = true;
+        R_Skill = true;
+    }
 
     private void Skill_Cooltime_Cal()
     {
