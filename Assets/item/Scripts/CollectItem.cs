@@ -18,7 +18,7 @@ public class CollectItem : MonoBehaviour
             MageInventory mageInventory = collision.gameObject.GetComponent<MageInventory>();
             PaladinInventory paladinInventory = collision.gameObject.GetComponent<PaladinInventory>();
             HealerInventory healerInventory = collision.gameObject.GetComponent<HealerInventory>();
-            //ArcherInventory archerInventory = collision.gameObject.GetComponent<ArcherInventory>();
+            ArcherInventory archerInventory = collision.gameObject.GetComponent<ArcherInventory>();
             WarriorInventory warriorInventory = collision.gameObject.GetComponent<WarriorInventory>();
 
             if (ninjaInventory != null)
@@ -37,11 +37,10 @@ public class CollectItem : MonoBehaviour
             {
                 healerInventory.CollectItem(item); // 힐러의 인벤토리에 아이템 전달
             }
-            /*
             else if (archerInventory != null)
             {
                 archerInventory.CollectItem(item); // 아처의 인벤토리에 아이템 전달
-            }*/
+            }
             else if (warriorInventory != null)
             {
                 warriorInventory.CollectItem(item); // 워리어의 인벤토리에 아이템 전달
