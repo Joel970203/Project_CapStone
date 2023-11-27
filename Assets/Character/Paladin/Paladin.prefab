@@ -346,9 +346,6 @@ PrefabInstance:
       addedObject: {fileID: 8829264811583239486}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d73b55f94744704a920c5348fd21944, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4541156990874040205}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d73b55f94744704a920c5348fd21944, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6510848845723029367}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d73b55f94744704a920c5348fd21944, type: 3}
       insertIndex: -1
@@ -405,25 +402,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AllStop: 0
---- !u!114 &4541156990874040205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5674347575092166980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9c9149e4d7da4e2e936c1ad7aeb95bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slotUI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!136 &6510848845723029367
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -471,6 +449,7 @@ MonoBehaviour:
   W_Skill: 0
   E_Skill: 0
   R_Skill: 0
+  Base_Attack: 0
   CastingPosition: {fileID: 0}
   Back: {fileID: 0}
   Feet: {fileID: 1760112654708643453}
@@ -497,7 +476,6 @@ MonoBehaviour:
   armor: 0
   hitEffectPrefab: {fileID: 0}
   Immotal: 0
-  Grave: {fileID: 0}
 --- !u!54 &4725168041618660432
 Rigidbody:
   m_ObjectHideFlags: 0

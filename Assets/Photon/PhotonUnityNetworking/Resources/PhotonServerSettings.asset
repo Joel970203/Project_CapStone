@@ -55,11 +55,50 @@ MonoBehaviour:
   - DeactivateRSkillAfterDuration
   - ActivateCloneForBaseAttack
   - SetUserInfoPosition
-  - AlertCharacterName
-  - AlertReadyOrStart
-  - AlertReady
-  - StartAndLoadScene
-  - CharacterSetting
+  - SetActiveBaseAttackRoutine
+  - ExecuteBaseAttack
+  - SyncActiveBaseAttack
+  - SpawnQParticles
+  - SpawnWParticles
+  - SyncEParticles
+  - SyncRParticles
+  - ActivateRParticleEffect
+  - ActivateRSkillAnimation
+  - MoveArrowToTarget
+  - PlayHeysteParticles
+  - StopHeysteParticles
+  - SyncAimAnimation
+  - ThrowGrenade
+  - ActivateESkillAnimation
+  - FireArrows
+  - SimulateArrowMovement
+  - DestroyEffectRPC
+  - PlayQSkill
+  - ShootEnergyBolt
+  - SettingParticle
+  - TriggerAnimation
+  - NormalAttack
+  - Active_E_Skill
+  - Active_Q_Skill
+  - Active_R_Skill
+  - Active_W_Skill
+  - callNormalAttack
+  - callE
+  - callQ
+  - callR
+  - callW
+  - StopMove
+  - Paladin_ESkill
+  - Paladin_QSkill
+  - Paladin_RSkill
+  - Paladin_WSkill
+  - HealerESkill
+  - HealerNormalAttack
+  - HealerQSkill
+  - HealerRSkill
+  - HealerWSkill
+  - SyncBossHP
+  - SyncBossPhase
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

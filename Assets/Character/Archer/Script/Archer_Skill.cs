@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Archer_Skill : MonoBehaviour 
+public class Archer_Skill : MonoBehaviourPunCallbacks
 {
+    PhotonView PV;
     [SerializeField]
     private float Q_Cooltime;
 
@@ -42,6 +44,7 @@ public class Archer_Skill : MonoBehaviour
     public ParticleSystem Heyste;
     void Start()
     {
+        PV = GetComponent<PhotonView>();
         Q_Skill = true;
         W_Skill = true;
         E_Skill = true;
@@ -79,6 +82,13 @@ public class Archer_Skill : MonoBehaviour
         HandleMouseInput();
     }
 
+    public void ResetCoolDown()
+    {
+        Q_Skill = true;
+        W_Skill = true;
+        E_Skill = true;
+        R_Skill = true;
+    }
     public void Skill_Cooltime_Cal()
     {
         if (Q_Cooltime_Check > 0)
@@ -172,9 +182,20 @@ public class Archer_Skill : MonoBehaviour
         {
             return; // Idle 또는 Walk 애니메이션 중일 때만 공격 가능하도록
         }
+
         anim.SetBool("Walk", false);
         agent.ResetPath();
-        anim.SetTrigger("Aiming"); 
+        anim.SetTrigger("Aiming");
+
+        // 애니메이션 동기화를 위한 RPC 호출
+        PV.RPC("SyncAimAnimation", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void SyncAimAnimation()
+    {
+        // 애니메이션 설정
+        anim.SetTrigger("Aiming");
     }
 
     public void Active_Base_Attack()
@@ -201,19 +222,25 @@ public class Archer_Skill : MonoBehaviour
                 targetRotation *= Quaternion.Euler(0, 90, 0);
 
                 transform.rotation = targetRotation;
-
-                anim.SetTrigger("Shot");
-                anim.SetBool("Aiming", false);
-
                 // 화살 발사 시 목표 지점 설정
-                StartCoroutine(MoveArrowToTarget(hit.point));
+                PV.RPC("MoveArrowToTarget", RpcTarget.All, hit.point);
                 hasShotArrow = true;
             }
         }
     }
 
-    IEnumerator MoveArrowToTarget(Vector3 targetPosition)
+    [PunRPC]
+    private void MoveArrowToTarget(Vector3 targetPosition)
     {
+        anim.SetTrigger("Shot");
+        anim.SetBool("Aiming", false);
+        PV.RPC("SimulateArrowMovement", RpcTarget.All, targetPosition);
+    }
+
+    [PunRPC]
+    IEnumerator SimulateArrowMovement(Vector3 targetPosition)
+    {
+        yield return new WaitForSeconds(0.05f);
         GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
         Rigidbody arrowRigidbody = arrow.GetComponent<Rigidbody>();
 
@@ -243,7 +270,6 @@ public class Archer_Skill : MonoBehaviour
         StartCoroutine(DestroyArrowAfterDelay(arrow, 1f)); // 2초 후에 화살 제거
     }
 
-
     IEnumerator DestroyArrowAfterDelay(GameObject arrow, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -266,19 +292,28 @@ public class Archer_Skill : MonoBehaviour
             {
                 Vector3 throwDirection = (hit.point - GrenadeSpawnPoint.position).normalized;
 
-                // 수류탄 던지기
-                GameObject grenade = Instantiate(grenadePrefab, GrenadeSpawnPoint.position, Quaternion.identity);
-
-                // Rigidbody에 중력 설정 (중력 사용)
-                Rigidbody grenadeRigidbody = grenade.GetComponent<Rigidbody>();
-                grenadeRigidbody.useGravity = true;
-
-                // 수류탄에게 힘을 주어 날아가게 하기
-                grenadeRigidbody.AddForce(throwDirection * 200f, ForceMode.Impulse);
+                // 수류탄 던지기를 포톤 RPC로 동기화
+                PV.RPC("ThrowGrenade", RpcTarget.All, GrenadeSpawnPoint.position, throwDirection);
             }
         }
-        anim.SetTrigger("Q"); 
+       
     }
+
+    [PunRPC]
+    private void ThrowGrenade(Vector3 spawnPosition, Vector3 direction)
+    {
+        // 수류탄 던지기
+        GameObject grenade = Instantiate(grenadePrefab, spawnPosition, Quaternion.identity);
+
+        // Rigidbody에 중력 설정 (중력 사용)
+        Rigidbody grenadeRigidbody = grenade.GetComponent<Rigidbody>();
+        grenadeRigidbody.useGravity = true;
+
+        anim.SetTrigger("Q");
+        // 수류탄에게 힘을 주어 날아가게 하기
+        grenadeRigidbody.AddForce(direction * 200f, ForceMode.Impulse);
+    }
+
 
 
 
@@ -292,15 +327,34 @@ public class Archer_Skill : MonoBehaviour
             agent.ResetPath();
             anim.SetTrigger("W");
             agent.speed *= 1.2f;
-            Heyste.Play();
+
+            // 파티클을 포톤 RPC로 동기화
+            PV.RPC("PlayHeysteParticles", RpcTarget.All);
             Invoke("StopHeyste", 10.0f);
         }
     }
 
+    [PunRPC]
+    private void PlayHeysteParticles()
+    {
+        anim.SetTrigger("W");
+        Heyste.Play();
+    }
+
     void StopHeyste()
     {
+        // 플레이어의 속도 및 파티클을 멈춤
         Heyste.Stop();
         agent.speed /= 1.2f;
+
+        // 파티클 동기화 해제
+        PV.RPC("StopHeysteParticles", RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void StopHeysteParticles()
+    {
+        Heyste.Stop();
     }
 
 
@@ -310,17 +364,22 @@ public class Archer_Skill : MonoBehaviour
             || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {
             anim.SetBool("Walk", false);
-            //agent.ResetPath();
-            anim.SetTrigger("E");
-
-            // 3번 연속 화살 발사
+            
+            // RPC를 통해 화살 발사 동기화
+            PV.RPC("ActivateESkillAnimation", RpcTarget.All);
             StartCoroutine(FireArrows(3));
+            
         }    
     }
 
-    private IEnumerator FireArrows(int arrowCount)
+    [PunRPC]
+    private void ActivateESkillAnimation()
     {
-        yield return new WaitForSeconds(1f);
+        anim.SetTrigger("E");
+    }
+   
+    private IEnumerator FireArrows(int arrowCount)
+    {   
         for (int i = 0; i < arrowCount; i++)
         {
             // 마우스 커서 위치를 기준으로 방향 계산
@@ -330,8 +389,7 @@ public class Archer_Skill : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 // 화살 발사
-                StartCoroutine(MoveArrowToTarget(hit.point));
-
+                PV.RPC("SimulateArrowMovement", RpcTarget.All, hit.point);
                 // 대기 시간 (필요에 따라 조절)
                 yield return new WaitForSeconds(0.1f);
             }
@@ -340,11 +398,11 @@ public class Archer_Skill : MonoBehaviour
     }
     public void Active_R_Skill()
     {
-        // 현재 애니메이션 상태가 Idle 또는 Walk인 경우에만 실행
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
+
             // 현재 마우스 위치를 기준으로 캐릭터가 바라볼 방향 계산
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -361,21 +419,35 @@ public class Archer_Skill : MonoBehaviour
                 // 캐릭터 방향 조정
                 transform.rotation = targetRotation;
 
-                // R 애니메이션 실행
-                anim.SetTrigger("R");
+                // R 애니메이션 실행 및 RPC 호출
+                PV.RPC("ActivateRSkillAnimation", RpcTarget.All);
 
                 // R_Aura 활성화 및 5초 후 정지
-                R_Aura.Play();
-                StartCoroutine(StopAuraAfterDelay(5f));
+                PV.RPC("ActivateRParticleEffect", RpcTarget.All);
+                StartCoroutine(StopRParticleEffectAfterDelay(3f));
+
+                // 화살 발사 및 RPC 호출
                 StartCoroutine(FireArrows(5));
             }
         }
     }
-    private IEnumerator StopAuraAfterDelay(float delay)
+
+    [PunRPC]
+    private void ActivateRSkillAnimation()
+    {
+        anim.SetTrigger("R");
+    }
+
+    [PunRPC]
+    private void ActivateRParticleEffect()
+    {
+        R_Aura.Play();
+    }
+
+    private IEnumerator StopRParticleEffectAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
 
-        // R_Aura 정지
         R_Aura.Stop();
         R_Aura.Clear();
     }
