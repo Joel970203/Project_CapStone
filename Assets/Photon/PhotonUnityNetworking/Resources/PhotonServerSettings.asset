@@ -99,6 +99,8 @@ MonoBehaviour:
   - HealerWSkill
   - SyncBossHP
   - SyncBossPhase
+  - SetChaseRPC
+  - SetIdleRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

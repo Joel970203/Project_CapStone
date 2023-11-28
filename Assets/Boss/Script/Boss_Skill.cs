@@ -7,8 +7,9 @@ using UnityEngine.AI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using Random = UnityEngine.Random;
+using Photon.Pun;
 
-public class Boss_Skill : MonoBehaviour
+public class Boss_Skill : MonoBehaviourPunCallbacks
 {
     [SerializeField] private float currentPhase;
 
@@ -105,12 +106,13 @@ public class Boss_Skill : MonoBehaviour
         Chase,
         Attack
     }
-
+    PhotonView PV;
     State state = State.Idle;
 
     // Start is called before the first frame update
     void Start()
     {
+        PV = GetComponent<PhotonView>();
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
@@ -435,7 +437,7 @@ public class Boss_Skill : MonoBehaviour
         isAttacking = false;
         isCoroutineFinished = true;
         isRotate = false;
-        Debug.Log("공격애니메이션 종료");
+        //Debug.Log("공격애니메이션 종료");
     }
 
     void RotateBoss(float RotateDegree)
