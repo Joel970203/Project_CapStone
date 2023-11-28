@@ -139,7 +139,7 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
 
         if (!isFinished || !isCoroutineFinished) return;
 
-        Debug.Log("함수 진입");
+        //Debug.Log("함수 진입");
 
         isFinished = false;
 
@@ -403,10 +403,22 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
 
     void SetChase(Transform nearTarget)
     {
-        state = State.Chase; //상태를 추격(Chase) 상태로 바꿈
+        if (PV.IsMine)
+        {
+            int targetViewID = nearTarget.GetComponent<PhotonView>().ViewID;
+            PV.RPC("SyncChaseState",RpcTarget.All,targetViewID);
+        }
+    }
+
+    [PunRPC]
+    void SyncChaseState(int targetViewID)
+    {
+        Transform nearTarget = PhotonView.Find(targetViewID).transform;
+        state = State.Chase;
         anim.SetTrigger("Chase");
         currentTarget = nearTarget;
     }
+    
 
     void SetAttack(Transform nearTarget)
     {
