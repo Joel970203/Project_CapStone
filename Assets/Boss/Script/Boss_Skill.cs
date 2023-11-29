@@ -184,6 +184,7 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         }
     }
 
+/*
     void JudgeStateInIdle()
     {
         //공격받을 때는 추가적으로 따로 작성
@@ -192,12 +193,35 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
 
         if (nearTarget != null)
         {
-            if (distanceToTarget >= agent.stoppingDistance) SetChase(nearTarget); //공격 범위 밖이면 추격 상태로
-            else SetAttack(nearTarget); //안이면 공격 상태로
+            if (distanceToTarget >= agent.stoppingDistance) PV.RPC("SetChase", RpcTarget.All, nearTarget.position); //공격 범위 밖이면 추격 상태로
+            else PV.RPC("SetAttack", RpcTarget.All, nearTarget.position); //안이면 공격 상태로
+            
         }
         //else Debug.Log("범위 내에 플레이어가 없음");
     }
+*/
+    void JudgeStateInIdle()
+    {
+        if (PV.IsMine)
+        {
+            PV.RPC("SyncJudgeStateInIdle", RpcTarget.All);
+        }
+    }
 
+    [PunRPC]
+    void SyncJudgeStateInIdle()
+    {
+        Transform nearTarget = FindnearTarget(); // 가장 가까운 플레이어를 탐색
+
+        if (nearTarget != null)
+        {
+            if (distanceToTarget >= agent.stoppingDistance)
+                SetChase(nearTarget); //공격 범위 밖이면 추격 상태로
+            else
+                SetChase(nearTarget);
+        }
+        // else Debug.Log("범위 내에 플레이어가 없음");
+    }
     void JudgeStateInChase()
     {
         Transform nearTarget = FindnearTarget();
@@ -269,7 +293,7 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         {   //idle->attack 이던 chase->attack 이던 currentTarget이 존재한채로 오게 됨 nearTarget이 없으면 따라가게 끝 타이머를 키고 chase로 보냄
             chaseStartTime = Time.time;
             isChaseTimerSet = true;
-            SetChase(currentTarget);
+            SetChase(nearTarget);
 
             return;
         }
@@ -296,6 +320,7 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         //else SkillAttack();
     }
 
+/*
     void Phase1_Attack()
     {
         //BaseAttack();
@@ -323,6 +348,46 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
                 break;
         }
     }
+*/
+    void Phase1_Attack()
+    {
+        if (PV.IsMine)
+        {
+            int randNum = Random.Range(1, 6);
+
+            switch (randNum)
+            {
+                case 1:
+                    if (CanUseSkill(P1S1_StartTime, P1S1_Cooltime))
+                        PV.RPC("UseSkillP1S1RPC", RpcTarget.All);
+                    else
+                        PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+                case 2:
+                    if (CanUseSkill(P1S2_StartTime, P1S2_Cooltime))
+                        PV.RPC("UseSkillP1S2RPC", RpcTarget.All);
+                    else
+                        PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+                case 3:
+                    if (CanUseSkill(P1S3_StartTime, P1S3_Cooltime))
+                        PV.RPC("UseSkillP1S3RPC", RpcTarget.All);
+                    else
+                        PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+                default:
+                    PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+            }
+        }
+    }
+
+
+
+    bool CanUseSkill(float skillStartTime, float skillCooltime)
+    {
+        return Time.time - skillStartTime >= skillCooltime || skillStartTime == -1f;
+    }
 
     void Phase2_Attack()
     {
@@ -332,18 +397,18 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         {
             case 1:
                 if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) StartCoroutine(UseSkillP1S1());
-                else BaseAttack();
+                else PV.RPC("BaseAttackRPC", RpcTarget.All);
                 break;
             case 2:
                 if (Time.time - P1S2_StartTime >= P1S2_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
-                else BaseAttack();
+                else PV.RPC("BaseAttackRPC", RpcTarget.All);
                 break;
             case 3:
                 if (Time.time - P1S3_StartTime >= P1S3_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
-                else BaseAttack();
+                else PV.RPC("BaseAttackRPC", RpcTarget.All);
                 break;
             default:
-                BaseAttack();
+                PV.RPC("BaseAttackRPC", RpcTarget.All);
                 break;
         }
     }
@@ -392,13 +457,26 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
 
     void SetIdle()
     {
-        agent.isStopped = true; //agent를 멈추고 경로 재설정
+        agent.isStopped = true;
         agent.ResetPath();
-
         currentTarget = null;
-
         anim.SetTrigger("Idle");
         state = State.Idle;
+        PV.RPC("SyncSetIdle", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void SyncSetIdle()
+    {
+        if(PV.IsMine)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+            currentTarget = null;
+            anim.SetTrigger("Idle");
+            state = State.Idle;
+        }
+
     }
 
     void SetChase(Transform nearTarget)
@@ -406,41 +484,51 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         if (PV.IsMine)
         {
             int targetViewID = nearTarget.GetComponent<PhotonView>().ViewID;
-            PV.RPC("SyncChaseState",RpcTarget.All,targetViewID);
+            PV.RPC("SyncChase", RpcTarget.All, targetViewID);
         }
     }
 
     [PunRPC]
-    void SyncChaseState(int targetViewID)
+    void SyncChase(int targetViewID)
     {
         Transform nearTarget = PhotonView.Find(targetViewID).transform;
         state = State.Chase;
         anim.SetTrigger("Chase");
-        currentTarget = nearTarget;
+        currentTarget = nearTarget; 
     }
-    
-
+        
     void SetAttack(Transform nearTarget)
     {
+        state = State.Attack;
         chaseStartTime = -1f;
         currentTarget = nearTarget;
-        state = State.Attack; //공격하도록
+        
     }
 
-    void BaseAttack()
+
+    [PunRPC]
+    void BaseAttackRPC()
+    {
+        StartCoroutine(PerformBaseAttack());
+    }
+
+    IEnumerator PerformBaseAttack()
     {
         isAttacking = true;
         swordVfx.gameObject.SetActive(true);
         isCoroutineFinished = false;
         string animName = "BaseAttack";
-        //RotateBoss(60f);
         isRotate = true;
         rotateAngle = 60f;
         anim.SetTrigger(animName);
-        //StopCoroutine("EndBaseAttack");
-        StartCoroutine(EndBaseAttack(2.1f));
+        yield return new WaitForSeconds(2.1f);
+        swordVfx.gameObject.SetActive(false);
+        anim.SetTrigger("Idle");
+        isAttacking = false;
+        isCoroutineFinished = true;
+        isRotate = false;
     }
-
+    /*
     IEnumerator EndBaseAttack(float length)
     {
         yield return new WaitForSeconds(length);
@@ -451,7 +539,7 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         isRotate = false;
         //Debug.Log("공격애니메이션 종료");
     }
-
+*/
     void RotateBoss(float RotateDegree)
     {
         Vector3 currentRotation = transform.rotation.eulerAngles;
@@ -556,6 +644,7 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
     }
     */
 
+/*
     IEnumerator UseSkillP1S1()
     {
         isCoroutineFinished = false;
@@ -574,7 +663,38 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         EndSkill();
         //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
     }
+*/
+    [PunRPC]
+    void UseSkillP1S1RPC()
+    {
+        if (CanUseSkill(P1S1_StartTime, P1S1_Cooltime))
+        {
+            StartCoroutine(UseSkillP1S1());
+        }
+        else return;
+    }
 
+    IEnumerator UseSkillP1S1()
+    {
+        isCoroutineFinished = false;
+        P1S1_StartTime = Time.time;
+
+        float castDelay = 1.5f;
+        //if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")) castDelay = 1.5f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.7f;
+
+        anim.SetTrigger("P1S1");
+
+        yield return new WaitForSeconds(castDelay);
+        MakeEffectOnTarget(P1S1_TargettingEffect, this.transform, 52.5f, 2.5f);
+
+        yield return new WaitForSeconds(1.0f);
+        Debug.Log("스킬 1끝");
+        EndSkill();
+        //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
+    }
+
+/*
     IEnumerator UseSkillP1S2()
     {
         isCoroutineFinished = false;
@@ -602,7 +722,47 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         EndSkill();
         //StartCoroutine(MakeEffect(LeftFinger_Pos, P1S2_CastingEffect, P1S2_Bullet, 300.0f, currentTarget.transform, null, 1.5f, 1.0f, 0f, 1.0f));
     }
+*/
+    [PunRPC]
+    void UseSkillP1S2RPC()
+    {
+        if (CanUseSkill(P1S2_StartTime, P1S2_Cooltime))
+        {
+            StartCoroutine(UseSkillP1S2());
+        }
+        else return;
+    }
 
+    IEnumerator UseSkillP1S2()
+    {
+        isCoroutineFinished = false;
+        isAttacking = true;
+        //RotateBoss(50f);
+        anim.SetTrigger("P1S2");
+        P1S2_StartTime = Time.time;
+
+
+        float animDelay = 1.5f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
+        {
+            animDelay = 1.7f;
+        }
+        
+        MakeEffectOnBoss(P1S2_CastingEffect, LeftFinger_Pos, true, 3.0f);
+
+        yield return new WaitForSeconds(animDelay);
+
+
+        MakeBulletAndShotLinear(P1S2_Bullet, LeftFinger_Pos, currentTarget.transform, 300.0f);
+
+
+        yield return new WaitForSeconds(2.0f);
+        Debug.Log("스킬 2끝");
+        EndSkill();
+        //StartCoroutine(MakeEffect(LeftFinger_Pos, P1S2_CastingEffect, P1S2_Bullet, 300.0f, currentTarget.transform, null, 1.5f, 1.0f, 0f, 1.0f));
+    }
+
+/*
     IEnumerator UseSkillP1S3()
     {
         isCoroutineFinished = false;
@@ -620,6 +780,38 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         MakeEffectOnBoss(P1S3_Effect, RightHand_Pos, true, 5.0f);
 
         yield return new WaitForSeconds(5.0f);
+        EndSkill();
+        //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
+    }
+*/
+    [PunRPC]
+    void UseSkillP1S3RPC()
+    {
+        if (CanUseSkill(P1S3_StartTime, P1S3_Cooltime))
+        {
+            StartCoroutine(UseSkillP1S3());
+        }
+        else return;
+    }
+
+    IEnumerator UseSkillP1S3()
+    {
+        isCoroutineFinished = false;
+        //P1S3_StartTime = Time.time;
+
+        float castDelay = 0.3f;
+        //if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle")) castDelay = 1.0f;
+        //else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.0f;
+
+        anim.SetTrigger("P1S3");
+        anim.SetTrigger("Walk");
+
+        yield return new WaitForSeconds(castDelay);
+        MakeEffectOnBoss(P1S3_Effect, LeftHand_Pos, true, 5.0f);
+        MakeEffectOnBoss(P1S3_Effect, RightHand_Pos, true, 5.0f);
+
+        yield return new WaitForSeconds(3.2f);
+        Debug.Log("스킬 3끝");
         EndSkill();
         //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
     }
