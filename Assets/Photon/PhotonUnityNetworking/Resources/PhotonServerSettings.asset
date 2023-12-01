@@ -113,6 +113,10 @@ MonoBehaviour:
   - SyncChase
   - EndBaseAttackRPC
   - BaseAttackRPC
+  - AlertCharacterName
+  - AlertReady
+  - CharacterSetting
+  - StartAndLoadScene
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
