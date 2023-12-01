@@ -78,7 +78,8 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
     private LineRenderer lineRenderer;
     const float tau = Mathf.PI * 2;
 
-    private List<GameObject> targets;
+    //private List<GameObject> targets;
+    private List<GameObject> targets = new List<GameObject>();
     private Transform nearTarget;
     protected Transform currentTarget;
 
@@ -100,6 +101,9 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
     float rotateAngle;
 
 
+
+
+
     private enum State
     {
         Idle,
@@ -117,7 +121,7 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         lineRenderer = GetComponent<LineRenderer>();
-        targets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
+        UpdatePlayerList();
         swordVfx.gameObject.SetActive(false);
         swordParticle = swordVfx.GetComponent<ParticleSystem>();
         skillObjects = new GameObject("SkillObjects");
@@ -127,6 +131,7 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
+        UpdatePlayerList();
         DrawRange(transform.position.x, transform.position.z, chaseRange, 50);
 
         if (currentTarget != null)
@@ -161,10 +166,18 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
                 JudgeStateInAttack();
                 break;
         }
-
+        //targets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
         isFinished = true;
     }
 
+    void UpdatePlayerList()
+    {
+        GameObject[] foundPlayers = GameObject.FindGameObjectsWithTag("Player");
+
+        // 현재 목록을 비우고 새로운 목록으로 채움
+        targets.Clear();
+        targets.AddRange(foundPlayers);
+    }
     void DrawRange(float x, float z, float radius, int vertexs)
     {
         //ChangeLineColor();
