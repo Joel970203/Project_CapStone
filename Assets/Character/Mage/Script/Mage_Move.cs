@@ -27,6 +27,7 @@ public class Mage_Move : MonoBehaviourPunCallbacks
         }
     }
 
+/*
     void Update()
     {
         if(!AllStop)
@@ -38,6 +39,16 @@ public class Mage_Move : MonoBehaviourPunCallbacks
             HandleAttack();
             HandleDodge();
         }
+    }
+*/
+    void Update()
+    {
+        if (!PV.IsMine)
+            return; // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
+
+        HandleMovement();
+        HandleAttack();
+        HandleDodge();
     }
 
     void HandleMovement()

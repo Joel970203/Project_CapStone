@@ -1007,7 +1007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 1944410763}
-  Character: {fileID: 712768366}
+  Character: {fileID: 459420235}
 --- !u!1 &410007709
 GameObject:
   m_ObjectHideFlags: 0
@@ -1219,6 +1219,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 439166359}
   m_CullTransparentMesh: 1
+--- !u!1 &459420235 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7199252431676364527, guid: 584a9d5de25548b4bbc0b5f4fbc43b05, type: 3}
+  m_PrefabInstance: {fileID: 2983340004576914900}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &465888245
 GameObject:
   m_ObjectHideFlags: 0
@@ -2585,7 +2590,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 965307877}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35bd842d1e9ba4bb1a7598055034bf02, type: 3}
   m_Name: 
@@ -4345,7 +4350,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1707644784}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8b3752be2477a4cbc998943a1c58bf89, type: 3}
@@ -6131,13 +6136,17 @@ PrefabInstance:
       propertyPath: slotUI.Array.data[2]
       value: 
       objectReference: {fileID: 465888245}
+    - target: {fileID: 5232337904626857122, guid: 584a9d5de25548b4bbc0b5f4fbc43b05, type: 3}
+      propertyPath: m_Radius
+      value: 0.63
+      objectReference: {fileID: 0}
     - target: {fileID: 7199252431676364527, guid: 584a9d5de25548b4bbc0b5f4fbc43b05, type: 3}
       propertyPath: m_Name
       value: Mage
       objectReference: {fileID: 0}
     - target: {fileID: 7199252431676364527, guid: 584a9d5de25548b4bbc0b5f4fbc43b05, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7539924480489917525, guid: 584a9d5de25548b4bbc0b5f4fbc43b05, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6411,7 +6420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1670065946705931501, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2046486417392170583, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
       propertyPath: m_LocalPosition.x
