@@ -80,33 +80,36 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-
-        Skill_Cooltime_Cal();
-
-        if (Input.GetMouseButtonDown(0))
+        if (PV.IsMine)
         {
-            NormalAttack();
+            Skill_Cooltime_Cal();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                NormalAttack();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+            {
+                Active_Q_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.W) && W_Skill)
+            {
+                Active_W_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && E_Skill)
+            {
+                Active_E_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R) && R_Skill)
+            {
+                Active_R_Skill();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
-        {
-            Active_Q_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.W) && W_Skill)
-        {
-            Active_W_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E) && E_Skill)
-        {
-            Active_E_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && R_Skill)
-        {
-            Active_R_Skill();
-        }
     }
 
     public void ResetCoolDown()
@@ -210,16 +213,16 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
         yield break;
     }
 
-   protected void StopMove(float delay)
+    protected void StopMove(float delay)
     {
         StartCoroutine(StopClickMove(delay));
     }
 
     IEnumerator StopClickMove(float delay)
     {
-        this.gameObject.GetComponent<Healer_Move>().AllStop=true;
+        this.gameObject.GetComponent<Healer_Move>().AllStop = true;
         yield return new WaitForSeconds(delay);
-        this.gameObject.GetComponent<Healer_Move>().AllStop=false;
+        this.gameObject.GetComponent<Healer_Move>().AllStop = false;
         yield break;
     }
 

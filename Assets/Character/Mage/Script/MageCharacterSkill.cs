@@ -83,33 +83,36 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-
-        Skill_Cooltime_Cal();
-
-        if (Input.GetMouseButtonDown(0))
+        if (PV.IsMine)
         {
-            NormalAttack();
+            Skill_Cooltime_Cal();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                NormalAttack();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+            {
+                Active_Q_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.W) && W_Skill)
+            {
+                Active_W_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && E_Skill)
+            {
+                Active_E_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R) && R_Skill)
+            {
+                Active_R_Skill();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
-        {
-            Active_Q_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.W) && W_Skill)
-        {
-            Active_W_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E) && E_Skill)
-        {
-            Active_E_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && R_Skill)
-        {
-            Active_R_Skill();
-        }
     }
 
     public void ResetCoolDown()
@@ -223,9 +226,9 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
 
     IEnumerator StopClickMove(float delay)
     {
-        this.gameObject.GetComponent<Mage_Move>().AllStop=true;
+        this.gameObject.GetComponent<Mage_Move>().AllStop = true;
         yield return new WaitForSeconds(delay);
-        this.gameObject.GetComponent<Mage_Move>().AllStop=false;
+        this.gameObject.GetComponent<Mage_Move>().AllStop = false;
         yield break;
     }
 
@@ -282,7 +285,7 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
-                
+
                 PV.RPC("callQ", RpcTarget.AllViaServer, hit.point);
             }
         }
@@ -294,7 +297,7 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
         StopMove(1.5f);
         anim.SetBool("Walk", false);
         agent.ResetPath();
-        ResetForward(targetPosition,-50f,0.2f);
+        ResetForward(targetPosition, -50f, 0.2f);
         SettingParticle(targetPosition, CastingPosition, QCastingEffect, QTargettingEffect, 0.2f);
         anim.SetTrigger("QSkillTrigger");
         Q_Cooltime_Check = Q_Cooltime; // 1
@@ -336,7 +339,7 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
         StartCoroutine(Teleport(targetPosition));
         anim.SetTrigger("QSkillTrigger");
         W_Cooltime_Check = W_Cooltime;
-        W_Skill = false;       
+        W_Skill = false;
     }
     IEnumerator Teleport(Vector3 targetPosition)
     {
@@ -347,7 +350,7 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
         agent.Warp(WarpPosition);
         yield break;
     }
-    
+
     //메이지 E 스킬. 지속딜 주는 불기둥 소환
     //화면상 마우스 위치로 레이캐스트를 쏴서 해당 위치에 불기둥 오브젝트 생성하는 함수.
     [PunRPC]
@@ -395,7 +398,7 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
-                PV.RPC("callR", RpcTarget.AllViaServer, hit.point);   
+                PV.RPC("callR", RpcTarget.AllViaServer, hit.point);
             }
         }
     }
