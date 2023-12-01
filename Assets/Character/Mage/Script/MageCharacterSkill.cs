@@ -18,6 +18,8 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
     [SerializeField]
     protected float R_Cooltime;
 
+    public Sprite[] SkillIcons;
+
     [HideInInspector]
     public float Q_Cooltime_Check;
     [HideInInspector]

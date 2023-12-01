@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Character_Info : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Character_Info : MonoBehaviour
 
     [SerializeField] private GameObject hitEffectPrefab;
 
+    public Image HealthGlobe;
+
     public bool Immotal;
 
     void Start()
@@ -24,6 +27,8 @@ public class Character_Info : MonoBehaviour
     void Update()
     {
         Immotal=false;
+        float ratio = HP / Max_HP;
+		HealthGlobe.rectTransform.localPosition = new Vector3(0, HealthGlobe.rectTransform.rect.height * ratio - HealthGlobe.rectTransform.rect.height, 0);
     }
 
     //보스에게 근접 공격 피격시 작동하는 이펙트

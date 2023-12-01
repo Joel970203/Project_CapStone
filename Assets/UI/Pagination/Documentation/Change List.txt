@@ -1,0 +1,414 @@
+v1.54
+-----------------------------------------------------------------------------
+- Moved 'LimitDraggingToOnePageAtATime' to its own section in the inspector
+  (titled 'Dragging'). It now affects regular PagedRects as well.
+-----------------------------------------------------------------------------
+
+v1.53
+-----------------------------------------------------------------------------
+- Added the option to limit dragging to a single page at a time for
+  Page Previews PagedRects
+- Fixed an exception which ocurred when calling RemoveAllPages()
+- Fixed some issues with Unity 2019
+-----------------------------------------------------------------------------
+
+v1.52
+-----------------------------------------------------------------------------
+- Fixed an issue where page positioning was sometimes off in Unity 2019
+- Fixed an issue where error messages were displayed when creating a new
+  prefab using PagedRect
+- Fixed an issue where disabling and re-enabling dragging wouldn't work
+  correctly
+- Added some new 'Set' methods for properties
+- 'AutomaticallyMoveToNextPage' will no longer trigger while a drag is
+  in progress
+- Added a new example scene
+-----------------------------------------------------------------------------
+
+v1.51
+-----------------------------------------------------------------------------
+- Experimental: New 'Animation -> Animation Curve' option which allows you
+  to specify an optional animation curve to use when animating to new pages
+-----------------------------------------------------------------------------
+
+v1.50
+-----------------------------------------------------------------------------
+- Some minor performance improvements
+-----------------------------------------------------------------------------
+
+v1.49
+-----------------------------------------------------------------------------
+- Adjusted the appearance of the default pagination for vertical PagedRects
+  created via the menu so that they look more like the examples.
+- Added the 'Performance' section to the inspector with options to:
+  - Disable automatic page collection management (to reduce PagedRect's memory
+    usage per frame)
+- Fixed a minor issue where seamless looping was moving pages when there were
+  3 pages while dragging, which unfortunately isn't seamless
+-----------------------------------------------------------------------------
+
+v1.48
+-----------------------------------------------------------------------------
+- Made an adjustment to the code which determines which page to select
+  when dragging (before now, it would always move to the closest page,
+  now it will do so unless the closest page is already selected, in which
+  case it will be more likely to move to the next closest page depending
+  on how far away it is).
+-----------------------------------------------------------------------------
+
+v1.47
+-----------------------------------------------------------------------------
+- Fixed some page positioning issues with Unity 2018
+- PagedRect will no longer add 'Animator' components to pages when using a
+  ScrollRect (this was leading to some odd issues in Unity 2018). The
+  Animator component is only necessary for Legacy PagedRects.
+- PagedRect_LayoutGroup now uses anchoredPosition rather than localPosition
+- Fixed an issue where, after removing a page, the Page collection
+  would sometimes still contain that page if Unity did not remove the
+  Page GameObject immediately
+-----------------------------------------------------------------------------
+
+v1.46
+-----------------------------------------------------------------------------
+- RemoveAllPages() will no longer trigger a PageChangedEvent
+- When adding a new page to an empty PagedRect, that page will now be set
+  as the current page
+- Drag and ScrollWheel events will no longer attempt to activate
+  seamless looping functionality when the number of pages is lower than 3
+  (as per regular seamless looping)
+-----------------------------------------------------------------------------
+
+v1.45
+-----------------------------------------------------------------------------
+- Fixed an issue where 'SpaceBetweenPages' was not correctly being taken
+  into account when sizing the viewport (making the PagedRect sometimes
+  off-center on the final page)
+-----------------------------------------------------------------------------
+
+v1.44
+-----------------------------------------------------------------------------
+- If you remove the current page, PagedRect will now automatically move to
+  to the previous page, preventing a potential StackOverflow Exception
+- Improved handling of the addition of new pages and removing of existing
+  when using Seamless Looping
+-----------------------------------------------------------------------------
+
+v1.43
+-----------------------------------------------------------------------------
+- Fixed an issue where PagedRect would sometimes scroll endlessly even when
+  "Loop Endlessly" was set to false
+- Fixed a bug where sometimes buttons would not look correct in Unity 2017.3
+-----------------------------------------------------------------------------
+
+v1.42
+-----------------------------------------------------------------------------
+- Some internal adjustments have been made such that PagedRect now functions
+  better when the TimeScale has been set to 0.
+-----------------------------------------------------------------------------
+
+v1.41
+-----------------------------------------------------------------------------
+- You can now set icons (and their colors) for each page. You can enable this
+  behaviour by setting the new 'ShowPageIconsOnButtons' option.
+- Added '(Legacy)' to the older PagedRect Prefab menu items and moved them
+  to the bottom of the list.
+-----------------------------------------------------------------------------
+
+v1.40
+-----------------------------------------------------------------------------
+- The Next and Previous buttons will now be marked as non-interactable
+  when on the first / last pages (when Loop Endlessly is disabled), allowing
+  you to use the 'Disabled Color' option to customize their appearance
+  at that time (e.g. to hide them when disabled)
+- When dragging left on the first page, or right on the last page in a
+  ScrollRect based PagedRect, the 'Loop Endlessly' option will now be respected
+-----------------------------------------------------------------------------
+
+v1.39
+-----------------------------------------------------------------------------
+- Fixed a bug introduced in v1.38 which resulted in PagedRect objects no
+  longer creating a canvas if one was not found in the scene
+-----------------------------------------------------------------------------
+
+v1.38
+-----------------------------------------------------------------------------
+- Animation fields are now marked as "Legacy (Non-ScrollRect) Animation"
+- "Mobile Input" is now marked as "Legacy (Non-ScrollRect) Input"
+  (Please note: "Use Swipe Input" can still be used with "Page Previews")
+- Added the "Use Swipe Input For ScrollRect" property which specifies whether
+  or not Scrollrect-based PagedRects should accept swipe input
+- Fixed a bug which could cause Pages to flash when seamless looping was enabled
+  with a 5 or fewer pages in Page Previews mode.
+- Fixed a potential null reference exception when using nested scrollrects.
+- SetCurrentPage() will now clear any animations in progress when passed a
+  value of 'true' as the second argument (Legacy PagedRects only)
+- SetCurrentPage() will now reset the timer for automatically moving to the
+  next page when it is called.
+- Pagination buttons are now pooled, reducing the overhead involved in
+  changing pages/etc.
+  Please note: if you edit the button templates at runtime, you will need to
+  call the new InvalidateButtonPool() method in order to replicate changes
+  to the buttons.
+- The Pagination section of each PagedRect is now isolated from the rest of
+  the PagedRect and Canvas so that any layout rebuild events triggered within
+  it are not propagated to the rest of the UI, resulting in a minor improvement
+  to performance.
+- The 'AutoDiscoverPages' property has been removed and is now always considered
+  to be true.
+- Fixed a bug preventing 'Show on Pagination' from working correctly when cleared
+  Pages with this value cleared will now correctly be hidden from the pagination,
+  and will not be eligible to be selected as a 'Next', 'Previous', 'First', or
+  'Last' page when those buttons are used. It can still be selected by instructing
+  the PagedRect to show that page with SetCurrentPage().
+  If using a ScrollRect, the page can still be scrolled to, but will not show up
+  on the pagination.
+-----------------------------------------------------------------------------
+
+v1.37
+-----------------------------------------------------------------------------
+- PagedRects will now highlight the currently visible page in the pagination
+  when dragging long distances left or right
+- PagedRects using Page Previews now support dragging. To enable this
+  functionality:
+  a) Ensure that PagedRect's 'Mobile Input -> Use Swipe Input' is disabled,
+     as this will interfere with dragging left/right
+  b) Clear the PagedRect_ScrollRect's 'Disable Dragging' property.
+     (The PagedRect_ScrollRect component is on the same GameObject as the
+	 PagedRect component)
+  Please note that, for now, using inertia is unsupported, but this may be
+  supported in future versions of PagedRect.
+-----------------------------------------------------------------------------
+
+v1.36
+-----------------------------------------------------------------------------
+- Improved drag-handling, drags which take longer than 0.25 seconds will no
+  longer be considered potential swipes (which move one page forward or
+  backwards) and instead will now always use the default behaviour (which
+  is to center on the closest page when the drag ended).
+- Seamless looping will now work better than before when dragging through
+  many pages at once.
+-----------------------------------------------------------------------------
+
+V1.35
+-----------------------------------------------------------------------------
+- Fixed the positioning of the nested Scrollrect prefab's content transform
+- The Z-scale of pages should now always be 1 instead of 0
+-----------------------------------------------------------------------------
+
+V1.34
+-----------------------------------------------------------------------------
+- PagedRects nested within another PagedRect will no longer sometimes have
+  their page buttons removed by the parent.
+-----------------------------------------------------------------------------
+
+V1.33
+-----------------------------------------------------------------------------
+- The 'Loop Seamlessly' option will now be ignored in PagedRects with three
+  or fewer pages (as it does not work correctly for them).
+-----------------------------------------------------------------------------
+
+V1.32
+-----------------------------------------------------------------------------
+- Added a new option to 'Page Previews' PagedRects which allows you to
+  avoid PagedRect creating Page Overlays to highlight the previous/next
+  pages on mouse over, as well as intercepting clicks (so that you can click
+  to go to the next/previous page). In most scenarios, the overlays should be
+  left enabled, but if, for example, you wish to add custom click functionality
+  of your own, then disabling the overlays allows you to add your own onclick
+  functionality to the underlying pages and have it be triggered when clicking
+  on the preview pages.
+- Reworked the 'MobileInput' component a little bit so that it handles
+  different canvas render modes better.
+-----------------------------------------------------------------------------
+
+V1.31
+-----------------------------------------------------------------------------
+- For non-scrollrect based PagedRects, swipes which are not within the confines
+  of the PagedRect will no longer incorrectly cause te PagedRect to change
+  pages
+-----------------------------------------------------------------------------
+
+V1.30
+-----------------------------------------------------------------------------
+- Fixed some potential scrollbar issues and prevented a possible null exception
+  when dealing with one or fewer pages (thanks to @PolarMotion for pointing
+  these out!)
+- Added a new Tabs Prefab Menu Item
+- Added the new Tabs Prefab to the example scene
+- Reworked the Example Scene controls a bit to use the available space
+  a little better
+-----------------------------------------------------------------------------
+
+V1.29
+-----------------------------------------------------------------------------
+- Fixed a bug where pages would sometimes be moved incorrectly during
+  seamless looping
+- Fixed a bug where sometimes swiping would result in skipping a page
+  when using nested scrollrects
+-----------------------------------------------------------------------------
+
+V1.28
+-----------------------------------------------------------------------------
+- Fixed a bug where the Nested ScrollRect example was using the 'MobileInput'
+  component (which is intended only for non-scrollrect based PagedRects [with
+  the exception of the PagePreviews PagedRects])
+- Modified the usage of the 'MobileInput' component so that non-ScrollRect
+  based PagedRects will no longer accept vertical swipe input for PagedRects
+  using horizontal slide animations, and PagedRects using vertical slide
+  animations will no longer accept horizontal swipe input. PagedRects using
+  Fade animations will still accept swipes in both directions.
+-----------------------------------------------------------------------------
+
+V1.27
+-----------------------------------------------------------------------------
+- Fixed a bug where Page Previews would ignore the "Use Swipe Input" setting
+- Fixed a potential editor crash when using PagedRect with XmlLayout
+-----------------------------------------------------------------------------
+
+V1.26
+-----------------------------------------------------------------------------
+- Fixed a bug in RemovePage() when working with ScrollRects
+- Added a new RemovePage() overlay which accepts a page number
+- Fixed a minor bug in RemovePage() which could cause pages to not be considered
+  'removed' until the next frame
+-----------------------------------------------------------------------------
+
+v1.25
+-----------------------------------------------------------------------------
+- You can now move pages by using the page.SetPagePosition() method
+  (You can access pages by using PagedRect.GetPageByNumber())
+-----------------------------------------------------------------------------
+
+v1.24
+-----------------------------------------------------------------------------
+- PagedRects using ScrollRects now use a new LayoutGroup designed just for
+  PagedRect which supports page scaling
+- "Paged Previews" functionality now scales pages up and down rather than
+  adjusting width and height. This should result in a better looking result,
+  particularly with more complex pages.
+-----------------------------------------------------------------------------
+
+v1.23
+-----------------------------------------------------------------------------
+- Improved handling of deleted pages for ScrollRect-based PagedRects
+-----------------------------------------------------------------------------
+
+v1.22
+-----------------------------------------------------------------------------
+- Added pagination to the "Page Previews" template prefabs - it isn't enabled
+  or visible by default, but you can now implement pagination via the
+  "Show Pagination" options.
+- All ScrollRect-based PagedRects can now use an optional scrollbar (via
+  ScrollRect -> Show Scroll Bar)
+-----------------------------------------------------------------------------
+
+v1.21
+-----------------------------------------------------------------------------
+- Some improvements and minor bug fixes to "Loop Seamlessly" functionality
+- A lot of refactoring, PagedRect.cs is now split across multiple partial
+  classes for easier readability. More refactoring to come in time.
+-----------------------------------------------------------------------------
+
+v1.20
+-----------------------------------------------------------------------------
+- Added a new "Loop Seamlessly" option which allows the PagedRect to scroll
+  endlessly through pages by moving the pages around as you scroll (instead of
+  scrolling all the way back to the first page when you reach the end / last page
+  when you reach the beginning). This is a new feature which, despite having
+  been tested extensively, may have some unexpected issues - please let
+  me know if you run into any problems!
+-----------------------------------------------------------------------------
+
+v1.19
+-----------------------------------------------------------------------------
+- Added a new prefab / menu item for PagedRects with nested ScrollRects
+- Added a new example showcasing PagedRects with nested ScrollRects
+-----------------------------------------------------------------------------
+
+v1.18
+-----------------------------------------------------------------------------
+- Replaced the default 'ScrollRect' used by all of the ScrollRect PagedRect
+  prefabs with a new 'PagedRect_ScrollRect' which provides additional options
+  (such as the ability to optionally disable dragging / mousewheel scrolling)
+- Added a new 'Page Previews' mode to ScrollRect implementations; in this mode
+  PagedRect will render both the current page as well as the next and previous
+  ones (these pages will be rendered at a smaller size, and act as next/previous
+  buttons). This functionality is controlled by the new 'ShowPagePreviews'
+  property, along with 'PagePreviewScale' and the preexisting 'SpaceBetweenPages'
+  property. Please note that the pages are NOT scaled using transform.localScale,
+  instead their width and height are adjusted - so this feature will only work
+  for page content which scales to fit its container (e.g. scaled images).
+- Added new examples showcasing the new Page Preview functionality
+- Added new prefabs and menu items for Page Previews ('Page Previews - Horizontal'
+  and 'Page Previews - Vertical')
+-----------------------------------------------------------------------------
+
+v1.17
+-----------------------------------------------------------------------------
+- Fixed a bug where sometimes pages in a ScrollRect implementation wouldn't
+  be sized correctly initially
+- Added the 'SpaceBetweenPages' property
+
+v1.16
+-----------------------------------------------------------------------------
+- Minor bug fix
+- A few minor internal adjustments to improve compatibility with XmlLayout (sold separately)
+
+v1.15
+-----------------------------------------------------------------------------
+- Added an example with a nested ScrollRect
+- Fixed a bug with page positioning in a Vertical PagedRect with ScrollRect
+
+v1.14
+-----------------------------------------------------------------------------
+- Page animations can now optionally be overriden on a page-by-page basis (check the Page component for details)
+
+v1.13
+-----------------------------------------------------------------------------
+- Bug Fixes
+	- Fixed an issue introduced in v1.1 which caused the wrong page enter/exit animation to be played
+	- Rewrote the scrollrect positioning code, it should be more reliable now
+	- Fixed a bug where sometimes the scrollrect would sometimes stay in the position to which it was dragged instead of moving to the closest page
+
+v1.12
+-----------------------------------------------------------------------------
+- Bug Fixes
+	- Fixed an issue where pages would not be resized correctly when the PagedRect or its Viewport is resized
+	- Fixed an issue where the scrollrect would not be positioned correctly when the PagedRect or its Viewport is resized
+
+v1.11
+-----------------------------------------------------------------------------
+- Bug Fixes
+	- Fixed an issue where an exception would be triggered when attempting to remove the last page with RemovePage()
+	- Fixed an issue where Page components were destroyed by RemovePage() instead of the Page GameObjects when destroyPageObject is set to true
+
+v1.1 Major Update
+-----------------------------------------------------------------------------
+- Added Support for a new Continuous Scrolling mode (using a ScrollRect)
+	- Added new Prefabs which utilize the new mode (existing PagedRect instances can be updated to use this mode, but it involves some manual changes)
+	- Existing PagedRect instances will not be affected - they will continue to function as they did before
+- Examples:
+	- Added a new Slider - ScrollRect example which utilizes Continous Scrolling
+- Bug Fixes:
+	- Fixed an issue where the Editor would sometimes show the wrong page as being selected in the inspector
+
+V1.01
+------------------------------------------------------------------------------
+- Added Support for Scroll Wheel Input
+- Added option to highlight the PagedRect on MouseOver
+- 'Loop Endlessly' now works regardless of how you reach the next/previous page
+- Added a 'PageChanged' event to the PagedRect - triggered every time the page is changes (Arguments: New Page, Previous Page)
+- Examples:
+	- Added Scroll Wheel Input control to the Vertical Pagination Example
+	- Added Enable/Disable button control to the Dynamic Pages Example
+	- Added a new Fantasy-style "Character Creation" example
+- Bug Fixes:
+	- Fixed an issue with nested PagedRects
+	- Fixed a bug with the Fade animation type when rapidly changing pages
+------------------------------------------------------------------------------
+
+
+V1.00
+------------------------------------------------------------------------------
+- Initial Release
+------------------------------------------------------------------------------

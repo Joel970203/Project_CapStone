@@ -19,6 +19,9 @@ public class Character_Skill : MonoBehaviour
     [SerializeField]
     protected float R_Cooltime;
 
+    //public Sprite SkillIcons1;
+
+
     [HideInInspector]
     public float Q_Cooltime_Check;
     [HideInInspector]

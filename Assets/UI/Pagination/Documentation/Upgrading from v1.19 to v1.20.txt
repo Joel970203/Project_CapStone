@@ -1,0 +1,12 @@
+Upgrading from v1.19 to v1.20
+--------------------------------------------------
+
+This should generally be a seamless process, however some of the classes were moved around so please be aware that if you are using Nested ScrollRects, you will need to make the following adjustment:
+
+Nested ScrollRects should have a 'PassThroughDragEvents' MonoBehaviour, however in some cases this behaviour may be missing after upgrading to v1.20.
+You will need to add it back, and set up the following:
+
+1. Targets: Add a single entry, and specify the PagedRect itself
+2. Desired Target Types: Add two entries: Type in 'PagedRect', and 'PagedRect_ScrollRect'
+
+That should be all that is necessary, and again, it should only be necessary if you are using nested ScrollRects.
