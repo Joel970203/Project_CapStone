@@ -9673,7 +9673,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4265905800737669795}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.18368082, w: 0.982986}
+  m_LocalRotation: {x: 0, y: 0, z: -0.1836768, w: 0.9829867}
   m_LocalPosition: {x: 679.8, y: 30.5, z: 699.5676}
   m_LocalScale: {x: 50, y: 30, z: 50}
   m_ConstrainProportionsScale: 0
@@ -9701,7 +9701,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.36
   m_Height: 0.72
   m_Direction: 1
   m_Center: {x: 0, y: 1.08, z: 0}
@@ -9807,7 +9807,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 0
+  sceneViewId: 11
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1 &8971263761179304050

@@ -1,89 +1,12 @@
-
-/*
-public class NinjaInventory : MonoBehaviour
-{
-    Character_Info characterInfo;
-    [SerializeField]
-    UnityEngine.AI.NavMeshAgent agent;
-    Ninja_Skill ninja_Skill;
-    Inventory inventory = new Inventory();
-    ItemType Item;
-    [SerializeField] GameObject[] slotUI;
-    // Start is called before the first frame update
-    void Start() {
-        inventory.setSlot(slotUI);
-        ninja_Skill = GetComponent<Ninja_Skill>();
-    }
-
-    void Update() {
-        ItemController();
-    }
-    void ItemController() 
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) 
-        {
-            Item = inventory.UseItem(0);
-            if(Item == ItemType.Hp)
-            {
-                characterInfo.HP += 20;
-            }
-            else if(Item == ItemType.Speed)
-            {
-                agent.speed = agent.speed * 1.5f;
-            }
-            else if(Item == ItemType.CoolDown)
-            {
-                ninja_Skill.ResetCoolDown();
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Item = inventory.UseItem(1);
-            {
-                if(Item == ItemType.Hp)
-                {
-                    characterInfo.HP += 20;
-                }
-                else if(Item == ItemType.Speed)
-                {
-                    agent.speed = agent.speed * 1.5f;
-                }
-                else if(Item == ItemType.CoolDown)
-                {
-                    ninja_Skill.ResetCoolDown();
-                }
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3)) 
-        {
-            Item = inventory.UseItem(2);
-            {
-                if(Item == ItemType.Hp)
-                {
-                    characterInfo.HP += 20;
-                }
-                else if(Item == ItemType.Speed)
-                {
-                    agent.speed = agent.speed * 1.5f;
-                }
-                else if(Item == ItemType.CoolDown)
-                {
-                    ninja_Skill.ResetCoolDown();
-                }
-            }
-        }
-    }
-    public void CollectItem(Item item){
-        inventory.AddItem(item);
-    }
-}
-*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class NinjaInventory : MonoBehaviour
 {
+    [SerializeField] ParticleSystem healParticle;
+    [SerializeField] ParticleSystem speedParticle;
+    [SerializeField] ParticleSystem coolDownParticle;
     Character_Info characterInfo;
     [SerializeField] UnityEngine.AI.NavMeshAgent agent;
     Ninja_Skill ninja_Skill;
@@ -97,6 +20,7 @@ public class NinjaInventory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        characterInfo = GetComponent<Character_Info>();
         inventory.setSlot(slotUI);
         ninja_Skill = GetComponent<Ninja_Skill>();
         originalSpeed = agent.speed; // 초기 속도 저장
@@ -132,21 +56,45 @@ public class NinjaInventory : MonoBehaviour
         switch (item)
         {
             case ItemType.Hp:
-                characterInfo.HP += 20;
+                characterInfo.TakeHeal(20);
+                PlayParticle(healParticle);
+                StartCoroutine(StopParticleAfterDuration(healParticle, 1f)); 
                 break;
             case ItemType.Speed:
                 if (!isSpeedIncreased)
                 {
                     agent.speed = agent.speed * 1.5f;
                     isSpeedIncreased = true;
-                    StartCoroutine(ResetSpeedAfterDuration(5f)); // 5초 후에 속도 원래대로 복구
+                    PlayParticle(speedParticle);
+                    StartCoroutine(StopParticleAfterDuration(speedParticle, 5f)); 
+                    StartCoroutine(ResetSpeedAfterDuration(5f)); 
                 }
                 break;
             case ItemType.CoolDown:
                 ninja_Skill.ResetCoolDown();
+                PlayParticle(coolDownParticle);
+                StartCoroutine(StopParticleAfterDuration(coolDownParticle, 1f)); 
                 break;
             default:
                 break;
+        }
+    }
+
+    void PlayParticle(ParticleSystem particle)
+    {
+        if (particle != null)
+        {
+            particle.Play();
+        }
+    }
+
+    IEnumerator StopParticleAfterDuration(ParticleSystem particle, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        
+        if (particle != null)
+        {
+            particle.Stop();
         }
     }
 
