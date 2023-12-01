@@ -29,10 +29,17 @@ public class Healer_Move : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if(!AllStop)
+        if (!AllStop)
         {
             if (!PV.IsMine)
-                return; // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
+            {
+                PhotonAnimatorView photonAnimatorView = GetComponent<PhotonAnimatorView>();
+                if (photonAnimatorView != null)
+                {
+                    Destroy(photonAnimatorView);
+                }
+                return;
+            } // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
 
             HandleMovement();
             HandleAttack();
@@ -53,7 +60,7 @@ public class Healer_Move : MonoBehaviourPunCallbacks
                 PV.RPC("SetWalkAnimationState", RpcTarget.Others, true);
             }
         }
-        else if (agent.remainingDistance < 0.1f)
+        else if (agent.remainingDistance < 2f)
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();

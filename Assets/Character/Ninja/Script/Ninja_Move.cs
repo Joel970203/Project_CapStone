@@ -29,7 +29,14 @@ public class Ninja_Move : MonoBehaviourPunCallbacks
     void Update()
     {
         if (!PV.IsMine)
-            return; // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
+        {
+            PhotonAnimatorView photonAnimatorView = GetComponent<PhotonAnimatorView>();
+            if (photonAnimatorView != null)
+            {
+                Destroy(photonAnimatorView);
+            }
+            return;
+        } // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
 
         HandleMovement();
         HandleAttack();

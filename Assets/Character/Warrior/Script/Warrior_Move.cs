@@ -28,8 +28,15 @@ public class Warrior_Move : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if (!PV.IsMine)
-            return; // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
+         if (!PV.IsMine)
+            {
+                PhotonAnimatorView photonAnimatorView = GetComponent<PhotonAnimatorView>();
+                if (photonAnimatorView != null)
+                {
+                    Destroy(photonAnimatorView);
+                }
+                return;
+            } // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
 
         HandleMovement();
         HandleAttack();
@@ -49,7 +56,7 @@ public class Warrior_Move : MonoBehaviourPunCallbacks
                 PV.RPC("SetWalkAnimationState", RpcTarget.Others, true);
             }
         }
-        else if (agent.remainingDistance < 0.1f)
+        else if (agent.remainingDistance < 2f)
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
