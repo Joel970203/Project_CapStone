@@ -99,10 +99,20 @@ MonoBehaviour:
   - HealerWSkill
   - SyncBossHP
   - SyncBossPhase
-  - AlertCharacterName
-  - AlertReady
-  - CharacterSetting
-  - StartAndLoadScene
+  - SetChaseRPC
+  - SetIdleRPC
+  - SyncChaseState
+  - SyncSetAttack
+  - SyncSetIdle
+  - UseSkillP1S1RPC
+  - UseSkillP1S2RPC
+  - UseSkillP1S3RPC
+  - SetAttack
+  - SetChase
+  - SyncJudgeStateInIdle
+  - SyncChase
+  - EndBaseAttackRPC
+  - BaseAttackRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

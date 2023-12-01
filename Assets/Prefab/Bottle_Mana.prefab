@@ -9779,7 +9779,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7632317973324012423}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.15319648, w: 0.9881958}
+  m_LocalRotation: {x: 0, y: 0, z: -0.1531928, w: 0.9881963}
   m_LocalPosition: {x: 687.9, y: 23.1, z: 707.2}
   m_LocalScale: {x: 50, y: 30, z: 50}
   m_ConstrainProportionsScale: 0
@@ -9798,7 +9798,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.23
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -9834,7 +9834,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.21
+  m_Radius: 0.33
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 1.18, z: 0}
@@ -9871,7 +9871,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 0
+  sceneViewId: 12
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!23 &1908977961602718454
