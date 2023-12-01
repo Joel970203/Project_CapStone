@@ -31,7 +31,7 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
     protected Animator anim;
     protected UnityEngine.AI.NavMeshAgent agent;
-    
+
     [SerializeField]
     private Transform CastingPosition;
 
@@ -71,33 +71,36 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-
-        Skill_Cooltime_Cal();
-
-        if (Input.GetMouseButtonDown(0))
+        if (PV.IsMine)
         {
-            //NormalAttack();
+            Skill_Cooltime_Cal();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                //NormalAttack();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+            {
+                Active_Q_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.W) && W_Skill)
+            {
+                Active_W_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && E_Skill)
+            {
+                Active_E_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R) && R_Skill)
+            {
+                Active_R_Skill();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
-        {
-            Active_Q_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.W) && W_Skill)
-        {
-            Active_W_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E) && E_Skill)
-        {
-            Active_E_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && R_Skill)
-        {
-            Active_R_Skill();
-        }
     }
 
     public void ResetCoolDown()
@@ -210,9 +213,9 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
     IEnumerator StopClickMove(float delay)
     {
-        this.gameObject.GetComponent<Paladin_Move>().AllStop=true;
+        this.gameObject.GetComponent<Paladin_Move>().AllStop = true;
         yield return new WaitForSeconds(delay);
-        this.gameObject.GetComponent<Paladin_Move>().AllStop=false;
+        this.gameObject.GetComponent<Paladin_Move>().AllStop = false;
         yield break;
     }
 
@@ -227,7 +230,7 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-              PV.RPC("Paladin_QSkill",RpcTarget.All,hit.point);
+                PV.RPC("Paladin_QSkill", RpcTarget.All, hit.point);
             }
 
         }
@@ -238,7 +241,7 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     {
         ResetForward(Point, 60f, 0.2f);
         anim.SetTrigger("QSkillTrigger");
-        StartCoroutine(QSkillRush(this.transform.position+(Point-this.transform.position).normalized*50f,0.1f,0.4f));
+        StartCoroutine(QSkillRush(this.transform.position + (Point - this.transform.position).normalized * 50f, 0.1f, 0.4f));
         StartCoroutine(QSkillDelay(0.8f));
     }
 
@@ -246,7 +249,7 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(delay);
         anim.SetTrigger("QSkillTrigger");
-        agent.updateRotation=true;
+        agent.updateRotation = true;
         QCastingEffect.SetActive(false);
         yield break;
     }
@@ -255,14 +258,14 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(delay);
 
-        agent.updateRotation=false;
-        
+        agent.updateRotation = false;
+
         agent.SetDestination(Point);
         QCastingEffect.SetActive(true);
-        QCastingEffect.transform.GetChild(0).transform.Find("AttackRange").GetComponent<Collider>().enabled=true;
+        QCastingEffect.transform.GetChild(0).transform.Find("AttackRange").GetComponent<Collider>().enabled = true;
         yield return new WaitForSeconds(Time);
         agent.ResetPath();
-        
+
         yield break;
     }
 
@@ -278,7 +281,7 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                PV.RPC("Paladin_WSkill",RpcTarget.All,hit.point);
+                PV.RPC("Paladin_WSkill", RpcTarget.All, hit.point);
             }
 
         }
@@ -287,8 +290,8 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Paladin_WSkill(Vector3 Point)
     {
-       ResetForward(Point, -50f, 0.2f);
-        Instantiate(WTargettingEffect,this.transform.position,Quaternion.identity);
+        ResetForward(Point, -50f, 0.2f);
+        Instantiate(WTargettingEffect, this.transform.position, Quaternion.identity);
         anim.SetTrigger("WSkillTrigger");
     }
 
@@ -303,7 +306,7 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                PV.RPC("Paladin_ESkill",RpcTarget.All,hit.point);
+                PV.RPC("Paladin_ESkill", RpcTarget.All, hit.point);
             }
 
         }
@@ -312,9 +315,9 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Paladin_ESkill(Vector3 Point)
     {
-       ResetForward(Point, 0f, 0.2f);
-       SettingParticle(Point, Feet, ECastingEffect, null, 0f);
-       anim.SetTrigger("ESkillTrigger");
+        ResetForward(Point, 0f, 0.2f);
+        SettingParticle(Point, Feet, ECastingEffect, null, 0f);
+        anim.SetTrigger("ESkillTrigger");
     }
 
     public void Active_R_Skill()
@@ -330,8 +333,8 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
-                PV.RPC("Paladin_RSkill",RpcTarget.All,hit.point);
-                StartCoroutine(TriggerRivival(hit.collider.gameObject,4f));
+                PV.RPC("Paladin_RSkill", RpcTarget.All, hit.point);
+                StartCoroutine(TriggerRivival(hit.collider.gameObject, 4f));
             }
         }
 
@@ -340,11 +343,11 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void Paladin_RSkill(Vector3 Point)
     {
-       ResetForward(Point, 60f, 0.2f);
-       SettingParticle(Point, Feet, RCastingEffect, null, 2.8f);
-       anim.SetTrigger("RSkillTrigger");
-       StartCoroutine(RSkillDelay(4f));
-      
+        ResetForward(Point, 60f, 0.2f);
+        SettingParticle(Point, Feet, RCastingEffect, null, 2.8f);
+        anim.SetTrigger("RSkillTrigger");
+        StartCoroutine(RSkillDelay(4f));
+
     }
     IEnumerator RSkillDelay(float delay)
     {

@@ -57,29 +57,32 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-
-        Skill_Cooltime_Cal();
-
-        if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+        if (PV.IsMine)
         {
-            Active_Q_Skill();
+            Skill_Cooltime_Cal();
+
+            if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+            {
+                Active_Q_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.W) && W_Skill)
+            {
+                Active_W_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && E_Skill)
+            {
+                Active_E_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R) && R_Skill)
+            {
+                Active_R_Skill();
+            }
+            HandleMouseInput();
         }
 
-        if (Input.GetKeyDown(KeyCode.W) && W_Skill)
-        {
-            Active_W_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E) && E_Skill)
-        {
-            Active_E_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && R_Skill)
-        {
-            Active_R_Skill();
-        }
-        HandleMouseInput();
     }
 
     public void ResetCoolDown()
@@ -132,7 +135,7 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
         }
 
     }
-    
+
     void HandleMouseInput()
     {
         if (Input.GetMouseButtonDown(0) && !isLeftMouseButtonPressed)
@@ -296,7 +299,7 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
                 PV.RPC("ThrowGrenade", RpcTarget.All, GrenadeSpawnPoint.position, throwDirection);
             }
         }
-       
+
     }
 
     [PunRPC]
@@ -359,17 +362,17 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
 
 
     public void Active_E_Skill()
-    {  
+    {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk")
             || anim.GetCurrentAnimatorStateInfo(0).IsName("Aim Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Aiming Walk"))
         {
             anim.SetBool("Walk", false);
-            
+
             // RPC를 통해 화살 발사 동기화
             PV.RPC("ActivateESkillAnimation", RpcTarget.All);
             StartCoroutine(FireArrows(3));
-            
-        }    
+
+        }
     }
 
     [PunRPC]
@@ -377,9 +380,9 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
     {
         anim.SetTrigger("E");
     }
-   
+
     private IEnumerator FireArrows(int arrowCount)
-    {   
+    {
         for (int i = 0; i < arrowCount; i++)
         {
             // 마우스 커서 위치를 기준으로 방향 계산

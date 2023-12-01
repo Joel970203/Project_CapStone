@@ -55,33 +55,36 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-
-        Skill_Cooltime_Cal();
-
-        if (Input.GetMouseButtonDown(0))
+        if (PV.IsMine)
         {
-           Active_Base_Attack();
+            Skill_Cooltime_Cal();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Active_Base_Attack();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
+            {
+                Active_Q_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.W) && W_Skill)
+            {
+                Active_W_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && E_Skill)
+            {
+                Active_E_Skill();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R) && R_Skill)
+            {
+                Active_R_Skill();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && Q_Skill)
-        {
-            Active_Q_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.W) && W_Skill)
-        {
-            Active_W_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E) && E_Skill)
-        {
-            Active_E_Skill();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && R_Skill)
-        {
-            Active_R_Skill();
-        }
     }
 
     public void ResetCoolDown()
@@ -163,9 +166,9 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
 
     IEnumerator StopClickMove(float delay)
     {
-        this.gameObject.GetComponent<ClickMove>().AllStop=true;
+        this.gameObject.GetComponent<ClickMove>().AllStop = true;
         yield return new WaitForSeconds(delay);
-        this.gameObject.GetComponent<ClickMove>().AllStop=false;
+        this.gameObject.GetComponent<ClickMove>().AllStop = false;
         yield break;
     }
 
@@ -333,7 +336,7 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
         spawnPosition.y += 20f;
         GameObject wParticlesObject = Instantiate(W_Particles.gameObject, spawnPosition, Quaternion.Euler(180f, 0f, 0f));
         var wParticles = wParticlesObject.GetComponent<ParticleSystem>();
-        
+
         if (wParticles != null)
         {
             wParticles.Play();
