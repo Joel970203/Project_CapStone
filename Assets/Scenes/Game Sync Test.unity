@@ -6725,7 +6725,7 @@ PrefabInstance:
     - target: {fileID: 8427195613274467975, guid: 584a9d5de25548b4bbc0b5f4fbc43b05, type: 3}
       propertyPath: HealthGlobe
       value: 
-      objectReference: {fileID: 682721566}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -27,8 +27,11 @@ public class Character_Info : MonoBehaviour
     void Update()
     {
         Immotal=false;
+        if(HealthGlobe!=null)
+        {
         float ratio = HP / Max_HP;
 		HealthGlobe.rectTransform.localPosition = new Vector3(0, HealthGlobe.rectTransform.rect.height * ratio - HealthGlobe.rectTransform.rect.height, 0);
+        }
     }
 
     //보스에게 근접 공격 피격시 작동하는 이펙트

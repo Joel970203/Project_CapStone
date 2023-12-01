@@ -56,32 +56,32 @@ public class GameSyncManager : MonoBehaviourPunCallbacks
             {
                 case "Warrior":
                     Characters[0].SetActive(true);
-                    Characters[0].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
+                    //Characters[0].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
                     temp = Characters[0];
                     break;
                 case "Paladin":
                     Characters[1].SetActive(true);
-                    Characters[1].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
+                    //Characters[1].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
                     temp = Characters[1];
                     break;
                 case "Mage":
                     Characters[2].SetActive(true);
-                    Characters[2].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
+                    //Characters[2].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
                     temp = Characters[2];
                     break;
                 case "Healer":
                     Characters[3].SetActive(true);
-                    Characters[3].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
+                    //Characters[3].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
                     temp = Characters[3];
                     break;
                 case "Ninja":
                     Characters[4].SetActive(true);
-                    Characters[4].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
+                    //Characters[4].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
                     temp = Characters[4];
                     break;
                 case "Archer":
                     Characters[5].SetActive(true);
-                    Characters[5].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
+                    //Characters[5].GetPhotonView().TransferOwnership(PhotonNetwork.PlayerList[i]);
                     temp = Characters[5];
                     break;
             }
@@ -90,6 +90,7 @@ public class GameSyncManager : MonoBehaviourPunCallbacks
                 myCharacter = temp;
                 MainCamera.GetComponent<CameraMove>().Character = myCharacter;
                 myCharacter.GetComponent<Character_Info>().HealthGlobe = HealthGlobe;
+                myCharacter.GetPhotonView().RequestOwnership();
                 switch (myCharacter.name)
                 {
                     case "Warrior":
