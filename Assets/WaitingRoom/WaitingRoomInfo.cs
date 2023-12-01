@@ -174,6 +174,6 @@ public class WaitingRoomInfo : MonoBehaviourPunCallbacks
     [PunRPC]
     void StartAndLoadScene()
     {
-        SceneManager.LoadScene("Game Sync Test");
+        SceneManager.LoadScene("Game");
     }
 }
