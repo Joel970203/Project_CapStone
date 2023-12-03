@@ -117,6 +117,8 @@ MonoBehaviour:
   - AlertReady
   - CharacterSetting
   - StartAndLoadScene
+  - SyncJudgeStateInAttack
+  - SyncJudgeStateInChase
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

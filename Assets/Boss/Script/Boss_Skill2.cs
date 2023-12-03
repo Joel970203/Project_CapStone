@@ -9,8 +9,9 @@ using UnityEngine.AI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using Random = UnityEngine.Random;
+using Photon.Pun;
 
-public class Boss_Skill2 : MonoBehaviour
+public class Boss_Skill2 : MonoBehaviourPunCallbacks
 {
     private int currentPhase;
     private int previousPhase = 1;
@@ -80,7 +81,7 @@ public class Boss_Skill2 : MonoBehaviour
     private LineRenderer lineRenderer;
     const float tau = Mathf.PI * 2;
 
-    private List<GameObject> targets;
+    private List<GameObject> targets = new List<GameObject>();
     [SerializeField] protected Transform currentTarget;
 
     [SerializeField] private float rotationSpeed;
@@ -104,12 +105,14 @@ public class Boss_Skill2 : MonoBehaviour
         Chase,
         Attack
     }
-
+    PhotonView PV;
     State state = State.Idle;
 
     // Start is called before the first frame update
     void Start()
     {
+        PV = GetComponent<PhotonView>();
+        UpdatePlayerList();
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
@@ -149,7 +152,7 @@ public class Boss_Skill2 : MonoBehaviour
     {
         //DrawRange(this.transform.position.x, this.transform.position.z, chaseRange, 50);
         //Debug.Log(state);
-
+        UpdatePlayerList();
         currentPhase = GetComponent<Boss_Info>().GetPhaseNum();
         if(previousPhase != currentPhase && previousPhase != 4) 
         {
@@ -183,6 +186,14 @@ public class Boss_Skill2 : MonoBehaviour
         }
 
         isFinished = true;
+    }
+    void UpdatePlayerList()
+    {
+        GameObject[] foundPlayers = GameObject.FindGameObjectsWithTag("Player");
+
+        // 현재 목록을 비우고 새로운 목록으로 채움
+        targets.Clear();
+        targets.AddRange(foundPlayers);
     }
 
     void ChangePhase() 
@@ -246,6 +257,15 @@ public class Boss_Skill2 : MonoBehaviour
 
     void JudgeStateInIdle()
     {
+        if (PV.IsMine)
+        {
+            PV.RPC("SyncJudgeStateInIdle", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    void SyncJudgeStateInIdle()
+    {
         //if (isChaseTimerSet) SetChase(currentTarget);
 
         Transform nearTarget = FindNearTarget(); //가장 가까운 플레이어를 탐색
@@ -260,7 +280,6 @@ public class Boss_Skill2 : MonoBehaviour
         currentHP = this.GetComponent<Boss_Info>().HP;
         if (previousHP != currentHP) SetChase(FindFarTarget());
     }
-
     void JudgeStateInChase()
     {
         Transform nearTarget = FindNearTarget();
@@ -384,56 +403,65 @@ public class Boss_Skill2 : MonoBehaviour
     {
         //BaseAttack();
         //StartCoroutine(UseSkillP1S2());
-
-        switch (Random.Range(1, 6))
+        if(PV.IsMine)
         {
-            case 1:
-                //Debug.Log(Time.time - P1S1_StartTime + " " + P1S1_Cooltime);
-                if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) StartCoroutine(UseSkillP1S1());
-                else BaseAttack();
-                return;
-            case 2:
-                //Debug.Log(Time.time - P1S2_StartTime + " " + P1S2_Cooltime);
-                if (Time.time - P1S2_StartTime >= P1S2_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
-                else BaseAttack();
-                return;
-            case 3:
-                //Debug.Log(Time.time - P1S3_StartTime + " " + P1S3_Cooltime);
-                if (Time.time - P1S3_StartTime >= P1S3_Cooltime || P1S3_StartTime == -1f) StartCoroutine(UseSkillP1S3());
-                else BaseAttack();
-                return;
-            default:
-                BaseAttack();
-                return;
+            int randNum = Random.Range(1, 6);
+
+            switch (randNum)
+            {
+                case 1:
+                    if (CanUseSkill(P1S1_StartTime, P1S1_Cooltime))
+                        PV.RPC("UseSkillP1S1RPC", RpcTarget.All);
+                    else
+                        PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+                case 2:
+                    if (CanUseSkill(P1S2_StartTime, P1S2_Cooltime))
+                        PV.RPC("UseSkillP1S2RPC", RpcTarget.All);
+                    else
+                        PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+                case 3:
+                    if (CanUseSkill(P1S3_StartTime, P1S3_Cooltime))
+                        PV.RPC("UseSkillP1S3RPC", RpcTarget.All);
+                    else
+                        PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+                default:
+                    PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+            }
         }
+    }
+    
+    bool CanUseSkill(float skillStartTime, float skillCooltime)
+    {
+        return Time.time - skillStartTime >= skillCooltime || skillStartTime == -1f;
     }
 
     void Phase2_Attack()
     {
-        int randNum = Random.Range(1, 6);
-
-        switch (randNum)
+        if(PV.IsMine)
         {
-            case 1:
-            case 2:
-                if (Time.time - P2S1_StartTime >= P2S1_Cooltime || P2S1_StartTime == -1f) StartCoroutine(UseSkillP2S1());
-                else BaseAttack();
-                return;
-            case 3:
-                if (Time.time - P2S2_StartTime >= P2S2_Cooltime || P2S2_StartTime == -1f)
-                {
-                    if (!isP2P3) StartCoroutine(UseSkillP2S2());
-                    else BaseAttack();
-                }
-                else BaseAttack();
-                return;
-            case 4:
-                if (Time.time - P2S3_StartTime >= P2S3_Cooltime || P2S3_StartTime == -1f) StartCoroutine(UseSkillP2S3());
-                else BaseAttack();
-                return;
-            default:
-                BaseAttack();
-                return;
+            int randNum = Random.Range(1, 6);
+            switch (randNum)
+            {
+                case 1:
+                    if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) StartCoroutine(UseSkillP1S1());
+                    else PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+                case 2:
+                    if (Time.time - P1S2_StartTime >= P1S2_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
+                    else PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+                case 3:
+                    if (Time.time - P1S3_StartTime >= P1S3_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
+                    else PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+                default:
+                    PV.RPC("BaseAttackRPC", RpcTarget.All);
+                    break;
+            }
         }
     }
 
@@ -486,7 +514,13 @@ public class Boss_Skill2 : MonoBehaviour
         return farTarget;
     }
 
-    void BaseAttack()
+    [PunRPC]
+    void BaseAttackRPC()
+    {
+        StartCoroutine(PerformBaseAttack());
+    }
+
+    IEnumerator PerformBaseAttack()
     {
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
@@ -499,7 +533,7 @@ public class Boss_Skill2 : MonoBehaviour
         rotateAngle = 60f;
 
         anim.SetTrigger("BaseAttack");
-        StartCoroutine(EndBaseAttack());
+        yield return StartCoroutine(EndBaseAttack());
     }
 
     IEnumerator EndBaseAttack()
@@ -585,6 +619,14 @@ public class Boss_Skill2 : MonoBehaviour
         isCoroutineFinished = true;
     }
 
+    [PunRPC]
+    void UseSkillP1S1RPC()
+    {
+        if(CanUseSkill(P1S1_StartTime, P1S1_Cooltime))
+        {
+            StartCoroutine(UseSkillP1S1());
+        }
+    }
     IEnumerator UseSkillP1S1()
     {
         isCoroutineFinished = false;
@@ -603,6 +645,16 @@ public class Boss_Skill2 : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         EndSkill();
         //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
+    }
+
+    [PunRPC]
+    void UseSkillP1S2RPC()
+    {
+        if (CanUseSkill(P1S2_StartTime, P1S2_Cooltime))
+        {
+            StartCoroutine(UseSkillP1S2());
+        }
+        else return;
     }
 
     IEnumerator UseSkillP1S2()
@@ -627,6 +679,16 @@ public class Boss_Skill2 : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
         EndSkill();
         //StartCoroutine(MakeEffect(LeftFinger_Pos, P1S2_CastingEffect, P1S2_Bullet, 300.0f, currentTarget.transform, null, 1.5f, 1.0f, 0f, 1.0f));
+    }
+
+    [PunRPC]
+    void UseSkillP1S3RPC()
+    {
+        if (CanUseSkill(P1S3_StartTime, P1S3_Cooltime))
+        {
+            StartCoroutine(UseSkillP1S3());
+        }
+        else return;
     }
 
     IEnumerator UseSkillP1S3()

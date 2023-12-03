@@ -100,10 +100,6 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
     bool isRotate = false;
     float rotateAngle;
 
-
-
-
-
     private enum State
     {
         Idle,
@@ -166,7 +162,6 @@ public class Boss_Skill : MonoBehaviourPunCallbacks
                 JudgeStateInAttack();
                 break;
         }
-        //targets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
         isFinished = true;
     }
 

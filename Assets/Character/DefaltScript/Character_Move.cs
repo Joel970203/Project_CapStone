@@ -30,8 +30,9 @@ public class Character_Move : MonoBehaviourPunCallbacks
     void Update()
     {
         if (!PV.IsMine)
+        {
             return; // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
-
+        }
         HandleMovement();
         HandleAttack();
         HandleDodge();
