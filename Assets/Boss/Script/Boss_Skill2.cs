@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
-//using UnityEditorInternal;
+using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
@@ -40,8 +41,7 @@ public class Boss_Skill2 : MonoBehaviour
     private float P2S3_StartTime = -1f;
     private float P3S1_StartTime = -1f;
     private float P3S2_StartTime = -1f;
-    private float P4S1_StartTime = -1f;
-    private float P4S2_StartTime = -1f;
+    private float P3S3_StartTime = -1f;
 
     [SerializeField] private GameObject P1S2_CastingEffect;
     [SerializeField] private GameObject P2S1_CastingEffect;
@@ -68,10 +68,19 @@ public class Boss_Skill2 : MonoBehaviour
     GameObject skillObjects;
 
     [SerializeField] Transform model;
+    [SerializeField] Transform floor;
     [SerializeField] GameObject sword;
     [SerializeField] Transform swordVfx;
     [SerializeField] ParticleSystem swordParticle;
+    [SerializeField] Transform lava;
+
+    Material modelMaterial;
+    Material floorMaterial;
+    Material swordMaterial;
+    Material lavaMaterial;
+
     private bool isP2P3 = false;
+    private bool isP3P3 = false;
 
     Color swordColor = Color.white;
 
@@ -113,6 +122,12 @@ public class Boss_Skill2 : MonoBehaviour
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
+
+        modelMaterial = model.GetComponent<Renderer>().material;
+        floorMaterial = floor.GetComponent<Renderer>().material;
+        swordMaterial = sword.GetComponent<Renderer>().material;
+        lavaMaterial = lava.GetComponent<Renderer>().material;
+
         lineRenderer = GetComponent<LineRenderer>();
         targets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
         swordVfx.gameObject.SetActive(false);
@@ -151,7 +166,7 @@ public class Boss_Skill2 : MonoBehaviour
         //Debug.Log(state);
 
         currentPhase = GetComponent<Boss_Info>().GetPhaseNum();
-        if(previousPhase != currentPhase && previousPhase != 4) 
+        if (previousPhase != currentPhase && previousPhase != 4)
         {
             StopAllCoroutines();
             ChangePhase();
@@ -185,20 +200,23 @@ public class Boss_Skill2 : MonoBehaviour
         isFinished = true;
     }
 
-    void ChangePhase() 
+    //페이즈 변경 관련 함수
+
+    void ChangePhase()
     {
         StartCoroutine(PhaseDelay());
-        agent.isStopped = true; 
+        agent.isStopped = true;
         agent.velocity = Vector3.zero;
         agent.ResetPath();
         currentTarget = null;
         state = State.Idle;
-        
-        switch(currentPhase)
+
+        switch (currentPhase)
         {
             case 2:
                 anim.SetTrigger("Phase2");
-                ChangeSword(new Color(0.3f, 0.65f, 0.7f), new Color(0.6f, 1f, 0.6f));        
+                ChangeShaderP2(new Color(0.3f, 0.65f, 0.7f));
+                ChangeLava();
                 return;
             case 3:
                 anim.SetTrigger("Phase3");
@@ -206,7 +224,8 @@ public class Boss_Skill2 : MonoBehaviour
         }
     }
 
-    void ChangeSword(Color swordColor, Color BossColor)
+    //페이즈 2에 대한 변경 함수
+    void ChangeShaderP2(Color swordColor)
     {
         var col = swordParticle.colorOverLifetime;
         Gradient gradient = new Gradient();
@@ -215,7 +234,20 @@ public class Boss_Skill2 : MonoBehaviour
         col.color = gradient;
 
         sword.GetComponent<Renderer>().material.color = swordColor;
-        model.GetComponent<Renderer>().material.color = swordColor;
+        StartCoroutine(blendTex(0.72f, 0.24f, modelMaterial)); //for boss
+        StartCoroutine(blendTex(0.6f, 0.2f, floorMaterial)); //for floor
+    }
+
+    //텍스트 혼합
+    IEnumerator blendTex(float endBlend, float speed, Material mat)
+    {
+        float startBlend = 0.0f;
+        while (startBlend <= endBlend)
+        {
+            startBlend += speed * Time.deltaTime;
+            mat.SetFloat("_Blend", startBlend);
+            yield return null;
+        }
     }
 
     IEnumerator PhaseDelay()
@@ -224,6 +256,44 @@ public class Boss_Skill2 : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         isCoroutineFinished = true;
     }
+
+    //용암(물) 변경
+    void ChangeLava()
+    {
+        StartCoroutine(waveColor());
+        StartCoroutine(baseColor());
+    }
+
+    //물결 색상 변경
+    IEnumerator waveColor()
+    {
+        Vector4 waveColor = new Vector4(0.3f, 0.55f, 0.75f, 0.0f);
+        Vector4 startColor = new Vector4(1.6f, 0.33f, 0.18f, 0.0f);
+        while (startColor.x >= waveColor.x)
+        {
+            startColor.x -= 0.3f * Time.deltaTime;
+            if (startColor.y <= waveColor.y) startColor.y += 0.1f * Time.deltaTime;
+            if (startColor.z <= waveColor.z) startColor.z += 0.3f * Time.deltaTime;
+            lavaMaterial.SetVector("_WaveColor", startColor);
+            yield return null;
+        }
+    }
+
+    //베이스 색상 변경
+    IEnumerator baseColor()
+    {
+        Vector4 baseColor = new Vector4(0.0f, 0.3f, 1.0f, 0.0f);
+        Vector4 startColor = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+        while (startColor.z <= baseColor.z)
+        {
+            startColor.z += 0.2f * Time.deltaTime;
+            if (startColor.y <= baseColor.y) startColor.y += 0.1f * Time.deltaTime;
+            lavaMaterial.SetVector("_BaseColor", startColor);
+            yield return null;
+        }
+    }
+
+    //페이즈 변경함수 끝
 
     void DrawRange(float x, float z, float radius, int vertexs)
     {
@@ -410,9 +480,7 @@ public class Boss_Skill2 : MonoBehaviour
 
     void Phase2_Attack()
     {
-        int randNum = Random.Range(1, 6);
-
-        switch (randNum)
+        switch (Random.Range(1, 6))
         {
             case 1:
             case 2:
@@ -718,23 +786,29 @@ public class Boss_Skill2 : MonoBehaviour
 
     }
 
-    void useSkillP4S1()
-    {
-
-    }
-
-    void useSkillP2S2()
-    {
-
-    }
-
     void useSkillP3S2()
     {
 
     }
 
-    void useSkillP4S2()
+     IEnumerator UseSkillP3S3()
     {
+        isCoroutineFinished = false;
+        P3S3_StartTime = Time.time;
+        isP3P3 = true;
 
+        float castDelay = 1.2f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle2")) castDelay = 1.0f;
+        //else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.0f;
+
+        anim.SetTrigger("P2S3");
+
+        yield return new WaitForSeconds(castDelay);
+        MakeEffectOnTarget(P2S3_TargettingEffect, this.transform, 54f);
+
+        yield return new WaitForSeconds(0.5f);
+        EndSkill();
+        yield return new WaitForSeconds(15.0f);
+        isP3P3 = false;
     }
 }

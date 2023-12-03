@@ -15420,7 +15420,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -41105,6 +41105,7 @@ MonoBehaviour:
   AD: 0
   armor: 0
   hitEffectPrefab: {fileID: 0}
+  HealthGlobe: {fileID: 0}
   Immotal: 0
 --- !u!114 &1188349555031623195
 MonoBehaviour:
@@ -41118,6 +41119,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c01c9630487ec429f794ed7d982590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healParticle: {fileID: 0}
+  speedParticle: {fileID: 0}
+  coolDownParticle: {fileID: 0}
   agent: {fileID: 3124948973129226560}
   slotUI:
   - {fileID: 0}
@@ -46557,6 +46561,10 @@ PrefabInstance:
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3574362967237534932, guid: a2a060732547fe64581bb0cb3c2bdf1d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
     - target: {fileID: 3574362967237534933, guid: a2a060732547fe64581bb0cb3c2bdf1d, type: 3}
       propertyPath: playOnAwake
       value: 0
@@ -46736,6 +46744,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6238151656541885338, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
     - target: {fileID: 6363146692899824976, guid: 9bfd371fdf80d034cb9b6f67f665b468, type: 3}
       propertyPath: sceneViewId
       value: 0
