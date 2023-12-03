@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
-//using UnityEditorInternal;
+using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using Random = UnityEngine.Random;
-using Photon.Pun;
 
-public class Boss_Skill2 : MonoBehaviourPunCallbacks
+public class Boss_Skill2 : MonoBehaviour
 {
     private int currentPhase;
     private int previousPhase = 1;
@@ -41,8 +41,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
     private float P2S3_StartTime = -1f;
     private float P3S1_StartTime = -1f;
     private float P3S2_StartTime = -1f;
-    private float P4S1_StartTime = -1f;
-    private float P4S2_StartTime = -1f;
+    private float P3S3_StartTime = -1f;
 
     [SerializeField] private GameObject P1S2_CastingEffect;
     [SerializeField] private GameObject P2S1_CastingEffect;
@@ -69,10 +68,19 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
     GameObject skillObjects;
 
     [SerializeField] Transform model;
+    [SerializeField] Transform floor;
     [SerializeField] GameObject sword;
     [SerializeField] Transform swordVfx;
     [SerializeField] ParticleSystem swordParticle;
+    [SerializeField] Transform lava;
+
+    Material modelMaterial;
+    Material floorMaterial;
+    Material swordMaterial;
+    Material lavaMaterial;
+
     private bool isP2P3 = false;
+    private bool isP3P3 = false;
 
     Color swordColor = Color.white;
 
@@ -81,7 +89,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
     private LineRenderer lineRenderer;
     const float tau = Mathf.PI * 2;
 
-    private List<GameObject> targets = new List<GameObject>();
+    private List<GameObject> targets;
     [SerializeField] protected Transform currentTarget;
 
     [SerializeField] private float rotationSpeed;
@@ -105,17 +113,21 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         Chase,
         Attack
     }
-    PhotonView PV;
+
     State state = State.Idle;
 
     // Start is called before the first frame update
     void Start()
     {
-        PV = GetComponent<PhotonView>();
-        UpdatePlayerList();
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
+
+        modelMaterial = model.GetComponent<Renderer>().material;
+        floorMaterial = floor.GetComponent<Renderer>().material;
+        swordMaterial = sword.GetComponent<Renderer>().material;
+        lavaMaterial = lava.GetComponent<Renderer>().material;
+
         lineRenderer = GetComponent<LineRenderer>();
         targets = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
         swordVfx.gameObject.SetActive(false);
@@ -152,9 +164,9 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
     {
         //DrawRange(this.transform.position.x, this.transform.position.z, chaseRange, 50);
         //Debug.Log(state);
-        UpdatePlayerList();
+
         currentPhase = GetComponent<Boss_Info>().GetPhaseNum();
-        if(previousPhase != currentPhase && previousPhase != 4) 
+        if (previousPhase != currentPhase && previousPhase != 4)
         {
             StopAllCoroutines();
             ChangePhase();
@@ -187,29 +199,24 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
 
         isFinished = true;
     }
-    void UpdatePlayerList()
-    {
-        GameObject[] foundPlayers = GameObject.FindGameObjectsWithTag("Player");
 
-        // 현재 목록을 비우고 새로운 목록으로 채움
-        targets.Clear();
-        targets.AddRange(foundPlayers);
-    }
+    //페이즈 변경 관련 함수
 
-    void ChangePhase() 
+    void ChangePhase()
     {
         StartCoroutine(PhaseDelay());
-        agent.isStopped = true; 
+        agent.isStopped = true;
         agent.velocity = Vector3.zero;
         agent.ResetPath();
         currentTarget = null;
         state = State.Idle;
-        
-        switch(currentPhase)
+
+        switch (currentPhase)
         {
             case 2:
                 anim.SetTrigger("Phase2");
-                ChangeSword(new Color(0.3f, 0.65f, 0.7f), new Color(0.6f, 1f, 0.6f));        
+                ChangeShaderP2(new Color(0.3f, 0.65f, 0.7f));
+                ChangeLava();
                 return;
             case 3:
                 anim.SetTrigger("Phase3");
@@ -217,7 +224,8 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         }
     }
 
-    void ChangeSword(Color swordColor, Color BossColor)
+    //페이즈 2에 대한 변경 함수
+    void ChangeShaderP2(Color swordColor)
     {
         var col = swordParticle.colorOverLifetime;
         Gradient gradient = new Gradient();
@@ -226,7 +234,20 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         col.color = gradient;
 
         sword.GetComponent<Renderer>().material.color = swordColor;
-        model.GetComponent<Renderer>().material.color = swordColor;
+        StartCoroutine(blendTex(0.72f, 0.24f, modelMaterial)); //for boss
+        StartCoroutine(blendTex(0.6f, 0.2f, floorMaterial)); //for floor
+    }
+
+    //텍스트 혼합
+    IEnumerator blendTex(float endBlend, float speed, Material mat)
+    {
+        float startBlend = 0.0f;
+        while (startBlend <= endBlend)
+        {
+            startBlend += speed * Time.deltaTime;
+            mat.SetFloat("_Blend", startBlend);
+            yield return null;
+        }
     }
 
     IEnumerator PhaseDelay()
@@ -235,6 +256,44 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(5.0f);
         isCoroutineFinished = true;
     }
+
+    //용암(물) 변경
+    void ChangeLava()
+    {
+        StartCoroutine(waveColor());
+        StartCoroutine(baseColor());
+    }
+
+    //물결 색상 변경
+    IEnumerator waveColor()
+    {
+        Vector4 waveColor = new Vector4(0.3f, 0.55f, 0.75f, 0.0f);
+        Vector4 startColor = new Vector4(1.6f, 0.33f, 0.18f, 0.0f);
+        while (startColor.x >= waveColor.x)
+        {
+            startColor.x -= 0.3f * Time.deltaTime;
+            if (startColor.y <= waveColor.y) startColor.y += 0.1f * Time.deltaTime;
+            if (startColor.z <= waveColor.z) startColor.z += 0.3f * Time.deltaTime;
+            lavaMaterial.SetVector("_WaveColor", startColor);
+            yield return null;
+        }
+    }
+
+    //베이스 색상 변경
+    IEnumerator baseColor()
+    {
+        Vector4 baseColor = new Vector4(0.0f, 0.3f, 1.0f, 0.0f);
+        Vector4 startColor = new Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+        while (startColor.z <= baseColor.z)
+        {
+            startColor.z += 0.2f * Time.deltaTime;
+            if (startColor.y <= baseColor.y) startColor.y += 0.1f * Time.deltaTime;
+            lavaMaterial.SetVector("_BaseColor", startColor);
+            yield return null;
+        }
+    }
+
+    //페이즈 변경함수 끝
 
     void DrawRange(float x, float z, float radius, int vertexs)
     {
@@ -257,15 +316,6 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
 
     void JudgeStateInIdle()
     {
-        if (PV.IsMine)
-        {
-            PV.RPC("SyncJudgeStateInIdle", RpcTarget.All);
-        }
-    }
-
-    [PunRPC]
-    void SyncJudgeStateInIdle()
-    {
         //if (isChaseTimerSet) SetChase(currentTarget);
 
         Transform nearTarget = FindNearTarget(); //가장 가까운 플레이어를 탐색
@@ -280,6 +330,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         currentHP = this.GetComponent<Boss_Info>().HP;
         if (previousHP != currentHP) SetChase(FindFarTarget());
     }
+
     void JudgeStateInChase()
     {
         Transform nearTarget = FindNearTarget();
@@ -403,65 +454,54 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
     {
         //BaseAttack();
         //StartCoroutine(UseSkillP1S2());
-        if(PV.IsMine)
-        {
-            int randNum = Random.Range(1, 6);
 
-            switch (randNum)
-            {
-                case 1:
-                    if (CanUseSkill(P1S1_StartTime, P1S1_Cooltime))
-                        PV.RPC("UseSkillP1S1RPC", RpcTarget.All);
-                    else
-                        PV.RPC("BaseAttackRPC", RpcTarget.All);
-                    break;
-                case 2:
-                    if (CanUseSkill(P1S2_StartTime, P1S2_Cooltime))
-                        PV.RPC("UseSkillP1S2RPC", RpcTarget.All);
-                    else
-                        PV.RPC("BaseAttackRPC", RpcTarget.All);
-                    break;
-                case 3:
-                    if (CanUseSkill(P1S3_StartTime, P1S3_Cooltime))
-                        PV.RPC("UseSkillP1S3RPC", RpcTarget.All);
-                    else
-                        PV.RPC("BaseAttackRPC", RpcTarget.All);
-                    break;
-                default:
-                    PV.RPC("BaseAttackRPC", RpcTarget.All);
-                    break;
-            }
+        switch (Random.Range(1, 6))
+        {
+            case 1:
+                //Debug.Log(Time.time - P1S1_StartTime + " " + P1S1_Cooltime);
+                if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) StartCoroutine(UseSkillP1S1());
+                else BaseAttack();
+                return;
+            case 2:
+                //Debug.Log(Time.time - P1S2_StartTime + " " + P1S2_Cooltime);
+                if (Time.time - P1S2_StartTime >= P1S2_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
+                else BaseAttack();
+                return;
+            case 3:
+                //Debug.Log(Time.time - P1S3_StartTime + " " + P1S3_Cooltime);
+                if (Time.time - P1S3_StartTime >= P1S3_Cooltime || P1S3_StartTime == -1f) StartCoroutine(UseSkillP1S3());
+                else BaseAttack();
+                return;
+            default:
+                BaseAttack();
+                return;
         }
-    }
-    
-    bool CanUseSkill(float skillStartTime, float skillCooltime)
-    {
-        return Time.time - skillStartTime >= skillCooltime || skillStartTime == -1f;
     }
 
     void Phase2_Attack()
     {
-        if(PV.IsMine)
+        switch (Random.Range(1, 6))
         {
-            int randNum = Random.Range(1, 6);
-            switch (randNum)
-            {
-                case 1:
-                    if (Time.time - P1S1_StartTime >= P1S1_Cooltime || P1S1_StartTime == -1f) StartCoroutine(UseSkillP1S1());
-                    else PV.RPC("BaseAttackRPC", RpcTarget.All);
-                    break;
-                case 2:
-                    if (Time.time - P1S2_StartTime >= P1S2_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
-                    else PV.RPC("BaseAttackRPC", RpcTarget.All);
-                    break;
-                case 3:
-                    if (Time.time - P1S3_StartTime >= P1S3_Cooltime || P1S2_StartTime == -1f) StartCoroutine(UseSkillP1S2());
-                    else PV.RPC("BaseAttackRPC", RpcTarget.All);
-                    break;
-                default:
-                    PV.RPC("BaseAttackRPC", RpcTarget.All);
-                    break;
-            }
+            case 1:
+            case 2:
+                if (Time.time - P2S1_StartTime >= P2S1_Cooltime || P2S1_StartTime == -1f) StartCoroutine(UseSkillP2S1());
+                else BaseAttack();
+                return;
+            case 3:
+                if (Time.time - P2S2_StartTime >= P2S2_Cooltime || P2S2_StartTime == -1f)
+                {
+                    if (!isP2P3) StartCoroutine(UseSkillP2S2());
+                    else BaseAttack();
+                }
+                else BaseAttack();
+                return;
+            case 4:
+                if (Time.time - P2S3_StartTime >= P2S3_Cooltime || P2S3_StartTime == -1f) StartCoroutine(UseSkillP2S3());
+                else BaseAttack();
+                return;
+            default:
+                BaseAttack();
+                return;
         }
     }
 
@@ -514,13 +554,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         return farTarget;
     }
 
-    [PunRPC]
-    void BaseAttackRPC()
-    {
-        StartCoroutine(PerformBaseAttack());
-    }
-
-    IEnumerator PerformBaseAttack()
+    void BaseAttack()
     {
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
@@ -533,7 +567,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         rotateAngle = 60f;
 
         anim.SetTrigger("BaseAttack");
-        yield return StartCoroutine(EndBaseAttack());
+        StartCoroutine(EndBaseAttack());
     }
 
     IEnumerator EndBaseAttack()
@@ -619,14 +653,6 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         isCoroutineFinished = true;
     }
 
-    [PunRPC]
-    void UseSkillP1S1RPC()
-    {
-        if(CanUseSkill(P1S1_StartTime, P1S1_Cooltime))
-        {
-            StartCoroutine(UseSkillP1S1());
-        }
-    }
     IEnumerator UseSkillP1S1()
     {
         isCoroutineFinished = false;
@@ -645,16 +671,6 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(1.0f);
         EndSkill();
         //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
-    }
-
-    [PunRPC]
-    void UseSkillP1S2RPC()
-    {
-        if (CanUseSkill(P1S2_StartTime, P1S2_Cooltime))
-        {
-            StartCoroutine(UseSkillP1S2());
-        }
-        else return;
     }
 
     IEnumerator UseSkillP1S2()
@@ -679,16 +695,6 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(0.8f);
         EndSkill();
         //StartCoroutine(MakeEffect(LeftFinger_Pos, P1S2_CastingEffect, P1S2_Bullet, 300.0f, currentTarget.transform, null, 1.5f, 1.0f, 0f, 1.0f));
-    }
-
-    [PunRPC]
-    void UseSkillP1S3RPC()
-    {
-        if (CanUseSkill(P1S3_StartTime, P1S3_Cooltime))
-        {
-            StartCoroutine(UseSkillP1S3());
-        }
-        else return;
     }
 
     IEnumerator UseSkillP1S3()
@@ -780,23 +786,29 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
 
     }
 
-    void useSkillP4S1()
-    {
-
-    }
-
-    void useSkillP2S2()
-    {
-
-    }
-
     void useSkillP3S2()
     {
 
     }
 
-    void useSkillP4S2()
+     IEnumerator UseSkillP3S3()
     {
+        isCoroutineFinished = false;
+        P3S3_StartTime = Time.time;
+        isP3P3 = true;
 
+        float castDelay = 1.2f;
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle2")) castDelay = 1.0f;
+        //else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Chase")) castDelay = 1.0f;
+
+        anim.SetTrigger("P2S3");
+
+        yield return new WaitForSeconds(castDelay);
+        MakeEffectOnTarget(P2S3_TargettingEffect, this.transform, 54f);
+
+        yield return new WaitForSeconds(0.5f);
+        EndSkill();
+        yield return new WaitForSeconds(15.0f);
+        isP3P3 = false;
     }
 }

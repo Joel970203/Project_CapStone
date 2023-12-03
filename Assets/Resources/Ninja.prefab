@@ -5819,6 +5819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdbbfb2f6b5a8df42bd6a6af8ec7ad50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  N_MaxHP: 0
   N_HP: 0
   N_AD: 0
   N_armor: 0
@@ -5835,13 +5836,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c9149e4d7da4e2e936c1ad7aeb95bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotUI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!54 &5303629728879378863
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5881,6 +5875,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dcd08bbe6cdec42bee5eaa041a7a07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapon: {fileID: 5804850331479144672}
+  weaponParticles: {fileID: 3741168085836175550}
+  B_Particles: {fileID: 7820242584224803771, guid: cf8337445a325534796e2208c35c1110, type: 3}
+  Q_Particles: {fileID: 8730983165628205481}
+  W_Particles: {fileID: 6728356632239091988, guid: 137d15d5613d70c47a3716b8ff79c538, type: 3}
+  R_Particles: {fileID: 8546778856684750927}
   Q_Cooltime: 0
   W_Cooltime: 0
   E_Cooltime: 0
@@ -5894,14 +5894,6 @@ MonoBehaviour:
   E_Skill: 0
   R_Skill: 0
   Base_Attack: 0
-  weapon: {fileID: 5804850331479144672}
-  shadowClonePrefab: {fileID: 4200867707382678120, guid: 0b434a8755d5b7d42939315f64f35bba, type: 3}
-  cloneDuration: 20
-  weaponParticles: {fileID: 3741168085836175550}
-  B_Particles: {fileID: 7820242584224803771, guid: cf8337445a325534796e2208c35c1110, type: 3}
-  Q_Particles: {fileID: 8730983165628205481}
-  W_Particles: {fileID: 6728356632239091988, guid: 137d15d5613d70c47a3716b8ff79c538, type: 3}
-  R_Particles: {fileID: 8546778856684750927}
 --- !u!114 &5324133414193816777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5914,7 +5906,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99dea92ed98aff049820ebbed8578d54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PV: {fileID: 2374398379712933864}
   anim: {fileID: 1163414188950559873}
 --- !u!23 &1298486186509560727
 MeshRenderer:
@@ -30550,7 +30541,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

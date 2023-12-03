@@ -4866,7 +4866,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
   - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -5268,9 +5268,6 @@ PrefabInstance:
       addedObject: {fileID: 8499378261755794480}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1856274938279524519}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 5106912964527811255}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
       insertIndex: -1
@@ -5493,59 +5490,6 @@ MonoBehaviour:
   spawnRadiusMax: 250
   itemRadius: 10
   sphereCastRad: 30
---- !u!114 &1856274938279524519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8465875080104350715}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8d306e24759b45ae90bb800b7caa346, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentPhase: 0
-  LeftFinger_Pos: {fileID: 9014141620991558862}
-  RightHand_Pos: {fileID: 1460769840611384356}
-  LeftHand_Pos: {fileID: 3136425675530170985}
-  P1S1_Cooltime: 10
-  P1S2_Cooltime: 10
-  P1S3_Cooltime: 10
-  P2S1_Cooltime: 10
-  P2S2_Cooltime: 10
-  P2S3_Cooltime: 0
-  P3S1_Cooltime: 10
-  P3S2_Cooltime: 0
-  P4S1_Cooltime: 0
-  P4S2_Cooltime: 0
-  P1S1_CastingEffect: {fileID: 0}
-  P1S2_CastingEffect: {fileID: 3768675494318801096, guid: 180d311bddfc54b61b704b8a0a42c213, type: 3}
-  P2S1_CastingEffect: {fileID: 0}
-  P2S2_CastingEffect: {fileID: 138232, guid: cba97d92ba33a46f09d0027a7761f4a5, type: 3}
-  P3S1_CastingEffect: {fileID: 0}
-  P3S2_CastingEffect: {fileID: 0}
-  P4S1_CastingEffect: {fileID: 0}
-  P4S2_CastingEffect: {fileID: 0}
-  P1S3_Effect: {fileID: 91426031799525742, guid: fa057e33b29cc445d894fe72444e8a4c, type: 3}
-  P1S2_Bullet: {fileID: 138232, guid: 8585f4caf25fc467193c81c647bd25c5, type: 3}
-  P2S2_Bullet: {fileID: 138232, guid: 78d35091e19954626bd25f9a3ec9cb67, type: 3}
-  P1S1_TargettingEffect: {fileID: 4284365289243807553, guid: b25474dbbf0bd4449a97176a054cf0cf, type: 3}
-  P1S2_TargettingEffect: {fileID: 0}
-  P2S1_TargettingEffect: {fileID: 0}
-  P2S2_TargettingEffect: {fileID: 0}
-  P2S3_TargettingEffect: {fileID: 91426031799525742, guid: 641afd060173241eb83db2dc41c4c542, type: 3}
-  P3S1_TargettingEffect: {fileID: 0}
-  P3S2_TargettingEffect: {fileID: 0}
-  P4S1_TargettingEffect: {fileID: 0}
-  P4S2_TargettingEffect: {fileID: 0}
-  weapon: {fileID: 5536144664209128629}
-  swordVfx: {fileID: 2472234402949931305}
-  chaseRange: 100
-  chaseDuration: 6
-  baseAttackProb: 0.6
-  meleeSkillProb: 0.6
-  useSkillInChaseProb: 0.08
 --- !u!114 &5106912964527811255
 MonoBehaviour:
   m_ObjectHideFlags: 0
