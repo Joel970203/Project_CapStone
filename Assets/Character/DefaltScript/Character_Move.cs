@@ -51,7 +51,7 @@ public class Character_Move : MonoBehaviourPunCallbacks
                 PV.RPC("SetWalkAnimationState", RpcTarget.Others, true);
             }
         }
-        else if (agent.remainingDistance < 0.1f)
+        else if (agent.remainingDistance < 2f)
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();

@@ -24,28 +24,34 @@ public class CollectItem : MonoBehaviour
             if (ninjaInventory != null)
             {
                 ninjaInventory.CollectItem(item); // 닌자의 인벤토리에 아이템 전달
+                Destroy(gameObject);
             }
             else if (mageInventory != null)
             {
                 mageInventory.CollectItem(item); // 메이지의 인벤토리에 아이템 전달
+                Destroy(gameObject);
             }
             else if (paladinInventory != null)
             {
                 paladinInventory.CollectItem(item); // 팔라딘의 인벤토리에 아이템 전달
+                Destroy(gameObject);
             }
             else if (healerInventory != null)
             {
                 healerInventory.CollectItem(item); // 힐러의 인벤토리에 아이템 전달
+                Destroy(gameObject);
             }
             else if (archerInventory != null)
             {
                 archerInventory.CollectItem(item); // 아처의 인벤토리에 아이템 전달
+                Destroy(gameObject);
             }
             else if (warriorInventory != null)
             {
                 warriorInventory.CollectItem(item); // 워리어의 인벤토리에 아이템 전달
+                Destroy(gameObject);
             }
-            Destroy(gameObject);
+            
         }
     }
 }

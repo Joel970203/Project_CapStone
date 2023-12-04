@@ -48,14 +48,14 @@ public class Warrior_Move : MonoBehaviourPunCallbacks
             {
                 agent.SetDestination(hit.point);
                 anim.SetBool("Walk", true);
-                PV.RPC("SetWalkAnimationState", RpcTarget.Others, true);
+                PV.RPC("SetWalkAnimationState", RpcTarget.All, true);
             }
         }
         else if (agent.remainingDistance < 2f)
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
-            PV.RPC("SetWalkAnimationState", RpcTarget.Others, false);
+            PV.RPC("SetWalkAnimationState", RpcTarget.All, false);
         }
     }
 
@@ -65,7 +65,7 @@ public class Warrior_Move : MonoBehaviourPunCallbacks
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
-            PV.RPC("SetWalkAnimationState", RpcTarget.Others, false);
+            PV.RPC("SetWalkAnimationState", RpcTarget.All, false);
         }
 
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Stand Up"))

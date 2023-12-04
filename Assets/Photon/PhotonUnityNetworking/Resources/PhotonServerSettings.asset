@@ -119,6 +119,40 @@ MonoBehaviour:
   - StartAndLoadScene
   - SyncJudgeStateInAttack
   - SyncJudgeStateInChase
+  - BaseAttack
+  - UseSkillP2S1RPC
+  - UseSkillP2S2RPC
+  - UseSkillP2S3RPC
+  - UseSkillP3S3RPC
+  - EndSkill
+  - UseSkillP1S1
+  - UseSkillP1S2
+  - UseSkillP1S3
+  - UseSkillP2S1
+  - UseSkillP2S2
+  - UseSkillP2S3
+  - UseSkillP3S3
+  - EndBaseAttack
+  - SetAttackRPC
+  - Phase1_Attack
+  - Phase2_Attack
+  - NotifyP1S1
+  - NotifyP1S2
+  - NotifyP1S3
+  - NotifyP2S1
+  - NotifyP2S2
+  - NotifyP2S3
+  - NotifySkillUsedP1S1
+  - NotifySkillUsedP1S2
+  - NotifySkillUsedP1S3
+  - NotifySkillUsedP2S1
+  - NotifySkillUsedP2S2
+  - NotifySkillUsedP2S3
+  - NotifyB
+  - NotifyBaseAttack
+  - SendItemInfo
+  - NotifyClient
+  - NotifyItemSpawn
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
