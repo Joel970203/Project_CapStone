@@ -9,7 +9,8 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
 
     PhotonView PV;
     private GameObject weapon;
-
+    
+    private Character_Info characterInfo;
     [SerializeField] private ParticleSystem weaponParticles;
     [SerializeField] private ParticleSystem Q_Particles;
     [SerializeField] private ParticleSystem W_Particles;
@@ -53,6 +54,7 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
         R_Skill = true;
         Base_Attack = true;
         anim = GetComponent<Animator>();
+        characterInfo = GetComponent<Character_Info>();
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         PV = GetComponent<PhotonView>();
     }
@@ -435,6 +437,7 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
             PV.RPC("SyncRParticles", RpcTarget.AllViaServer);
             Invoke("StopParticles", 10f);
             R_Cooltime_Check = R_Cooltime; // 1
+            characterInfo.preventHpDrop = true;
             R_Skill = false;
         }
     }

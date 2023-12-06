@@ -708,9 +708,6 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         isCoroutineFinished = true;
     }
 
-
-
-
     void UseSkillP1S1RPC()
     {
         StartCoroutine(UseSkillP1S1());
@@ -744,10 +741,11 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         //if (anim.GetCurrentAnimatorStateInfo(0).IsName("P1S1")) castDelay = 1.7f;
 
         yield return new WaitForSeconds(castDelay);
-        MakeEffectOnTarget(P1S1_TargettingEffect, this.transform, 52.5f);
+       // MakeEffectOnTarget(P1S1_TargettingEffect, this.transform, 52.5f);
 
         yield return new WaitForSeconds(1.0f);
         EndSkill();
+        anim.SetTrigger("P1S1");
         //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
     }
 
@@ -953,12 +951,13 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         anim.SetTrigger("P2S3");
 
         yield return new WaitForSeconds(castDelay);
-        MakeEffectOnTarget(P2S3_TargettingEffect, this.transform, 54f);
+        //MakeEffectOnTarget(P2S3_TargettingEffect, this.transform, 54f);
 
         yield return new WaitForSeconds(0.5f);
         EndSkill();
         yield return new WaitForSeconds(8.0f);
         isP2P3 = false;
+        anim.SetTrigger("Idle");
     }
 
 /*

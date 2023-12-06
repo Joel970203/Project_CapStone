@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Character_Info : MonoBehaviour
+public class Warrior_Info : MonoBehaviour
 {
     [SerializeField] public float Max_HP;
     [SerializeField] public float HP;
@@ -22,10 +22,6 @@ public class Character_Info : MonoBehaviour
     {
         HP=Max_HP;
         Immotal=false;
-        if(preventHpDrop)
-        {
-            StartCoroutine(PreventHpDropCoroutine(5f));
-        }
     }
 
     // Update is called once per frame
@@ -51,7 +47,7 @@ public class Character_Info : MonoBehaviour
             {
                 HP = Mathf.Max(1f, HP); // HP가 1 이하로 내려가지 않도록 함
             }
-            preventHpDrop=false;
+
             yield return null;
         }
     }
