@@ -9,6 +9,7 @@ public class Warrior_Move : MonoBehaviourPunCallbacks
     public Animator anim;
     PhotonView PV;
 
+    public bool AllStop = false;
     void Start()
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -28,14 +29,22 @@ public class Warrior_Move : MonoBehaviourPunCallbacks
 
     void Update()
     {
-         if (!PV.IsMine)
+        if (!AllStop)
+        {
+            if (!PV.IsMine)
             {
+                PhotonAnimatorView photonAnimatorView = GetComponent<PhotonAnimatorView>();
+                if (photonAnimatorView != null)
+                {
+                    Destroy(photonAnimatorView);
+                }
                 return;
             } // 다른 플레이어일 경우, 이후 코드를 실행하지 않음
 
-        HandleMovement();
-        HandleAttack();
-        HandleDodge();
+            HandleMovement();
+            HandleAttack();
+            HandleDodge();
+        }
     }
 
     void HandleMovement()
@@ -48,14 +57,14 @@ public class Warrior_Move : MonoBehaviourPunCallbacks
             {
                 agent.SetDestination(hit.point);
                 anim.SetBool("Walk", true);
-                PV.RPC("SetWalkAnimationState", RpcTarget.All, true);
+                PV.RPC("SetWalkAnimationState", RpcTarget.Others, true);
             }
         }
         else if (agent.remainingDistance < 2f)
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
-            PV.RPC("SetWalkAnimationState", RpcTarget.All, false);
+            PV.RPC("SetWalkAnimationState", RpcTarget.Others, false);
         }
     }
 
@@ -65,7 +74,7 @@ public class Warrior_Move : MonoBehaviourPunCallbacks
         {
             anim.SetBool("Walk", false);
             agent.ResetPath();
-            PV.RPC("SetWalkAnimationState", RpcTarget.All, false);
+            PV.RPC("SetWalkAnimationState", RpcTarget.Others, false);
         }
 
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Stand Up"))

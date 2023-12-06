@@ -153,6 +153,8 @@ MonoBehaviour:
   - SendItemInfo
   - NotifyClient
   - NotifyItemSpawn
+  - RPC_TakeDamage
+  - PerformHitAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

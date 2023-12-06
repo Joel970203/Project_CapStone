@@ -16,37 +16,38 @@ public class ItemSpawn : MonoBehaviourPunCallbacks
 
     bool isMasterClient = false;
     bool coroutineStarted = false;
-
+    int ItemCnt;
     void Start()
+    {
+        // 5초마다 Update 함수를 호출하여 원하는 작업을 수행합니다.
+        InvokeRepeating("CustomUpdate", 0f, 5f);
+    }
+    void CustomUpdate()
     {
         isMasterClient = PhotonNetwork.IsMasterClient;
         if (isMasterClient)
         {
-            StartCoroutine(ItemCreaterCoroutine());
+            ItemCnt = GameObject.FindGameObjectsWithTag("Item").Length;
+            if(ItemCnt < itemNumMax)
+            {
+                StartCoroutine(ItemCreaterCoroutine());
+            }
+            else return;
         }
     }
-
+    
     IEnumerator ItemCreaterCoroutine()
     {
         if (coroutineStarted)
         {
             yield break; // 이미 실행 중인 경우 중복 실행 방지
         }
-
         coroutineStarted = true;
-
-        for (int i = 0; i < itemNumMax; i++)
-        {
-            Vector3 spawn_Pos = MakeSpawnPos();
-            RaycastHit hit;
-            while (Physics.SphereCast(spawn_Pos, sphereCastRad, Vector3.up, out hit, 0f))
-            {
-                spawn_Pos = MakeSpawnPos();
-            }
-            SpawnItem(spawn_Pos);
-            yield return new WaitForSeconds(coolDown);
-        }
-
+        Vector3 spawn_Pos = MakeSpawnPos();
+        RaycastHit hit;
+        while (Physics.SphereCast(spawn_Pos, sphereCastRad, Vector3.up, out hit, 0f))
+        spawn_Pos = MakeSpawnPos();
+        SpawnItem(spawn_Pos);
         coroutineStarted = false;
     }
 
