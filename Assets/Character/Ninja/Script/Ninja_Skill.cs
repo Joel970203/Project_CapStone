@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class Ninja_Skill : MonoBehaviourPunCallbacks
 {
@@ -26,6 +27,10 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
 
     [SerializeField]
     protected float R_Cooltime;
+
+    public Sprite[] SkillIcons;
+
+    public GameObject SKillIconUI;
 
     [HideInInspector]
     public float Q_Cooltime_Check;
@@ -99,40 +104,93 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
         if (Q_Cooltime_Check >= 0)
         {
             Q_Cooltime_Check -= Time.deltaTime;
+
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(Q_Cooltime_Check).ToString();
+            }
+
             if (Q_Cooltime_Check <= 0)
             {
                 Q_Cooltime_Check = 0;
                 Q_Skill = true;
+
+                SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (W_Cooltime_Check >= 0)
         {
             W_Cooltime_Check -= Time.deltaTime;
+
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(W_Cooltime_Check).ToString();
+            }
             if (W_Cooltime_Check <= 0)
             {
                 W_Cooltime_Check = 0;
                 W_Skill = true;
+
+                SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (E_Cooltime_Check >= 0)
         {
             E_Cooltime_Check -= Time.deltaTime;
+
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(2).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(E_Cooltime_Check).ToString();
+            }
             if (E_Cooltime_Check <= 0)
             {
                 E_Cooltime_Check = 0;
                 E_Skill = true;
+
+                SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (R_Cooltime_Check >= 0)
         {
             R_Cooltime_Check -= Time.deltaTime;
+
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(3).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(R_Cooltime_Check).ToString();
+            }
             if (R_Cooltime_Check <= 0)
             {
                 R_Cooltime_Check = 0;
                 R_Skill = true;
+
+                SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(false);
             }
         }
     }
@@ -283,6 +341,8 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
 
 
                 photonView.RPC("PlayQParticles", RpcTarget.All);
+                Q_Cooltime_Check = Q_Cooltime; // 1
+                Q_Skill = false;
             }
         }
     }
@@ -333,6 +393,8 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
                     photonView.RPC("PlayWParticles", RpcTarget.All);
                     photonView.RPC("SpawnDelay", RpcTarget.All, 0.5f, 0.35f, 3);
                 }
+                W_Cooltime_Check = W_Cooltime; // 1
+                W_Skill = false;
             }
         }
     }
@@ -438,6 +500,8 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
 
                 // 다른 플레이어에게 E 스킬을 동기화하기 위해 Photon RPC 호출
                 photonView.RPC("PlayWeaponParticles", RpcTarget.All);
+                E_Cooltime_Check = E_Cooltime; // 1
+                E_Skill = false;
             }
         }
     }
@@ -471,6 +535,8 @@ public class Ninja_Skill : MonoBehaviourPunCallbacks
                 Quaternion targetRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 90, 0);
                 transform.rotation = targetRotation;
                 photonView.RPC("ActivateRSkill", RpcTarget.All, targetPosition);
+                R_Cooltime_Check = R_Cooltime; // 1
+                R_Skill = false;
             }
         }
     }
