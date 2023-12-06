@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class HealerCharacterSkill : MonoBehaviourPunCallbacks
 {
@@ -18,6 +19,8 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
     protected float R_Cooltime;
 
     public Sprite[] SkillIcons;
+
+    public GameObject SKillIconUI;
 
     [HideInInspector]
     public float Q_Cooltime_Check;
@@ -125,40 +128,85 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
         if (Q_Cooltime_Check >= 0)
         {
             Q_Cooltime_Check -= Time.deltaTime;
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(Q_Cooltime_Check).ToString();
+            }
             if (Q_Cooltime_Check <= 0)
             {
                 Q_Cooltime_Check = 0;
                 Q_Skill = true;
+                SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (W_Cooltime_Check >= 0)
         {
             W_Cooltime_Check -= Time.deltaTime;
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(W_Cooltime_Check).ToString();
+            }
             if (W_Cooltime_Check <= 0)
             {
                 W_Cooltime_Check = 0;
                 W_Skill = true;
+                SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (E_Cooltime_Check >= 0)
         {
             E_Cooltime_Check -= Time.deltaTime;
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(2).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(E_Cooltime_Check).ToString();
+            }
             if (E_Cooltime_Check <= 0)
             {
                 E_Cooltime_Check = 0;
                 E_Skill = true;
+                SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (R_Cooltime_Check >= 0)
         {
             R_Cooltime_Check -= Time.deltaTime;
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(3).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(R_Cooltime_Check).ToString();
+            }
             if (R_Cooltime_Check <= 0)
             {
                 R_Cooltime_Check = 0;
                 R_Skill = true;
+
+                SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(false);
             }
         }
     }
@@ -279,6 +327,8 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
                 PV.RPC("HealerQSkill", RpcTarget.AllViaServer, hit.point);
+                                Q_Cooltime_Check = Q_Cooltime; // 1
+                Q_Skill = false;
             }
         }
     }
@@ -325,6 +375,8 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
                 else
                 {
                     PV.RPC("HealerWSkill", RpcTarget.AllViaServer, hit.point);
+                                    W_Cooltime_Check = W_Cooltime; // 1
+                W_Skill = false;
                 }
             }
         }
@@ -356,6 +408,8 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
                 PV.RPC("HealerESkill", RpcTarget.AllViaServer, hit.point);
+                                E_Cooltime_Check = E_Cooltime; // 1
+                E_Skill = false;
             }
         }
     }
@@ -371,6 +425,20 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
         anim.SetTrigger("ESkillTrigger");
         E_Cooltime_Check = E_Cooltime;
         E_Skill = false;
+
+        GameObject[] temp = GameObject.FindGameObjectsWithTag("Player");
+
+        for(int i=0;i<temp.Length;i++)
+        {
+            try
+            {
+                temp[i].GetComponent<Character_Info>().IncreaseArmor(10);
+            }
+            catch
+            {
+                Debug.Log("에러 발생");
+            }
+        }
     }
 
     //힐러 R 스킬. 부활
@@ -388,6 +456,8 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
             {
                 PV.RPC("HealerRSkill", RpcTarget.AllViaServer, hit.point);
                 StartCoroutine(TriggerRivival(hit.collider.gameObject, 4f));
+                                R_Cooltime_Check = R_Cooltime; // 1
+                R_Skill = false;
             }
         }
     }

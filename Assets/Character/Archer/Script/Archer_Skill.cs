@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class Archer_Skill : MonoBehaviourPunCallbacks
 {
@@ -17,6 +18,10 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
 
     [SerializeField]
     private float R_Cooltime;
+
+    public Sprite[] SkillIcons;
+
+    public GameObject SKillIconUI;
 
     [HideInInspector]
     public float Q_Cooltime_Check;
@@ -97,41 +102,92 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
         if (Q_Cooltime_Check > 0)
         {
             Q_Cooltime_Check -= Time.deltaTime;
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(Q_Cooltime_Check).ToString();
+            }
         }
         else
         {
             Q_Cooltime_Check = 0;
             Q_Skill = true;
+
+            SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+            SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
         }
 
         if (W_Cooltime_Check > 0)
         {
             W_Cooltime_Check -= Time.deltaTime;
+
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(W_Cooltime_Check).ToString();
+            }
         }
         else
         {
             W_Cooltime_Check = 0;
             W_Skill = true;
+
+            SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+            SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
         }
 
         if (E_Cooltime_Check > 0)
         {
             E_Cooltime_Check -= Time.deltaTime;
+
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(2).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(E_Cooltime_Check).ToString();
+            }
         }
         else
         {
             E_Cooltime_Check = 0;
             E_Skill = true;
+
+            SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
+            SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
         }
 
         if (R_Cooltime_Check > 0)
         {
             R_Cooltime_Check -= Time.deltaTime;
+
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(3).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(R_Cooltime_Check).ToString();
+            }
         }
         else
         {
             R_Cooltime_Check = 0;
             R_Skill = true;
+
+            SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(false);
+            SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(false);
         }
 
     }
@@ -297,6 +353,8 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
 
                 // 수류탄 던지기를 포톤 RPC로 동기화
                 PV.RPC("ThrowGrenade", RpcTarget.All, GrenadeSpawnPoint.position, throwDirection);
+                Q_Cooltime_Check = Q_Cooltime; // 1
+                Q_Skill = false;
             }
         }
 
@@ -334,6 +392,8 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
             // 파티클을 포톤 RPC로 동기화
             PV.RPC("PlayHeysteParticles", RpcTarget.All);
             Invoke("StopHeyste", 10.0f);
+            W_Cooltime_Check = W_Cooltime; // 1
+            W_Skill = false;
         }
     }
 
@@ -371,7 +431,8 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
             // RPC를 통해 화살 발사 동기화
             PV.RPC("ActivateESkillAnimation", RpcTarget.All);
             StartCoroutine(FireArrows(3));
-
+            E_Cooltime_Check = E_Cooltime; // 1
+            E_Skill = false;
         }
     }
 
@@ -431,6 +492,9 @@ public class Archer_Skill : MonoBehaviourPunCallbacks
 
                 // 화살 발사 및 RPC 호출
                 StartCoroutine(FireArrows(5));
+
+                R_Cooltime_Check = R_Cooltime; // 1
+                R_Skill = false;
             }
         }
     }

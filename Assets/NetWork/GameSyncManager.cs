@@ -94,24 +94,46 @@ public class GameSyncManager : MonoBehaviourPunCallbacks
                 switch (myCharacter.name)
                 {
                     case "Warrior":
+                        for (int j = 0; j < 4; j++)
+                        {
+                            SkillIcon.transform.GetChild(j).GetComponent<Image>().sprite = myCharacter.GetComponent<Warrior_Skill>().SkillIcons[j];
+                        }
+                        myCharacter.GetComponent<Warrior_Skill>().SKillIconUI=SkillIcon;
                         break;
                     case "Paladin":
+                        for (int j = 0; j < 4; j++)
+                        {
+                            SkillIcon.transform.GetChild(j).GetComponent<Image>().sprite = myCharacter.GetComponent<PaladinCharacterController>().SkillIcons[j];
+                        }
+                        myCharacter.GetComponent<PaladinCharacterController>().SKillIconUI=SkillIcon;
                         break;
                     case "Mage":
                         for (int j = 0; j < 4; j++)
                         {
                             SkillIcon.transform.GetChild(j).GetComponent<Image>().sprite = myCharacter.GetComponent<MageCharacterSkill>().SkillIcons[j];
                         }
+                        myCharacter.GetComponent<MageCharacterSkill>().SKillIconUI=SkillIcon;
                         break;
                     case "Healer":
                         for (int j = 0; j < 4; j++)
                         {
                             SkillIcon.transform.GetChild(j).GetComponent<Image>().sprite = myCharacter.GetComponent<HealerCharacterSkill>().SkillIcons[j];
                         }
+                        myCharacter.GetComponent<HealerCharacterSkill>().SKillIconUI=SkillIcon;
                         break;
                     case "Ninja":
+                        for (int j = 0; j < 4; j++)
+                        {
+                            SkillIcon.transform.GetChild(j).GetComponent<Image>().sprite = myCharacter.GetComponent<Ninja_Skill>().SkillIcons[j];
+                        }
+                        myCharacter.GetComponent<Ninja_Skill>().SKillIconUI=SkillIcon;
                         break;
                     case "Archer":
+                        for (int j = 0; j < 4; j++)
+                        {
+                            SkillIcon.transform.GetChild(j).GetComponent<Image>().sprite = myCharacter.GetComponent<Archer_Skill>().SkillIcons[j];
+                        }
+                        myCharacter.GetComponent<Archer_Skill>().SKillIconUI=SkillIcon;
                         break;
                 }
             }

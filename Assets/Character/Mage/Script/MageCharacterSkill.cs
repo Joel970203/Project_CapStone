@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using Photon.Pun;
+using TMPro;
 public class MageCharacterSkill : MonoBehaviourPunCallbacks
 {
 
@@ -19,6 +20,8 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
     protected float R_Cooltime;
 
     public Sprite[] SkillIcons;
+
+    public GameObject SKillIconUI;
 
     [HideInInspector]
     public float Q_Cooltime_Check;
@@ -128,40 +131,88 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
         if (Q_Cooltime_Check >= 0)
         {
             Q_Cooltime_Check -= Time.deltaTime;
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(Q_Cooltime_Check).ToString();
+            }
             if (Q_Cooltime_Check <= 0)
             {
                 Q_Cooltime_Check = 0;
                 Q_Skill = true;
+
+                SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (W_Cooltime_Check >= 0)
         {
             W_Cooltime_Check -= Time.deltaTime;
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(W_Cooltime_Check).ToString();
+            }
             if (W_Cooltime_Check <= 0)
             {
                 W_Cooltime_Check = 0;
                 W_Skill = true;
+
+                SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (E_Cooltime_Check >= 0)
         {
             E_Cooltime_Check -= Time.deltaTime;
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(2).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(E_Cooltime_Check).ToString();
+            }
             if (E_Cooltime_Check <= 0)
             {
                 E_Cooltime_Check = 0;
                 E_Skill = true;
+
+                SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (R_Cooltime_Check >= 0)
         {
             R_Cooltime_Check -= Time.deltaTime;
+            if (SKillIconUI != null)
+            {
+                if (!SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.activeSelf)
+                {
+                    SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(true);
+                    SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(true);
+                }
+                SKillIconUI.transform.GetChild(3).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(R_Cooltime_Check).ToString();
+            }
             if (R_Cooltime_Check <= 0)
             {
                 R_Cooltime_Check = 0;
                 R_Skill = true;
+
+                SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(false);
+                SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(false);
             }
         }
     }
