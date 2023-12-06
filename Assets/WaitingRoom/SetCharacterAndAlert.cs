@@ -10,8 +10,6 @@ using TMPro;
 public class SetCharacterAndAlert : MonoBehaviourPunCallbacks
 {
     public string CharacterName;
-
-    public GameObject SettingUI;
     void Start()
     {
         this.gameObject.GetComponent<Button>().onClick.AddListener(OnClickButton);
@@ -31,7 +29,6 @@ public class SetCharacterAndAlert : MonoBehaviourPunCallbacks
                 if(!playerObject.GetComponent<WaitingRoomInfo>().CharacterOwnerCheck(CharacterName))
                 {
                     playerObject.GetComponent<WaitingRoomInfo>().SetCharacterNameAndAlert(CharacterName);
-                    SettingUI.SetActive(false);
                 }
                 return;
             }

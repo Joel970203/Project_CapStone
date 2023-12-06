@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-//using System.Numerics;
 
 public class Healer_Move : MonoBehaviourPunCallbacks
 {
@@ -56,18 +55,16 @@ public class Healer_Move : MonoBehaviourPunCallbacks
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                //agent.SetDestination(hit.point);
+                agent.SetDestination(hit.point);
                 anim.SetBool("Walk", true);
                 PV.RPC("SetWalkAnimationState", RpcTarget.Others, true);
-                PV.RPC("SetDestination",RpcTarget.All,hit.point);
             }
         }
         else if (agent.remainingDistance < 2f)
         {
             anim.SetBool("Walk", false);
-            //agent.ResetPath();
+            agent.ResetPath();
             PV.RPC("SetWalkAnimationState", RpcTarget.Others, false);
-            PV.RPC("ResetDestination",RpcTarget.All);
         }
     }
 
@@ -125,20 +122,8 @@ public class Healer_Move : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    void SetDestination(Vector3 position)
-    {
-        agent.SetDestination(position);
-    }
-
-    [PunRPC]
     void PerformDodgeAnimation()
     {
         anim.SetTrigger("Dodge");
-    }
-
-    [PunRPC]
-    void ResetDestination()
-    {
-        agent.ResetPath();
     }
 }

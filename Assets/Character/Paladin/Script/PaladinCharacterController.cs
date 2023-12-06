@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using TMPro;
 public class PaladinCharacterController : MonoBehaviourPunCallbacks
 {
     [SerializeField]
@@ -18,8 +17,6 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     protected float R_Cooltime;
 
     public Sprite[] SkillIcons;
-
-        public GameObject SKillIconUI;
 
     [HideInInspector]
     public float Q_Cooltime_Check;
@@ -80,11 +77,6 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
             if (Input.GetMouseButtonDown(0))
             {
-                Active_Base_Attack();
-            }
-
-            if (Input.GetMouseButtonDown(0))
-            {
                 //NormalAttack();
             }
 
@@ -124,86 +116,40 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
         if (Q_Cooltime_Check >= 0)
         {
             Q_Cooltime_Check -= Time.deltaTime;
-            if (SKillIconUI != null)
-            {
-                if (!SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.activeSelf)
-                {
-                    SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
-                    SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
-                }
-                SKillIconUI.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(Q_Cooltime_Check).ToString();
-            }
             if (Q_Cooltime_Check <= 0)
             {
                 Q_Cooltime_Check = 0;
                 Q_Skill = true;
-                SKillIconUI.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
-                SKillIconUI.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (W_Cooltime_Check >= 0)
         {
             W_Cooltime_Check -= Time.deltaTime;
-            if (SKillIconUI != null)
-            {
-                if (!SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.activeSelf)
-                {
-                    SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
-                    SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(true);
-                }
-                SKillIconUI.transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(W_Cooltime_Check).ToString();
-            }
             if (W_Cooltime_Check <= 0)
             {
                 W_Cooltime_Check = 0;
                 W_Skill = true;
-                SKillIconUI.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
-                SKillIconUI.transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (E_Cooltime_Check >= 0)
         {
             E_Cooltime_Check -= Time.deltaTime;
-            if (SKillIconUI != null)
-            {
-                if (!SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.activeSelf)
-                {
-                    SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
-                    SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(true);
-                }
-                SKillIconUI.transform.GetChild(2).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(E_Cooltime_Check).ToString();
-            }
             if (E_Cooltime_Check <= 0)
             {
                 E_Cooltime_Check = 0;
                 E_Skill = true;
-
-                SKillIconUI.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
-                SKillIconUI.transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
             }
         }
 
         if (R_Cooltime_Check >= 0)
         {
             R_Cooltime_Check -= Time.deltaTime;
-                        if (SKillIconUI != null)
-            {
-                if (!SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.activeSelf)
-                {
-                    SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(true);
-                    SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(true);
-                }
-                SKillIconUI.transform.GetChild(3).GetChild(1).GetComponent<TMP_Text>().text = Mathf.FloorToInt(R_Cooltime_Check).ToString();
-            }
             if (R_Cooltime_Check <= 0)
             {
                 R_Cooltime_Check = 0;
                 R_Skill = true;
-
-                SKillIconUI.transform.GetChild(3).GetChild(0).gameObject.SetActive(false);
-                SKillIconUI.transform.GetChild(3).GetChild(1).gameObject.SetActive(false);
             }
         }
     }
@@ -273,42 +219,6 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
         yield break;
     }
 
-    public void Active_Base_Attack()
-    {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {
-            anim.SetBool("Walk", false);
-            agent.ResetPath();
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                Vector3 targetPosition = hit.point;
-                Vector3 direction = targetPosition - transform.position;
-                direction.y = 0;
-                Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = targetRotation;
-            }
-
-            // 애니메이션을 동기화하는 RPC 호출
-            PV.RPC("SyncActiveBaseAttack", RpcTarget.All);
-        }
-    }
-
-    [PunRPC]
-    private void SyncActiveBaseAttack()
-    {
-        // 애니메이션을 재생하는 메서드 호출
-        PlayBaseAttackAnimation();
-    }
-
-    private void PlayBaseAttackAnimation()
-    {
-        // Base Attack 애니메이션 재생
-        anim.SetTrigger("Base Attack");
-    }
-
     public void Active_Q_Skill()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
@@ -321,8 +231,6 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 PV.RPC("Paladin_QSkill", RpcTarget.All, hit.point);
-                Q_Cooltime_Check = Q_Cooltime; // 1
-                Q_Skill = false;
             }
 
         }
@@ -374,8 +282,6 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 PV.RPC("Paladin_WSkill", RpcTarget.All, hit.point);
-                W_Cooltime_Check = W_Cooltime; // 1
-                W_Skill = false;
             }
 
         }
@@ -401,8 +307,6 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 PV.RPC("Paladin_ESkill", RpcTarget.All, hit.point);
-                E_Cooltime_Check = E_Cooltime; // 1
-                E_Skill = false;
             }
 
         }
@@ -423,16 +327,14 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
             anim.SetBool("Walk", false);
             agent.ResetPath();
 
-            int layerMask = 1 << LayerMask.NameToLayer("Moveable");
+            int layerMask = 1 << LayerMask.NameToLayer("Grave");
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
                 PV.RPC("Paladin_RSkill", RpcTarget.All, hit.point);
-                //StartCoroutine(TriggerRivival(hit.collider.gameObject, 10f));
-                R_Cooltime_Check = R_Cooltime; // 1
-                R_Skill = false;
+                StartCoroutine(TriggerRivival(hit.collider.gameObject, 4f));
             }
         }
 
@@ -442,9 +344,9 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     public void Paladin_RSkill(Vector3 Point)
     {
         ResetForward(Point, 60f, 0.2f);
-        SettingParticle(Feet.position, null, null, RCastingEffect, 1f);
+        SettingParticle(Point, Feet, RCastingEffect, null, 2.8f);
         anim.SetTrigger("RSkillTrigger");
-        StartCoroutine(RSkillDelay(10f));
+        StartCoroutine(RSkillDelay(4f));
 
     }
     IEnumerator RSkillDelay(float delay)
@@ -457,7 +359,7 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
     IEnumerator TriggerRivival(GameObject Grave, float delay)
     {
         yield return new WaitForSeconds(delay);
-        //Grave.GetComponent<RivivalCharacter>().rivival();
+        Grave.GetComponent<RivivalCharacter>().rivival();
         yield break;
     }
 }

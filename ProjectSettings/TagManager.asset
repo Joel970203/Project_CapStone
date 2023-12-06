@@ -10,7 +10,7 @@ TagManager:
   - Heal
   - Grenade
   - Terrain
-  - Unbeatable
+  - Item
   layers:
   - Default
   - TransparentFX

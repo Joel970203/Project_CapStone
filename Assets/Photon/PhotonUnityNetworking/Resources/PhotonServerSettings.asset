@@ -117,10 +117,25 @@ MonoBehaviour:
   - AlertReady
   - CharacterSetting
   - StartAndLoadScene
-  - SetDestination
-  - ResetDestination
-  - NotifyB
-  - NotifyBaseAttack
+  - SyncJudgeStateInAttack
+  - SyncJudgeStateInChase
+  - BaseAttack
+  - UseSkillP2S1RPC
+  - UseSkillP2S2RPC
+  - UseSkillP2S3RPC
+  - UseSkillP3S3RPC
+  - EndSkill
+  - UseSkillP1S1
+  - UseSkillP1S2
+  - UseSkillP1S3
+  - UseSkillP2S1
+  - UseSkillP2S2
+  - UseSkillP2S3
+  - UseSkillP3S3
+  - EndBaseAttack
+  - SetAttackRPC
+  - Phase1_Attack
+  - Phase2_Attack
   - NotifyP1S1
   - NotifyP1S2
   - NotifyP1S3
@@ -133,8 +148,13 @@ MonoBehaviour:
   - NotifySkillUsedP2S1
   - NotifySkillUsedP2S2
   - NotifySkillUsedP2S3
-  - Phase1_Attack
-  - Phase2_Attack
+  - NotifyB
+  - NotifyBaseAttack
+  - SendItemInfo
+  - NotifyClient
+  - NotifyItemSpawn
+  - RPC_TakeDamage
+  - PerformHitAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

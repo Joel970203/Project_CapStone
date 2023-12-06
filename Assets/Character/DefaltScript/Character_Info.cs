@@ -21,12 +21,12 @@ public class Character_Info : MonoBehaviour
     void Start()
     {
         HP=Max_HP;
-        Immotal=false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Immotal=false;
         if(HealthGlobe!=null)
         {
         float ratio = HP / Max_HP;
@@ -37,66 +37,20 @@ public class Character_Info : MonoBehaviour
     //보스에게 근접 공격 피격시 작동하는 이펙트
     private void OnTriggerEnter(Collider other) {
 
-        if (other.gameObject.CompareTag("BossAttack") && !Immotal)
+        if (other.gameObject.CompareTag("BossAttack")&&!Immotal)
         {
             //Vector3 characterCenter = transform.position; // 캐릭터 중심점
             //Vector3 BossCenter = other.gameObject.transform.position; // 적의 중심점
-            TakeDamage(20);
-        }
 
-        if (other.gameObject.CompareTag("Heal"))
-        {
-            if (other.gameObject.GetComponent<SkillHealAmount>())
-            {
-                TakeHeal((int)(other.gameObject.GetComponent<SkillHealAmount>().HealAmount));
-            }
-            other.enabled = false;
-        }
-        else
-        {
-            TakeHeal(20);
-            other.enabled = false;
-        }
+            // 타격 위치를 평균 위치로 설정
+            //Vector3 hitPoint = (characterCenter + BossCenter) / 2;
 
-        if(other.gameObject.CompareTag("Unbeatable"))
-        {
-            Immotal=true;
+            // 타격 이펙트를 생성하거나 처리
+            //GameObject spawnedHit =Instantiate(hitEffectPrefab, hitPoint, Quaternion.identity);
+
+            //TakeDamage(20);
         }
     }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.CompareTag("Heal"))
-        {
-            if (other.gameObject.GetComponent<SkillHealAmount>())
-            {
-                TakeHeal((int)(other.gameObject.GetComponent<SkillHealAmount>().HealAmount));
-                other.enabled = false;
-            }
-        }
-        else
-        {
-            TakeHeal(20);
-            other.enabled = false;
-        }
-
-        if(other.gameObject.CompareTag("Unbeatable"))
-        {
-            Immotal=true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.gameObject.CompareTag("Unbeatable"))
-        {
-            Immotal=false;
-        }
-    }
-
-
-
-
 
 
     public virtual void TakeDamage(float damage)
@@ -141,24 +95,5 @@ public class Character_Info : MonoBehaviour
     public float GetArmor() 
     {
         return armor;
-    }
-
-    public void SetArmor(int value) 
-    {
-        armor+=value;
-    }
-
-    public void IncreaseArmor(float value)
-    {
-        Debug.Log("잉크리즈 아머 "+value);
-        StartCoroutine(ArmorPlusTemporary(value));
-    }
-
-    IEnumerator ArmorPlusTemporary(float delay)
-    {
-        SetArmor(10);
-        yield return new WaitForSeconds(10);
-        SetArmor(-10);
-        yield break;
     }
 }

@@ -1,14 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 using Random = UnityEngine.Random;
 
-public class ItemSpawn : MonoBehaviour
+public class ItemSpawn : MonoBehaviourPunCallbacks
 {
-    const float tau = Mathf.PI * 2;
-    [SerializeField] float coolDown = 15f;
+    const float Tau = Mathf.PI * 2;
+    [SerializeField] float coolDown = 20f;
     [SerializeField] GameObject[] items;
     [SerializeField] float itemNumMax = 100f;
     [SerializeField] float spawnRadiusMin = 60f;
@@ -16,45 +14,50 @@ public class ItemSpawn : MonoBehaviour
     [SerializeField] float itemRadius = 10f;
     [SerializeField] float sphereCastRad = 30f;
 
-    // Start is called before the first frame update
+    bool isMasterClient = false;
+    bool coroutineStarted = false;
+    int ItemCnt;
     void Start()
     {
-        StartCoroutine(ItemCreaterCoroutine());
+        // 5초마다 Update 함수를 호출하여 원하는 작업을 수행합니다.
+        InvokeRepeating("CustomUpdate", 0f, 5f);
     }
-
-    // Update is called once per frame
-    IEnumerator ItemCreaterCoroutine()
+    void CustomUpdate()
     {
-        int coroutine_Num = 0;
-        while (coroutine_Num < itemNumMax)
+        isMasterClient = PhotonNetwork.IsMasterClient;
+        if (isMasterClient)
         {
-            yield return new WaitForSeconds(coolDown);
-            ItemCreater();
-            coroutine_Num++;
+            ItemCnt = GameObject.FindGameObjectsWithTag("Item").Length;
+            if(ItemCnt < itemNumMax)
+            {
+                StartCoroutine(ItemCreaterCoroutine());
+            }
+            else return;
         }
     }
-
-    void ItemCreater()
+    
+    IEnumerator ItemCreaterCoroutine()
     {
+        if (coroutineStarted)
+        {
+            yield break; // 이미 실행 중인 경우 중복 실행 방지
+        }
+        coroutineStarted = true;
         Vector3 spawn_Pos = MakeSpawnPos();
         RaycastHit hit;
         while (Physics.SphereCast(spawn_Pos, sphereCastRad, Vector3.up, out hit, 0f))
-        {
-            //Debug.Log("cc");
-            spawn_Pos = MakeSpawnPos();
-        }
-        var hitt = Physics.SphereCastAll(spawn_Pos, sphereCastRad, Vector3.up, 0f);
+        spawn_Pos = MakeSpawnPos();
         SpawnItem(spawn_Pos);
+        coroutineStarted = false;
     }
 
     Vector3 MakeSpawnPos()
     {
-        Vector3 pos_Center = new Vector3(564f,51f,516f);
+        Vector3 pos_Center = new Vector3(564f, 51f, 516f);
 
         float spawn_Radius = Random.Range(spawnRadiusMin, spawnRadiusMax);
-        float rand_Angle = Random.Range(0, tau);
-        
-        //원형 지형에 맞는 Sin은 X좌표, Cos은 Z좌표 담당 각도와 반지름은 랜덤으로 주어짐
+        float rand_Angle = Random.Range(0, Tau);
+
         float pos_X = pos_Center.x + spawn_Radius * Mathf.Sin(rand_Angle);
         float pos_Z = pos_Center.z + spawn_Radius * Mathf.Cos(rand_Angle);
 
@@ -65,9 +68,11 @@ public class ItemSpawn : MonoBehaviour
 
     void SpawnItem(Vector3 spawn_Pos)
     {
-        int rand_Num = Random.Range(0, items.Length);
-        GameObject item = items[rand_Num];
-
-        Instantiate(item, spawn_Pos, Quaternion.identity);
+        if (PhotonNetwork.IsConnected && isMasterClient)
+        {
+            int rand_Num = Random.Range(0, items.Length);
+            GameObject itemPrefab = items[rand_Num];
+            PhotonNetwork.Instantiate(itemPrefab.name, spawn_Pos, Quaternion.identity);
+        }
     }
 }
