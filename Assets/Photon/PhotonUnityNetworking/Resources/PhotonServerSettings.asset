@@ -119,6 +119,22 @@ MonoBehaviour:
   - StartAndLoadScene
   - SetDestination
   - ResetDestination
+  - NotifyB
+  - NotifyBaseAttack
+  - NotifyP1S1
+  - NotifyP1S2
+  - NotifyP1S3
+  - NotifyP2S1
+  - NotifyP2S2
+  - NotifyP2S3
+  - NotifySkillUsedP1S1
+  - NotifySkillUsedP1S2
+  - NotifySkillUsedP1S3
+  - NotifySkillUsedP2S1
+  - NotifySkillUsedP2S2
+  - NotifySkillUsedP2S3
+  - Phase1_Attack
+  - Phase2_Attack
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
