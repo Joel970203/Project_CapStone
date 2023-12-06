@@ -11,7 +11,7 @@ public class Mage_Move : MonoBehaviourPunCallbacks
 
     public bool AllStop = false;
 
-    public float RD=2f;
+    public float RD=0.1f;
     void Start()
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
