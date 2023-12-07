@@ -246,31 +246,31 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 160996, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7654371033025423788}
+      addedObject: {fileID: 4138992963458908826}
     - targetCorrespondingSourceObject: {fileID: 160996, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8778047836226469506}
+      addedObject: {fileID: 8533522607161401771}
   m_SourcePrefab: {fileID: 100100000, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
 --- !u!1 &4284365289243807553 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 160996, guid: d6cbeb13c773d154995ea9a66246a5c0, type: 3}
   m_PrefabInstance: {fileID: 4284365289243966373}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7654371033025423788
+--- !u!114 &4138992963458908826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4284365289243807553}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f90fe9080dbb440a8b944d11ccf7ee5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   castDelay: 1.5
   scriptName: SphereDamageHandler
---- !u!114 &8778047836226469506
+--- !u!114 &8533522607161401771
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

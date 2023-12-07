@@ -50,8 +50,17 @@ public class Boss_Info : MonoBehaviourPunCallbacks
     {
         if(BossHPUI.activeSelf==true)
         {
+            if(_hp<=0)
+            {
+                _hp=0;
+            }
             BossHPUI.GetComponent<TMP_Text>().text="X"+_hp.ToString();
         }
+    }
+
+    public void Death()
+    {
+
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -68,26 +77,19 @@ public class Boss_Info : MonoBehaviourPunCallbacks
         }
     }
 
-    public void Death()
-    {
-
-    }
-
     IEnumerator CheckPhase2()
     {   
-        while((float)HP / Max_HP > 0.99f) yield return null;
+        while((float)HP / Max_HP > 0.7f) yield return null;
 
         phaseNum = 2;
-        Debug.Log("2");
         StartCoroutine(CheckPhase3());
     }
 
     IEnumerator CheckPhase3()
     {   
-        while((float)HP / Max_HP > 0.3f) yield return null;
+        while((float)HP / Max_HP > 0.5f) yield return null;
 
         phaseNum = 3;
-        Debug.Log("3");
         StartCoroutine(CheckPhase4());
     }
 
@@ -95,7 +97,7 @@ public class Boss_Info : MonoBehaviourPunCallbacks
     {   
         while(HP > 0) yield return null;
 
-        Death();
+        phaseNum = 4;
     }
 
     public void SetPhaseNum(int num)

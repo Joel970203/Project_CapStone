@@ -20,7 +20,7 @@ public class SphereDamageHandler : MonoBehaviour
         {
             if (!isDot)
             {
-                Debug.Log("뎀" + num);
+                //Debug.Log(damage);
                 hits[num].transform.GetComponent<Character_Info>().TakeDamage(damage);
                 if (num == hitsNum - 1) this.enabled = false; //범위 내 플레이어에게 데미지를 다 줬으면 1회성 데미지이기에 스크립트 비활성화
             }

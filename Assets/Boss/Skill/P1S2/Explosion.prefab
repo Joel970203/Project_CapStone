@@ -24103,6 +24103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01dc6f2c856b642ffad37a0f973351fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 10
   isDot: 0
   radius: 38

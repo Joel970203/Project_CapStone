@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 using Random = UnityEngine.Random;
 
 public class ItemSpawn : MonoBehaviour
 {
+    PhotonView PV;
     const float tau = Mathf.PI * 2;
     [SerializeField] float coolDown = 15f;
     [SerializeField] GameObject[] items;
@@ -19,7 +20,12 @@ public class ItemSpawn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ItemCreaterCoroutine());
+        PV = GetComponent<PhotonView>();
+        if(PV.IsMine&&PhotonNetwork.IsMasterClient)
+        {   
+            StartCoroutine(ItemCreaterCoroutine());
+        }
+
     }
 
     // Update is called once per frame
@@ -29,11 +35,12 @@ public class ItemSpawn : MonoBehaviour
         while (coroutine_Num < itemNumMax)
         {
             yield return new WaitForSeconds(coolDown);
-            ItemCreater();
+            PV.RPC("ItemCreater", RpcTarget.All);
             coroutine_Num++;
         }
     }
 
+    [PunRPC]
     void ItemCreater()
     {
         Vector3 spawn_Pos = MakeSpawnPos();
