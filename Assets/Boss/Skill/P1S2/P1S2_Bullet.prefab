@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 19949918}
   - component: {fileID: 2907809924826899805}
   - component: {fileID: 871870481960494212}
-  - component: {fileID: 9168439529742069214}
+  - component: {fileID: 7400914529494041158}
   m_Layer: 12
   m_Name: P1S2_Bullet
   m_TagString: BossAttack
@@ -4770,7 +4770,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &9168439529742069214
+--- !u!114 &7400914529494041158
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4779,7 +4779,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 138232}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 796593f9cd86340bdb5f74572e056c28, type: 3}
+  m_Script: {fileID: 11500000, guid: f29f8550118f64cc7a4468a96edf0efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   effect: {fileID: 190680, guid: 43989fe877d974e56961d7ea81c9e7a0, type: 3}

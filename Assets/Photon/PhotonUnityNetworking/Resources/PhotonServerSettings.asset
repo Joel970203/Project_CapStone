@@ -145,6 +145,7 @@ MonoBehaviour:
   - NotifySkillUsedP3S3
   - NotifySkillUsedP3S4
   - NotifySkillUsedP3S5
+  - Phase3_Attack
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

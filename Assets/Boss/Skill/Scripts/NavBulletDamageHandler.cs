@@ -12,6 +12,7 @@ public class NavBulletDamageHandler : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            other.GetComponent<Character_Info>().TakeDamage(damage);
             Vector3 targetPoint = transform.position;
             targetPoint.y = customY;
             GameObject targetEffect = Instantiate(effect, targetPoint, Quaternion.identity);

@@ -328,12 +328,15 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
 
     void ChangePhase()
     {
-        StartCoroutine(PhaseDelay());
+        isCoroutineFinished = false;
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
         agent.ResetPath();
+        isRotate = false;
         currentTarget = null;
         state = State.Idle;
+        
+        StartCoroutine(PhaseDelay());
 
         switch (currentPhase)
         {
@@ -356,8 +359,6 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
     //페이즈 하는 동안 딜레이 주는 함수
     IEnumerator PhaseDelay()
     {
-        isCoroutineFinished = false;
-
         switch (currentPhase)
         {
             case 2:
@@ -704,6 +705,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
     void Phase3_Attack()
     {
         if (PhotonNetwork.IsMasterClient)
