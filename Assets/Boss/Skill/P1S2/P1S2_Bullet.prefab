@@ -4779,8 +4779,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 138232}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f467eb6f674734a39a51330e93ccb552, type: 3}
+  m_Script: {fileID: 11500000, guid: 796593f9cd86340bdb5f74572e056c28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   effect: {fileID: 190680, guid: 43989fe877d974e56961d7ea81c9e7a0, type: 3}
   customY: 51.5
+  isDamage: 0
+  damage: 0

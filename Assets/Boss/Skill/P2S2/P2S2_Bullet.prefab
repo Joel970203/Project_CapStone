@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 19949918}
   - component: {fileID: -1757897131884023957}
   - component: {fileID: 2907809924826899805}
-  - component: {fileID: 202731642447171267}
   - component: {fileID: 6434213649336725632}
+  - component: {fileID: 1138269439245298150}
   m_Layer: 12
   m_Name: P2S2_Bullet
   m_TagString: BossAttack
@@ -3506,9 +3506,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
-    type: 0
+    type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
@@ -3685,11 +3685,11 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 128
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -4771,22 +4771,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 11
   m_Center: {x: 0, y: 1.3734002, z: 0.1}
---- !u!114 &202731642447171267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 138232}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f467eb6f674734a39a51330e93ccb552, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effect: {fileID: 192648, guid: d42426c8c63ab4444b47f513d84377ac, type: 3}
-  customY: 65
-  isDamage: 1
-  damage: 50
 --- !u!195 &6434213649336725632
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4809,3 +4793,18 @@ NavMeshAgent:
   m_BaseOffset: 21.180298
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 1
+--- !u!114 &1138269439245298150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ebecad7a88dd469497bbbd535f3093d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 60
+  customY: 65
+  effect: {fileID: 192648, guid: d42426c8c63ab4444b47f513d84377ac, type: 3}

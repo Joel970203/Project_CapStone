@@ -5265,9 +5265,6 @@ PrefabInstance:
       addedObject: {fileID: 7382836985165078902}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8499378261755794480}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 5106912964527811255}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4f1c2f643c70e4b439e533c935e151e9, type: 3}
       insertIndex: -1
@@ -5466,30 +5463,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Max_HP: 1000
-  HP: 1000
   armor: 0
---- !u!114 &8499378261755794480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8465875080104350715}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35bd842d1e9ba4bb1a7598055034bf02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coolDown: 30
-  items:
-  - {fileID: 6842309005120179054, guid: 45419957d5e0a4e50922eb5cfbdd0982, type: 3}
-  - {fileID: 6842309005120179054, guid: b6438159dc6b245ebae0ad8eab960d53, type: 3}
-  - {fileID: 6842309005120179054, guid: 2c986a36b1c8f49e29420bf899a498b1, type: 3}
-  itemNumMax: 100
-  spawnRadiusMin: 60
-  spawnRadiusMax: 250
-  itemRadius: 10
-  sphereCastRad: 30
+  _hp: 0
 --- !u!114 &5106912964527811255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5534,9 +5509,11 @@ MonoBehaviour:
   P4S1_TargettingEffect: {fileID: 0}
   P4S2_TargettingEffect: {fileID: 0}
   model: {fileID: 8540377270008018459}
+  floor: {fileID: 0}
   sword: {fileID: 5536144664209128629}
   swordVfx: {fileID: 2472234402949931305}
   swordParticle: {fileID: 5556299056059204334}
+  lava: {fileID: 0}
   currentTarget: {fileID: 0}
   rotationSpeed: 500
   chaseRange: 150
