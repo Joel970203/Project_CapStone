@@ -21,14 +21,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Sword5_Material_Red
-  m_Shader: {fileID: 4800000, guid: f0cab3d394676424baaa85315e6f34ab, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0b2f64111a00e4ac2b1a52278fc90684, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   m_InvalidKeywords:
   - _METALLICGLOSSMAP
-  - _METALLICSPECGLOSSMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BlendMap:
-        m_Texture: {fileID: 2800000, guid: cf519ba4e29524b45bcb6333bb81978a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2e65b85fb29b143b9aa2c8faf7caf84d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
