@@ -745,7 +745,6 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
 
         yield return new WaitForSeconds(1.0f);
         EndSkill();
-        anim.SetTrigger("P1S1");
         //StartCoroutine(MakeEffect(null, null, null, 0f, transform, P1S1_TargettingEffect, 1.7f, 0f, 52.5f, 2.0f));
     }
 
@@ -957,7 +956,6 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         EndSkill();
         yield return new WaitForSeconds(8.0f);
         isP2P3 = false;
-        anim.SetTrigger("Idle");
     }
 
 /*
