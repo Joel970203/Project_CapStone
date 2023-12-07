@@ -9,12 +9,16 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
 
     PhotonView PV;
     private GameObject weapon;
-
+    
+    private Character_Info characterInfo;
     [SerializeField] private ParticleSystem weaponParticles;
     [SerializeField] private ParticleSystem Q_Particles;
     [SerializeField] private ParticleSystem W_Particles;
     [SerializeField] private ParticleSystem E_Particles;
+    [SerializeField] private ParticleSystem E_Particles2;
     [SerializeField] private ParticleSystem R_Particles;
+    
+    bool Counter = false;
 
     [SerializeField]
     protected float Q_Cooltime;
@@ -53,6 +57,7 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
         R_Skill = true;
         Base_Attack = true;
         anim = GetComponent<Animator>();
+        characterInfo = GetComponent<Character_Info>();
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         PV = GetComponent<PhotonView>();
     }
@@ -416,14 +421,36 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
     {
         anim.SetTrigger("E");
         E_Particles.Play();
+        Counter = true;
         Invoke("StopAndClearEParticles", 3f);
     }
 
+    private void OnCollisionEnter(Collision other)
+    {   if(Counter)
+        {
+            PV.RPC("SyncEParticles2", RpcTarget.AllViaServer);
+        }
+    }
+        
+    [PunRPC]
+    private void SyncEParticles2()
+    {
+        E_Particles2.Play();
+        Invoke("StopAndClearE2Particles", 2f);
+    }
+
     // 포톤 RPC로 호출되는 메서드 내에서 E 파티클을 정지하고 초기화.
+    private void StopAndClearE2Particles()
+    {
+        E_Particles2.Stop();
+        E_Particles2.Clear();
+        Counter = false;
+    }
     private void StopAndClearEParticles()
     {
         E_Particles.Stop();
         E_Particles.Clear();
+        Counter = false;
     }
 
     public void Active_R_Skill()
@@ -435,6 +462,7 @@ public class Warrior_Skill : MonoBehaviourPunCallbacks
             PV.RPC("SyncRParticles", RpcTarget.AllViaServer);
             Invoke("StopParticles", 10f);
             R_Cooltime_Check = R_Cooltime; // 1
+            characterInfo.preventHpDrop = true;
             R_Skill = false;
         }
     }

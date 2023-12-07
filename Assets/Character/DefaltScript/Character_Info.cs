@@ -9,7 +9,7 @@ public class Character_Info : MonoBehaviour
     [SerializeField] public float HP;
 
     [SerializeField] private int AD;
-
+    public bool preventHpDrop;
     [SerializeField] private float armor;
 
     [SerializeField] private GameObject hitEffectPrefab;
@@ -22,6 +22,10 @@ public class Character_Info : MonoBehaviour
     {
         HP=Max_HP;
         Immotal=false;
+        if(preventHpDrop)
+        {
+            StartCoroutine(PreventHpDropCoroutine(5f));
+        }
     }
 
     // Update is called once per frame
@@ -32,8 +36,25 @@ public class Character_Info : MonoBehaviour
         float ratio = HP / Max_HP;
 		HealthGlobe.rectTransform.localPosition = new Vector3(0, HealthGlobe.rectTransform.rect.height * ratio - HealthGlobe.rectTransform.rect.height, 0);
         }
+        if(preventHpDrop)
+        {
+            StartCoroutine(PreventHpDropCoroutine(5f));
+        }
     }
 
+    private IEnumerator PreventHpDropCoroutine(float duration)
+    {
+        // 5초 동안 HP가 1 이하로 내려가지 않도록 함
+        for (float timer = 0; timer < duration; timer += Time.deltaTime)
+        {
+            if (HP <= 1f)
+            {
+                HP = Mathf.Max(1f, HP); // HP가 1 이하로 내려가지 않도록 함
+            }
+            preventHpDrop=false;
+            yield return null;
+        }
+    }
     //보스에게 근접 공격 피격시 작동하는 이펙트
     private void OnTriggerEnter(Collider other) {
 
