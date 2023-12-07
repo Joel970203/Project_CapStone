@@ -327,7 +327,7 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
                 PV.RPC("HealerQSkill", RpcTarget.AllViaServer, hit.point);
-                                Q_Cooltime_Check = Q_Cooltime; // 1
+                Q_Cooltime_Check = Q_Cooltime; // 1
                 Q_Skill = false;
             }
         }
@@ -375,8 +375,8 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
                 else
                 {
                     PV.RPC("HealerWSkill", RpcTarget.AllViaServer, hit.point);
-                                    W_Cooltime_Check = W_Cooltime; // 1
-                W_Skill = false;
+                    W_Cooltime_Check = W_Cooltime; // 1
+                    W_Skill = false;
                 }
             }
         }
@@ -408,7 +408,7 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
                 PV.RPC("HealerESkill", RpcTarget.AllViaServer, hit.point);
-                                E_Cooltime_Check = E_Cooltime; // 1
+                E_Cooltime_Check = E_Cooltime; // 1
                 E_Skill = false;
             }
         }
@@ -428,7 +428,7 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
 
         GameObject[] temp = GameObject.FindGameObjectsWithTag("Player");
 
-        for(int i=0;i<temp.Length;i++)
+        for (int i = 0; i < temp.Length; i++)
         {
             try
             {
@@ -456,7 +456,7 @@ public class HealerCharacterSkill : MonoBehaviourPunCallbacks
             {
                 PV.RPC("HealerRSkill", RpcTarget.AllViaServer, hit.point);
                 StartCoroutine(TriggerRivival(hit.collider.gameObject, 4f));
-                                R_Cooltime_Check = R_Cooltime; // 1
+                R_Cooltime_Check = R_Cooltime; // 1
                 R_Skill = false;
             }
         }

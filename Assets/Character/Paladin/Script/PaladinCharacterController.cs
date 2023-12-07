@@ -354,7 +354,7 @@ public class PaladinCharacterController : MonoBehaviourPunCallbacks
 
         agent.SetDestination(Point);
         QCastingEffect.SetActive(true);
-        QCastingEffect.transform.GetChild(0).transform.Find("AttackRange").GetComponent<Collider>().enabled = true;
+        //QCastingEffect.transform.GetChild(0).transform.Find("AttackRange").GetComponent<Collider>().enabled = true;
         yield return new WaitForSeconds(Time);
         agent.ResetPath();
 

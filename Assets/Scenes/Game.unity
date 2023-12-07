@@ -4697,6 +4697,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7382836985165078902, guid: b17cf94d17d584779988030056ca17a1, type: 3}
+      propertyPath: BossHPUI
+      value: 
+      objectReference: {fileID: 1995163585}
     - target: {fileID: 8465875080104350715, guid: b17cf94d17d584779988030056ca17a1, type: 3}
       propertyPath: m_Name
       value: new Boss
@@ -7552,6 +7556,34 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1850058129}
   m_CullTransparentMesh: 1
+--- !u!1 &1858383911 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6257942983251840493, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+  m_PrefabInstance: {fileID: 9078125596089720881}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1858383913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858383911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1 &1870098383
 GameObject:
   m_ObjectHideFlags: 0
@@ -9149,6 +9181,10 @@ PrefabInstance:
       value: Archer
       objectReference: {fileID: 0}
     - target: {fileID: 3446598832045624655, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3446598832045624655, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -9778,6 +9814,10 @@ PrefabInstance:
       value: Ninja
       objectReference: {fileID: 0}
     - target: {fileID: 6784897925963828146, guid: 2340b2ab528de1143a2f24f2fd0b7a5b, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6784897925963828146, guid: 2340b2ab528de1143a2f24f2fd0b7a5b, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -9832,6 +9872,10 @@ PrefabInstance:
     - target: {fileID: 1670065946705931501, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
       propertyPath: m_Name
       value: Paladin
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670065946705931501, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1670065946705931501, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
       propertyPath: m_IsActive
@@ -9925,6 +9969,30 @@ PrefabInstance:
       propertyPath: SkillIcons.Array.data[3]
       value: 
       objectReference: {fileID: 21300000, guid: 61dab0b6e506c6a43b12d9fde15b2393, type: 3}
+    - target: {fileID: 4702299778595324105, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4702299778595324105, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4702299778595324105, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7514018320705279359, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734017231154115028, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_Height
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734017231154115028, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -9941,6 +10009,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1670065946705931501, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1018846394}
+    - targetCorrespondingSourceObject: {fileID: 6257942983251840493, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1858383913}
   m_SourcePrefab: {fileID: 100100000, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

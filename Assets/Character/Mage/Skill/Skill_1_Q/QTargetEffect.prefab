@@ -43242,11 +43242,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4695539424016632549, guid: 4bd600e827be5e144970839614ae2ecb, type: 3}
       propertyPath: m_Height
-      value: 7
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4695539424016632549, guid: 4bd600e827be5e144970839614ae2ecb, type: 3}
       propertyPath: m_Radius
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7727256907881708536, guid: 4bd600e827be5e144970839614ae2ecb, type: 3}
       propertyPath: m_LocalPosition.x

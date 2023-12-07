@@ -320,6 +320,7 @@ public class MageCharacterSkill : MonoBehaviourPunCallbacks
         GameObject EnergyBolt = Instantiate(NormalAttackObject, CastingPosition.position, CastingPosition.rotation);
         Rigidbody EnergyBoltRigid = EnergyBolt.GetComponent<Rigidbody>();
         EnergyBoltRigid.velocity = (HitPoint - this.transform.position).normalized * 70f;
+        EnergyBolt.transform.GetChild(3).gameObject.GetComponent<CapsuleCollider>().enabled=true;
         yield break;
     }
 
