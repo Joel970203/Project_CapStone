@@ -4178,6 +4178,10 @@ PrefabInstance:
       propertyPath: _hp
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 7382836985165078902, guid: b17cf94d17d584779988030056ca17a1, type: 3}
+      propertyPath: BossHPUI
+      value: 
+      objectReference: {fileID: 1995163585}
     - target: {fileID: 8465875080104350715, guid: b17cf94d17d584779988030056ca17a1, type: 3}
       propertyPath: m_Name
       value: new Boss
@@ -8237,7 +8241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1865874949465064272, guid: 75f2d67ec9bec7d4a92f85c036933126, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 429.1
+      value: 495.9
       objectReference: {fileID: 0}
     - target: {fileID: 1865874949465064272, guid: 75f2d67ec9bec7d4a92f85c036933126, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8245,7 +8249,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1865874949465064272, guid: 75f2d67ec9bec7d4a92f85c036933126, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1052.9
+      value: 1171.2
       objectReference: {fileID: 0}
     - target: {fileID: 1865874949465064272, guid: 75f2d67ec9bec7d4a92f85c036933126, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8274,6 +8278,10 @@ PrefabInstance:
     - target: {fileID: 1865874949465064272, guid: 75f2d67ec9bec7d4a92f85c036933126, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3321441531518114083, guid: 75f2d67ec9bec7d4a92f85c036933126, type: 3}
+      propertyPath: m_Radius
+      value: 0.59
       objectReference: {fileID: 0}
     - target: {fileID: 3677261231712579667, guid: 75f2d67ec9bec7d4a92f85c036933126, type: 3}
       propertyPath: sceneViewId
