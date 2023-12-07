@@ -3023,7 +3023,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -362, y: -34}
+  m_AnchoredPosition: {x: 0, y: 115}
   m_SizeDelta: {x: 1000, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &818522350
@@ -6560,7 +6560,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -911, y: -34}
+  m_AnchoredPosition: {x: -546, y: 115}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1658607882
@@ -8091,6 +8091,7 @@ MonoBehaviour:
   Max_HP: 100
   HP: 0
   AD: 0
+  preventHpDrop: 0
   armor: 0
   hitEffectPrefab: {fileID: 0}
   HealthGlobe: {fileID: 0}
@@ -9066,6 +9067,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7521999388226367423, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
+      propertyPath: sceneViewId
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 8397192160131875608, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
       propertyPath: R_Aura
       value: 
@@ -9893,6 +9898,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 2470210071494128852, guid: bcbc7e49c75c1434ca51d760261a1445, type: 3}
+      propertyPath: BossHPUI
+      value: 
+      objectReference: {fileID: 1995163585}
     - target: {fileID: 3815415063924293229, guid: bcbc7e49c75c1434ca51d760261a1445, type: 3}
       propertyPath: m_LocalPosition.x
       value: 522.4
@@ -10058,6 +10067,26 @@ PrefabInstance:
       propertyPath: SkillIcons.Array.data[3]
       value: 
       objectReference: {fileID: 21300000, guid: 61dab0b6e506c6a43b12d9fde15b2393, type: 3}
+    - target: {fileID: 4702299778595324105, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4702299778595324105, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4702299778595324105, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734017231154115028, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_Height
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734017231154115028, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

@@ -50,6 +50,10 @@ public class Boss_Info : MonoBehaviourPunCallbacks
     {
         if(BossHPUI.activeSelf==true)
         {
+            if(_hp<=0)
+            {
+                _hp=0;
+            }
             BossHPUI.GetComponent<TMP_Text>().text="X"+_hp.ToString();
         }
     }
@@ -75,7 +79,7 @@ public class Boss_Info : MonoBehaviourPunCallbacks
 
     IEnumerator CheckPhase2()
     {   
-        while((float)HP / Max_HP > 0.99f) yield return null;
+        while((float)HP / Max_HP > 0.7f) yield return null;
 
         phaseNum = 2;
         StartCoroutine(CheckPhase3());
@@ -83,7 +87,7 @@ public class Boss_Info : MonoBehaviourPunCallbacks
 
     IEnumerator CheckPhase3()
     {   
-        while((float)HP / Max_HP > 0.95f) yield return null;
+        while((float)HP / Max_HP > 0.5f) yield return null;
 
         phaseNum = 3;
         StartCoroutine(CheckPhase4());

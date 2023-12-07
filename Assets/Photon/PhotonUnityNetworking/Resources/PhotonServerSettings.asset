@@ -137,6 +137,17 @@ MonoBehaviour:
   - Phase2_Attack
   - ItemCreater
   - SyncEParticles2
+  - NotifyP3S1
+  - NotifyP3S2
+  - NotifyP3S3
+  - NotifyP3S4
+  - NotifyP3S5
+  - NotifySkillUsedP3S1
+  - NotifySkillUsedP3S2
+  - NotifySkillUsedP3S3
+  - NotifySkillUsedP3S4
+  - NotifySkillUsedP3S5
+  - Phase3_Attack
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
