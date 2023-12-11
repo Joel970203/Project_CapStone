@@ -5,7 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using Random = UnityEngine.Random;
 
-public class ItemSpawn : MonoBehaviour
+public class ItemSpawn : MonoBehaviourPunCallbacks 
 {
     PhotonView PV;
     const float tau = Mathf.PI * 2;
