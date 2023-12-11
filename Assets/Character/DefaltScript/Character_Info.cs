@@ -73,13 +73,14 @@ public class Character_Info : MonoBehaviour
             {
                 TakeHeal((int)(other.gameObject.GetComponent<SkillHealAmount>().HealAmount));
             }
+                else
+            {
+                TakeHeal(20);
+                other.enabled = false;
+            }
             other.enabled = false;
         }
-        else
-        {
-            TakeHeal(20);
-            other.enabled = false;
-        }
+ 
 
         if(other.gameObject.CompareTag("Unbeatable"))
         {
@@ -96,12 +97,13 @@ public class Character_Info : MonoBehaviour
                 TakeHeal((int)(other.gameObject.GetComponent<SkillHealAmount>().HealAmount));
                 other.enabled = false;
             }
+            else
+            {
+                TakeHeal(20);
+                other.enabled = false;
+            }
         }
-        else
-        {
-            TakeHeal(20);
-            other.enabled = false;
-        }
+
 
         if(other.gameObject.CompareTag("Unbeatable"))
         {

@@ -7055,6 +7055,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Archer
       objectReference: {fileID: 0}
+    - target: {fileID: 6042036845868150892, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
+      propertyPath: Max_HP
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521999388226367423, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
+      propertyPath: sceneViewId
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8397192160131875608, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
       propertyPath: arrowPrefab
       value: 
@@ -7062,7 +7070,7 @@ PrefabInstance:
     - target: {fileID: 8397192160131875608, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
       propertyPath: grenadePrefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 3659533174477016465, guid: a82782a828d3e6b48b9619122dc94eba, type: 3}
     - target: {fileID: 9184570530376958968, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
       propertyPath: slotUI.Array.data[0]
       value: 
@@ -7189,6 +7197,10 @@ PrefabInstance:
       propertyPath: Grave
       value: 
       objectReference: {fileID: 1677125707499528, guid: ba91113dd2db6e940b586a4c446d7190, type: 3}
+    - target: {fileID: 4664444000186581899, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
+      propertyPath: Max_HP
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 5973233292204930999, guid: 9614f75a66a6ae842a1a7741b235eeaa, type: 3}
       propertyPath: sceneViewId
       value: 8
@@ -7414,6 +7426,10 @@ PrefabInstance:
       propertyPath: Grave
       value: 
       objectReference: {fileID: 1677125707499528, guid: ba91113dd2db6e940b586a4c446d7190, type: 3}
+    - target: {fileID: 8427195613274467975, guid: 584a9d5de25548b4bbc0b5f4fbc43b05, type: 3}
+      propertyPath: Max_HP
+      value: 500
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7552,7 +7568,7 @@ PrefabInstance:
       objectReference: {fileID: 1677125707499528, guid: ba91113dd2db6e940b586a4c446d7190, type: 3}
     - target: {fileID: 3940894508816711260, guid: 75f2d67ec9bec7d4a92f85c036933126, type: 3}
       propertyPath: Max_HP
-      value: 100
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 7750894192802644826, guid: 75f2d67ec9bec7d4a92f85c036933126, type: 3}
       propertyPath: healParticle
@@ -7725,9 +7741,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7512522980850240191, guid: 2340b2ab528de1143a2f24f2fd0b7a5b, type: 3}
+      propertyPath: HP
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7512522980850240191, guid: 2340b2ab528de1143a2f24f2fd0b7a5b, type: 3}
       propertyPath: Grave
       value: 
       objectReference: {fileID: 1677125707499528, guid: ba91113dd2db6e940b586a4c446d7190, type: 3}
+    - target: {fileID: 7512522980850240191, guid: 2340b2ab528de1143a2f24f2fd0b7a5b, type: 3}
+      propertyPath: Max_HP
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 8321582413891661827, guid: 2340b2ab528de1143a2f24f2fd0b7a5b, type: 3}
       propertyPath: sceneViewId
       value: 2
@@ -7966,6 +7990,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1918433228}
     m_Modifications:
+    - target: {fileID: 764514748261004667, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
+      propertyPath: Max_HP
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 1670065946705931501, guid: 29e8601b50d8e214b8fc493399f65f6e, type: 3}
       propertyPath: m_Name
       value: Paladin
