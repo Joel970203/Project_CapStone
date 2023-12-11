@@ -492,13 +492,13 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
 
         if (nearTarget != null)
         {
-            if (distanceToTarget >= agent.stoppingDistance) SetChase(nearTarget); //공격 범위 밖이면 추격 상태로
+            if (distanceToTarget >= agent.stoppingDistance) SetChaseRPC(nearTarget); //공격 범위 밖이면 추격 상태로
             else SetAttack(nearTarget); //안이면 공격 상태로
         }
         //else Debug.Log("범위 내에 플레이어가 없음");
 
         currentHP = this.GetComponent<Boss_Info>().HP;
-        if (previousHP != currentHP) SetChase(FindFarTarget());
+        if (previousHP != currentHP) SetChaseRPC(FindFarTarget());
     }
 
     void JudgeStateInChase()
@@ -543,7 +543,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         {
             if (distanceToTarget >= agent.stoppingDistance) //공격 범위 밖이라면 쫓아가도록
             {
-                SetChase(nearTarget);
+                SetChaseRPC(nearTarget);
             }
             else //공격 범위 안이면 공격
             {
@@ -554,7 +554,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         {   //idle->attack 이던 chase->attack 이던 currentTarget이 존재한채로 오게 됨 nearTarget이 없으면 따라가게 끝 타이머를 키고 chase로 보냄
             chaseTime_Check = chaseDuration;
             isChaseTimerSet = true;
-            SetChase(currentTarget);
+            SetChaseRPC(currentTarget);
 
             return;
         }
@@ -572,17 +572,23 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         currentTarget = null;
         previousHP = this.GetComponent<Boss_Info>().HP;
     }
+    
+    void SetChaseRPC(Transform Target)
+    {
+        state = State.Chase;
+        anim.SetTrigger("Chase");
+        currentTarget = Target;
+        agent.SetDestination(currentTarget.position);
+        PV.RPC("SetChase", RpcTarget.All);
+    }
 
-    void SetChase(Transform nearTarget)
+    [PunRPC]
+    void SetChase()
     {
         state = State.Chase; //상태를 추격(Chase) 상태로 바꿈
         anim.SetTrigger("Chase");
-
         if (!isChaseTimerSet) isChaseTimerSet = true;
         chaseTime_Check = chaseDuration;
-
-        currentTarget = nearTarget;
-        agent.SetDestination(currentTarget.position);
         if (agent.isStopped) agent.isStopped = false;
     }
 
@@ -648,7 +654,6 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
                 return;
         }
     }
-
     [PunRPC]
     void Phase1_Attack(PhotonMessageInfo info)
     {
@@ -757,7 +762,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
                 }
             }
         }
-
+        distanceToTarget = minDistance;
         return nearTarget;
     }
 
@@ -1070,7 +1075,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
     [PunRPC]
     void NotifySkillUsedP2S2()
     {
-        PV.RPC("NotifyP2S2", RpcTarget.All);
+        PV.RPC("NotifyP2S2", RpcTarget.Others);
     }
 
     [PunRPC]
