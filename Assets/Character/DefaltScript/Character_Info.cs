@@ -20,6 +20,8 @@ public class Character_Info : MonoBehaviour
 
     public GameObject Grave;
 
+    public CapsuleCollider capsuleCollider;
+
     void Start()
     {
         HP=Max_HP;
@@ -28,6 +30,7 @@ public class Character_Info : MonoBehaviour
         {
             StartCoroutine(PreventHpDropCoroutine(5f));
         }
+        capsuleCollider=GetComponent<CapsuleCollider>();
     }
 
     // Update is called once per frame
@@ -42,6 +45,7 @@ public class Character_Info : MonoBehaviour
         {
             StartCoroutine(PreventHpDropCoroutine(5f));
         }
+        capsuleCollider.enabled = true;
     }
 
     private IEnumerator PreventHpDropCoroutine(float duration)
