@@ -7816,6 +7816,18 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 7521999388226367423, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521999388226367423, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
+      propertyPath: ObservedComponents.Array.data[2]
+      value: 
+      objectReference: {fileID: 1952625745}
+    - target: {fileID: 7521999388226367423, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
+      propertyPath: ObservedComponents.Array.data[3]
+      value: 
+      objectReference: {fileID: 1952625743}
     - target: {fileID: 8397192160131875608, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
       propertyPath: R_Aura
       value: 
@@ -7864,7 +7876,8 @@ PrefabInstance:
       propertyPath: SkillIcons.Array.data[3]
       value: 
       objectReference: {fileID: 21300000, guid: 125bb49b217257347be09ede099b888d, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2864100424575382102, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2638854075393464309, guid: 6d1cdaa9462fda842b54b8066191b4e6, type: 3}
