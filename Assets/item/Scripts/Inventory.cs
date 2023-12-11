@@ -13,7 +13,7 @@ using Image = UnityEngine.UI.Image;
 public class Inventory
 {
     Dictionary<ItemType, Item> itemList = new Dictionary<ItemType, Item>();
-    ItemType[] slotArr = new ItemType[6]; //슬롯 번호에 해당되는 아이템 타입의 정보가 들어간다.
+    ItemType[] slotArr = new ItemType[3]; //슬롯 번호에 해당되는 아이템 타입의 정보가 들어간다.
 
     GameObject[] slotUI;
     bool dupFlag = false; //중복됐는지를 확인하는 플레그
@@ -22,7 +22,7 @@ public class Inventory
     public void setSlot(GameObject[] slotUI)
     {
         this.slotUI = slotUI;
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 3; i++)
         {
             slotArr[i] = ItemType.Nothing;
         }
@@ -35,7 +35,7 @@ public class Inventory
 
         ItemType newItemType = newItem.type;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 3; i++)
         {
             if (i < itemListCount)
             {
