@@ -18,6 +18,8 @@ public class Character_Info : MonoBehaviour
 
     public bool Immotal;
 
+    public GameObject Grave;
+
     void Start()
     {
         HP=Max_HP;
@@ -144,11 +146,6 @@ public class Character_Info : MonoBehaviour
         }
     }
 
-    private void Death()
-    {
-
-    }
-
     public float GetHP()
     {
         return HP;
@@ -181,5 +178,12 @@ public class Character_Info : MonoBehaviour
         yield return new WaitForSeconds(10);
         SetArmor(-10);
         yield break;
+    }
+
+    private void Death()
+    {
+        /*GameObject CharacterGrave = Instantiate(Grave, this.transform.position, Quaternion.identity);
+        CharacterGrave.GetComponent<RivivalCharacter>().GameCharacter = this.gameObject;
+        this.gameObject.SetActive(false);*/
     }
 }

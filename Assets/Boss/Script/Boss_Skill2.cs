@@ -624,7 +624,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
                 {
                     agent.isStopped = true;
                     state = State.Attack;
-                    StartCoroutine(UseSkillP1S2());
+                    UseSkillP1S2RPC();
                 }
                 else state = State.Chase;
                 return;
@@ -633,7 +633,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
                 {
                     agent.isStopped = true;
                     state = State.Attack;
-                    StartCoroutine(UseSkillP2S2());
+                    UseSkillP2S2RPC();
                 }
                 else state = State.Chase;
                 return;
@@ -642,7 +642,7 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
                 {
                     agent.isStopped = true;
                     state = State.Attack;
-                    StartCoroutine(UseSkillP3S2());
+                    UseSkillP3S2RPC();
                 }
                 else state = State.Chase;
                 return;
@@ -1361,4 +1361,3 @@ public class Boss_Skill2 : MonoBehaviourPunCallbacks
         EndSkill();
     }
 }
-

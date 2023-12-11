@@ -5,6 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 using ExitGames.Client.Photon.StructWrapping;
+using UnityEngine.UI;
 
 public class Boss_Info : MonoBehaviourPunCallbacks
 {
@@ -14,6 +15,8 @@ public class Boss_Info : MonoBehaviourPunCallbacks
     private int phaseNum = 1;
 
     public GameObject BossHPUI;
+
+    public Slider HPUISlider;
     public int HP // HP의 Getter 및 Setter
     {
         get { return _hp; }
@@ -55,6 +58,7 @@ public class Boss_Info : MonoBehaviourPunCallbacks
                 _hp=0;
             }
             BossHPUI.GetComponent<TMP_Text>().text="X"+_hp.ToString();
+            HPUISlider.value=_hp;
         }
     }
 

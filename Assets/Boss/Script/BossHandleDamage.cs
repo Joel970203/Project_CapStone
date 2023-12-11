@@ -36,6 +36,14 @@ public class BossDamageHandler : MonoBehaviour
                 HandleDamage(damage);
             }
             //attack.gameObject.SetActive(false);
+            try
+            {
+                attack.gameObject.GetComponent<RevealCollider>().isAdapted=true;
+            }
+            catch
+            {
+                Debug.Log("공격의 RevealCollider스크립트 없음. 공격 이름: "+attack.gameObject.transform.parent.gameObject.name);
+            }
             attack.enabled = false;
         }
     }
