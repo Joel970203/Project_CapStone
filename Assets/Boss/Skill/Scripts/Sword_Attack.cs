@@ -5,6 +5,20 @@ using UnityEngine;
 public class Sword_Attack : MonoBehaviour
 {
     [SerializeField] float damage;
+    Collider collider;
+    
+    void Start()
+    {
+        collider = GetComponent<Collider>();
+    }
+
+    void Update()
+    {
+        if (!collider.enabled)
+        {
+            collider.enabled = true;
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
