@@ -42,6 +42,7 @@
 
 ![그림2](https://github.com/Joel970203/Project_CapStone/assets/121085543/8f3a74d7-3f27-4ea2-a542-628eb917fe74)
 
+<div>
 네트워크 - 로비 시스템
 - 포톤 엔진의 PUN2 라이브러리
 - 서버를 경유한 데이터를 가져와 화면에 출력하는 것을 목표로 함
@@ -49,7 +50,7 @@
 기능
 -서버 접속 및 로비 리스트 출력
 -마우스 클릭을 통한 간단한 방 생성 및 참여 기능
-
+</div>
 
 ![그림3](https://github.com/Joel970203/Project_CapStone/assets/121085543/3190fe76-8cdd-40ca-acd3-29e06ad60450)
 네트워크 – 대기실
