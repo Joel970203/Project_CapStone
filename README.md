@@ -58,12 +58,31 @@
 ![그림5](https://github.com/Joel970203/Project_CapStone/assets/121085543/db9f1e70-e33c-4fb7-b6b3-f96cc6e3fddb)
 
 
+쉐이더 
+물과 용암의 공통 특징을 잡아 픽셀 쉐이더에서 보로노이 텍스처를 만들고 
+변형을 거쳐 용암과 물을 하나의 쉐이더로 표현  
+정점의 위치에 동적인 변화를 주어 상하 출렁임을 구현
+C# 스크립트를 통해 해당 쉐이더를 조작하여 지형이 변화할때 색상 변화를 주고
+용암일 때는 출렁임이 적고 물일 때는 빠르게 변화 시킴
+
+![그림7](https://github.com/Joel970203/Project_CapStone/assets/121085543/24ca078f-a33a-4f96-a04f-af81b652f31c)
+
+![그림8](https://github.com/Joel970203/Project_CapStone/assets/121085543/c836e2a8-6d7f-4013-bb99-4872e369257f)
+
+선형 보간을 이용한 텍스처 혼합을 통해 지형과 몬스터의 외형 변화 구현
+
+![그림10](https://github.com/Joel970203/Project_CapStone/assets/121085543/6b4a4b12-5546-4945-861f-5dad6ae20816)
+![그림11](https://github.com/Joel970203/Project_CapStone/assets/121085543/e3e78a33-7cec-4029-a2fa-53cb36377ec7)
+
+노멀 벡터, 방향벡터 값과 굴절률을 통해 굴절 벡터를 계산하고 
+스크린 UV와 더하여 
+굴절 벡터를 구현 
+![그림12](https://github.com/Joel970203/Project_CapStone/assets/121085543/fb18524e-c63c-4e47-adde-1f86e530b104)
+
 </br>
 
 설계서 : 
 </br>
 
-인게임 사진 : 
-</br>
 
 다운로드 : 
