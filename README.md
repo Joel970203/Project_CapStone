@@ -30,6 +30,8 @@
 
 </br>
 
+
+<h3 align="center">🔑 주요 기술 🔑  </h3>
 개발 내용 : 
 ![그림2](https://github.com/Joel970203/Project_CapStone/assets/121085543/8f3a74d7-3f27-4ea2-a542-628eb917fe74)
 
