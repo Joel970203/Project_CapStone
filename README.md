@@ -11,7 +11,7 @@
 
 <h3 align="center">🥇 멤버 구성  🥇 </h3>
 <div align="center">
-    
+        <https://github.com/Rubbe1124>
     (https://github.com/Rubbe1124) 
     업무 : 서버 접속, 로비, 대기실 기능 구현. 씬 로딩 및 오브젝트 동기화 진행. 캐릭터 기능 개발. 
     (https://github.com/1CM98)
