@@ -12,7 +12,7 @@
 <h3 align="center">🥇 멤버 구성  🥇 </h3>
 <div align="center">
     
-    [나영빈](https://github.com/Rubbe1124)
+    [나영빈](https://github.com/Rubbe1124) </br>
     업무 : 서버 접속, 로비, 대기실 기능 구현. 씬 로딩 및 오브젝트 동기화 진행. 캐릭터 기능 개발. 
     [이충민](https://github.com/1CM98)
     업무 : 보스 행동 패턴 개발, 아이템 시스템 개발, 커스텀 쉐이더 개발 후 지형 및 보스 등에 적용.
