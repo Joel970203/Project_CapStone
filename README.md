@@ -39,8 +39,6 @@
 기능
 -서버 접속 및 로비 리스트 출력
 -마우스 클릭을 통한 간단한 방 생성 및 참여 기능
-![image](https://github.com/Joel970203/Project_CapStone/assets/121085543/d0f3de3a-81c0-4f76-b76d-68ebbabf6fb0)
-
 
 네트워크 – 대기실
 -캐릭터 선택 및 준비 완료 설정 여부
