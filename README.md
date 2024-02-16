@@ -10,15 +10,15 @@
 
 
 <h3 align="center">🥇 멤버 구성  🥇 </h3>
-    [나영빈](https://github.com/Rubbe1124)
+   # [나영빈](https://github.com/Rubbe1124)
     </br>
     업무 : 서버 접속, 로비, 대기실 기능 구현. 씬 로딩 및 오브젝트 동기화 진행. 캐릭터 기능 개발. 
     </br>
-    [이충민](https://github.com/1CM98)
+  # [이충민](https://github.com/1CM98)
     </br>
     업무 : 보스 행동 패턴 개발, 아이템 시스템 개발, 커스텀 쉐이더 개발 후 지형 및 보스 등에 적용.
     </br>
-    [한상혁](https://github.com/Joel970203)
+  # [한상혁](https://github.com/Joel970203)
     </br>
     업무 : 맵 디자인 및 캐릭터 기능 개발. 캐릭터 이동 및 스킬 동기화 진행. 보스 패턴 동기화 진행.
 개발 동기 : 보스레이드 게임을 유니티로 구현하고자 함.
